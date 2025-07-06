@@ -476,11 +476,38 @@ theorem d_nonsquare
   (q_prime : Nat.Prime q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   : 
-  let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
   ¬ (∃ w : F, w^2 = d_of_s) := by
     change ¬∃ w, w ^ 2 = (-((2 / s^2) + 1)^2 / ((2 / s^2) - 1)^2)
-    intro h
-    sorry
+    rintro ⟨w, Pw⟩ 
+    have h0 : (2 / s^2 - 1)^2 ≠ 0 := by
+      sorry
+    have h1 : w^2 * ((2 / s^2) - 1)^2 / ((2 / s^2) + 1)^2 = -1 := by
+      rw [Pw]
+      rw [div_eq_mul_inv]
+      rw [div_eq_mul_inv]
+      rw [← neg_one_mul]
+      rw [mul_assoc (-1 * (2 / s ^ 2 + 1) ^ 2) (((2 / s ^ 2 - 1) ^ 2)⁻¹) ((2 / s ^ 2 - 1) ^ 2)]
+      rw [inv_mul_cancel₀ h0]
+      sorry
+    have h2 : IsSquare (-1 : F) := by
+      rw [← h1]
+      have h3 : IsSquare (w^2) := by
+        rw [pow_two]
+        apply IsSquare.mul_self w
+      have h4 : IsSquare (((2 / s^2) - 1)^2 / ((2 / s^2) + 1)^2) := by
+        apply IsSquare.div 
+        · rw [pow_two]
+          apply IsSquare.mul_self (2 / s^2 - 1)
+        · rw [pow_two]
+          apply IsSquare.mul_self (2 / s^2 + 1)
+      rw [mul_div_assoc]
+      apply IsSquare.mul h3 h4
+    have h5 : q % 4 ≠ 3 := by 
+      rw [FiniteField.isSquare_neg_one_iff] at h2
+      rw [field_cardinality] at h2
+      exact h2
+    contradiction
 
 theorem u_defined :
   ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1}, ∃ (w : F), w = u t := by
