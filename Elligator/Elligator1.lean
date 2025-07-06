@@ -438,9 +438,25 @@ theorem r_ne_zero
   intro h
   let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   have h1 : c_of_s  = (-1 : F) / c_of_s := by 
-    sorry
+    change c_of_s + 1 / c_of_s = 0 at h
+    rw [← add_right_inj (-1 / c_of_s)] at h
+    rw [add_comm] at h
+    rw [add_zero] at h
+    have h3 : 1 / c_of_s + -1 / c_of_s = 0 := by 
+      ring_nf
+    nth_rw 1 [← add_zero c_of_s]
+    rw [← h3]
+    rw [← add_assoc]
+    exact h
   have h2 : c_of_s^2 = -1 := by 
-    sorry
+    calc 
+      c_of_s^2 = -1 / c_of_s * c_of_s := by 
+        rw [pow_two]
+        nth_rw 1 [h1]
+      _ = -1 := by
+        nth_rw 1 [← neg_one_mul 1]
+        ring
+        rw [mul_inv_cancel₀ (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3)]
   have h3 : IsSquare (-1 : F) := by
     rw [← h2]
     rw [pow_two]
