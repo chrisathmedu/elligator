@@ -545,6 +545,53 @@ theorem d_nonsquare
       exact h2
     contradiction
 
+theorem one_sub_t_ne_zero
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  :
+  (1 : F) - t.val ≠ 0 := by 
+  intro h
+  have h1 : t.val = 1 := by 
+    rw [← add_right_inj t.val] at h
+    rw [add_zero] at h
+    rw [add_comm] at h
+    have h' : t.val - t.val = 0 := by ring
+    rw [sub_add] at h
+    rw [h'] at h
+    rw [sub_zero] at h
+    symm at h
+    exact h
+  have h2 : t.val ≠ 1 := by 
+    apply And.left
+    exact t.property
+  contradiction
+
+theorem one_add_t_ne_zero
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  :
+  (1 : F) + t.val ≠ 0 := by 
+  intro h
+  have h1 : t.val = -1 := by 
+    rw [← add_right_inj (-1)] at h
+    rw [add_zero] at h
+    rw [add_comm] at h
+    have h' : (-1 : F) + 1 = 0 := by ring
+    rw [add_comm] at h
+    rw [← add_assoc] at h
+    rw [h'] at h
+    rw [zero_add] at h
+    exact h
+  have h2 : t.val ≠ -1 := by 
+    apply And.right
+    exact t.property
+  contradiction
+
+theorem u_ne_zero
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  :
+  u t ≠ (0 : F) := by
+  change (1 - t.val) / (1 + t.val) ≠ 0
+  apply div_ne_zero (one_sub_t_ne_zero t) (one_add_t_ne_zero t) 
+
 theorem u_defined :
   ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1}, ∃ (w : F), w = u t := by
   sorry
