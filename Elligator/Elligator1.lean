@@ -545,7 +545,7 @@ theorem d_nonsquare
       exact h2
     contradiction
 
-theorem one_sub_t_ne_zero
+lemma one_sub_t_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
   (1 : F) - t.val ≠ 0 := by 
@@ -565,7 +565,7 @@ theorem one_sub_t_ne_zero
     exact t.property
   contradiction
 
-theorem one_add_t_ne_zero
+lemma one_add_t_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
   (1 : F) + t.val ≠ 0 := by 
@@ -585,7 +585,7 @@ theorem one_add_t_ne_zero
     exact t.property
   contradiction
 
-theorem u_ne_zero
+lemma u_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
   u t ≠ (0 : F) := by
@@ -594,7 +594,21 @@ theorem u_ne_zero
 
 theorem u_defined :
   ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1}, ∃ (w : F), w = u t := by
-  sorry
+  intro t
+  use u t
+
+lemma v_ne_zero
+  (s : F)
+  (s_h1 : s ≠ 0) 
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  :
+  v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 ≠ (0 : F) := by
+    sorry
 
 theorem v_defined 
   (s : F)
