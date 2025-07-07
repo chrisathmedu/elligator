@@ -480,16 +480,52 @@ theorem d_nonsquare
   ¬ (∃ w : F, w^2 = d_of_s) := by
     change ¬∃ w, w ^ 2 = (-((2 / s^2) + 1)^2 / ((2 / s^2) - 1)^2)
     rintro ⟨w, Pw⟩ 
-    have h0 : (2 / s^2 - 1)^2 ≠ 0 := by
-      sorry
+    have h00 : (2 / s^2 - 1)^2 ≠ 0 := by
+      rw [pow_two]
+      apply mul_ne_zero
+      · apply sub_ne_zero.2
+        exact c_ne_one s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+      · apply sub_ne_zero.2
+        exact c_ne_one s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+    have h01 : (2 / s^2 + 1)^2 ≠ 0 := by
+      rw [pow_two]
+      apply mul_ne_zero
+      change c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 + 1 ≠ 0
+      · intro h
+        have h' : (c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3) = -1 := by
+          rw [← add_right_inj (-1)] at h
+          rw [add_zero] at h
+          rw [add_comm] at h
+          have h8 : (1 : F) + (-1 : F) = 0 := by ring
+          rw [add_assoc] at h
+          rw [h8] at h
+          rw [add_zero] at h
+          exact h
+        apply c_ne_neg_one s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 at h'
+        exact h'
+      · intro h
+        have h' : (c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3) = -1 := by
+          rw [← add_right_inj (-1)] at h
+          rw [add_zero] at h
+          rw [add_comm] at h
+          have h8 : (1 : F) + (-1 : F) = 0 := by ring
+          rw [add_assoc] at h
+          rw [h8] at h
+          rw [add_zero] at h
+          exact h
+        apply c_ne_neg_one s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 at h'
+        exact h'
     have h1 : w^2 * ((2 / s^2) - 1)^2 / ((2 / s^2) + 1)^2 = -1 := by
       rw [Pw]
       rw [div_eq_mul_inv]
       rw [div_eq_mul_inv]
       rw [← neg_one_mul]
       rw [mul_assoc (-1 * (2 / s ^ 2 + 1) ^ 2) (((2 / s ^ 2 - 1) ^ 2)⁻¹) ((2 / s ^ 2 - 1) ^ 2)]
-      rw [inv_mul_cancel₀ h0]
-      sorry
+      rw [inv_mul_cancel₀ h00]
+      rw [mul_one]
+      rw [mul_assoc]
+      rw [mul_inv_cancel₀ h01]
+      rw [mul_one]
     have h2 : IsSquare (-1 : F) := by
       rw [← h1]
       have h3 : IsSquare (w^2) := by
