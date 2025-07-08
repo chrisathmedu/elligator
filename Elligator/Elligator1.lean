@@ -29,6 +29,10 @@ noncomputable def χ
 lemma χ_a_zero_eq_zero
   (a : F)
   (a_eq_zero : a = 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let χ_of_a := χ a q field_cardinality q_prime q_mod_4_congruent_3
   χ_of_a = 0 := by
@@ -48,7 +52,11 @@ lemma χ_a_zero_eq_zero
 
 lemma χ_a_ne_zero
   (a : F)
-  (a_ne_zero : a ≠ 0)
+  (a_zero : a ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let χ_of_a := χ a q field_cardinality q_prime q_mod_4_congruent_3
   χ_of_a ≠ 0 := by
@@ -57,56 +65,96 @@ lemma χ_a_ne_zero
 
 lemma χ_a_square_eq_square
   (a : F)
-  (a_eq_nonzero : a ≠ 0)
-  (a_square : ∃ (w : F), w^2 = a)
+  (a_nonzero : a ≠ 0)
+  (a_square : IsSquare a = true)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let χ_of_a := χ a q field_cardinality q_prime q_mod_4_congruent_3
   χ_of_a = 1 := by
     --change a^((q-1)/2) = 1
     sorry
 
-lemma χ_a_nonsquare_eq_nonsquare
+lemma χ_of_a_eq_neg_one
   (a : F)
-  (a_eq_nonzero : a ≠ 0)
-  (a_square : ¬ (∃ (w : F), w^2 = a))
+  (a_nonzero : a ≠ 0)
+  (a_nonsquare : IsSquare a = false)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let χ_of_a := χ a q field_cardinality q_prime q_mod_4_congruent_3
   χ_of_a = -1 := sorry
 
-lemma χ_neg_one_eq_nonsquare :
+lemma χ_of_neg_one_eq_neg_one 
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
   let χ_of_neg_one := χ (-1 : F) q field_cardinality q_prime q_mod_4_congruent_3 
   χ_of_neg_one = -1 := sorry
 
-lemma χ_χ_a_eq_χ_a
+lemma χ_of_χ_of_a_eq_χ_of_a
   (a : F)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let χ_of_a := χ a q field_cardinality q_prime q_mod_4_congruent_3
   let χ_of_χ_of_a := χ (χ_of_a) q field_cardinality q_prime q_mod_4_congruent_3
   χ_of_χ_of_a = χ_of_a := sorry
 
-lemma χ_ab_eq_χ_a_mul_χ_b
+lemma χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b
   (a b : F)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let χ_of_a := χ a q field_cardinality q_prime q_mod_4_congruent_3
   let χ_of_b := χ b q field_cardinality q_prime q_mod_4_congruent_3
   let χ_of_a_mul_b := χ (a * b) q field_cardinality q_prime q_mod_4_congruent_3
   χ_of_a_mul_b = χ_of_a * χ_of_b := sorry
 
-lemma χ_1_over_a_eq_χ_a
+lemma χ_of_one_over_a_eq_χ_a
   (a : F)
   (a_non_zero : a ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let χ_of_1_over_a := χ (1 / a) q field_cardinality q_prime q_mod_4_congruent_3
   let χ_of_a := χ a q field_cardinality q_prime q_mod_4_congruent_3
   χ_of_1_over_a = χ_of_a := sorry
 
-lemma χ_1_over_a_eq_1_over_χ_a
+lemma χ_of_one_over_a_eq_one_over_χ_a
   (a : F)
   (a_non_zero : a ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let χ_of_1_over_a := χ (1 / a) q field_cardinality q_prime q_mod_4_congruent_3
   let χ_of_a := χ a q field_cardinality q_prime q_mod_4_congruent_3
   χ_of_1_over_a = 1 / χ_of_a := sorry
+
+lemma one_over_χ_of_a_eq_χ_a
+  (a : F)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let χ_of_a := χ a q field_cardinality q_prime q_mod_4_congruent_3
+  1 / χ_of_a  = χ_of_a := by 
+    sorry
 
 variable (s : F)
 variable (s_h1 : s ≠ 0) 
@@ -843,6 +891,50 @@ theorem x_defined
   intro t
   use x t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
 
+lemma one_add_X_ne_zero 
+  (s : F)
+  (s_h1 : s ≠ 0) 
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  :
+  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
+  (1 + X_of_t) ≠ (0 : F) := by
+    let u_of_t := u t
+    let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+    intro X
+    change 1 + χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3 * u t ≠ 0
+    intro h
+    have h1 : χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3 * u t = -1 := by
+      rw [← add_right_inj (-1)] at h
+      rw [add_zero] at h
+      have h1_1 : (-1 : F) + (1 : F) = 0 := by ring
+      rw [← add_assoc] at h
+      rw [h1_1] at h
+      rw [zero_add] at h
+      exact h
+    have h2 : X ≠ -1 := by
+      have h2_1 : u_of_t = - χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3 := by
+        sorry
+      sorry
+    contradiction
+
+lemma x_ne_zero 
+  (s : F)
+  (s_h1 : s ≠ 0) 
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  :
+  let x_of_t := x t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
+  x_of_t ≠ (0 : F) := by sorry
+
 theorem y_defined
   (s : F)
   (s_h1 : s ≠ 0) 
@@ -855,7 +947,8 @@ theorem y_defined
   ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1},
   ∃ (w : F), w = y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   := by
-  sorry
+  intro t
+  use y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
 
 -- Chapter 3.2 Theorem 1
 theorem map_fulfills_curve_equation
