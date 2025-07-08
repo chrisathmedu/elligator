@@ -993,6 +993,19 @@ lemma x_ne_zero
     · apply one_add_X_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
   · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
 
+theorem y_add_one_ne_zero
+  (s : F)
+  (s_h1 : s ≠ 0) 
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  :
+  let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
+  y_of_t + 1 ≠ (0 : F) := by sorry
+
 theorem y_defined
   (s : F)
   (s_h1 : s ≠ 0) 
@@ -1020,12 +1033,12 @@ theorem map_fulfills_curve_equation
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let x_of_t := x t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-  let y_of_t := x t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   x_of_t^2 + y_of_t^2 = 1 + d_of_s * x_of_t^2 * y_of_t^2 := sorry
 
 -- Chapter 3.2 Theorem 1
-theorem map_variables_mul_neq_zero
+theorem u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_1_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0) 
@@ -1040,9 +1053,19 @@ theorem map_variables_mul_neq_zero
   let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let x_of_t := x t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-  let y_of_t := x t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   u t * v_of_t * X_of_t  * Y_of_t * x_of_t * (y_of_t + 1) ≠ 0 := by
-    sorry
+    apply mul_ne_zero
+    · apply mul_ne_zero
+      · apply mul_ne_zero
+        · apply mul_ne_zero
+          · apply mul_ne_zero
+            · apply u_ne_zero t
+            · apply v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+          · apply X_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+        · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+      · apply x_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+    · apply y_add_one_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
 
 -- Chapter 3.2 Theorem 1
 theorem map_fulfills_specific_equation
