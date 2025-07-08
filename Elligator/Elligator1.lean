@@ -608,7 +608,104 @@ lemma v_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
   v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 ≠ (0 : F) := by
-    sorry
+  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  let u_of_t := u t
+  change u_of_t^5 + (r_of_s^2 - 2) * u_of_t^3 + u_of_t ≠ 0
+  have h1 : (r_of_s^2 - 2) = c_of_s^2 + 1 / c_of_s^2 := by
+    calc 
+      r_of_s^2 - 2 = (c_of_s + 1 / c_of_s)^2 - 2 := by
+        change (c_of_s + 1 / c_of_s)^2 - 2 = (c_of_s + 1 / c_of_s)^2 - 2
+        rfl
+      _ = c_of_s^2 + 2 * (c_of_s * (1 / c_of_s)) + (1 / c_of_s)^2 - 2 := by
+        rw [add_pow_two]
+        rw [mul_assoc 2 c_of_s (1 / c_of_s)]
+      _ = c_of_s^2 + 2 + 1 / c_of_s^2 - 2 := by
+        ring
+        rw [mul_inv_cancel₀ (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3)]
+        ring
+      _ = c_of_s^2 + 1 / c_of_s^2 := by
+        ring_nf
+  rw [h1]
+  intro h
+  have h2 : u_of_t * (u_of_t^2 + c_of_s^2) * (u_of_t^2 + 1 / c_of_s^2) = 0 := by
+    calc 
+      u_of_t * (u_of_t^2 + c_of_s^2) * (u_of_t^2 + 1 / c_of_s^2) 
+    = u_of_t * (u_of_t^2 * (u_of_t^2 + 1 / c_of_s^2) + c_of_s^2 * (u_of_t^2 + 1 / c_of_s^2)) := by
+        rw [mul_assoc]
+        rw [add_mul]
+    _ = u_of_t ^ 5 + (c_of_s ^ 2 + 1 / c_of_s ^ 2) * u_of_t ^ 3 + u_of_t := by 
+        ring_nf
+        rw [mul_assoc]
+        rw [← mul_pow c_of_s c_of_s⁻¹ 2]
+        rw [mul_inv_cancel₀ (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3)]
+        rw [pow_two]
+        repeat rw [mul_one]
+    _  = 0 := by apply h
+  have h3 : u_of_t * (u_of_t^2 + c_of_s^2) * (u_of_t^2 + 1 / c_of_s^2) ≠ 0 := by
+    apply mul_ne_zero 
+    · apply mul_ne_zero
+      · apply u_ne_zero t
+      · intro h3_1
+        have h3_1_1 : -1 = (u_of_t / c_of_s)^2 := by
+          rw [← add_left_inj (-c_of_s^2)] at h3_1
+          rw [zero_add] at h3_1
+          rw [add_assoc] at h3_1
+          have h3_1_1_1 : c_of_s^2 = c_of_s^2 := by rfl
+          rw [add_neg_eq_zero.2 h3_1_1_1] at h3_1
+          rw [add_zero] at h3_1
+          rw [← neg_one_mul] at h3_1
+          rw [div_pow u_of_t c_of_s 2]
+          have h3_1_1_2 : c_of_s^2 ≠ 0 := by 
+            rw [pow_two]
+            apply mul_ne_zero
+            · apply c_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+            · apply c_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+          rw [← div_left_inj' h3_1_1_2] at h3_1
+          rw [mul_div_assoc] at h3_1
+          rw [← div_eq_one_iff_eq h3_1_1_2] at h3_1_1_1
+          rw [h3_1_1_1] at h3_1
+          rw [mul_one] at h3_1
+          symm at h3_1
+          exact h3_1
+        have h3_1_2 : IsSquare (-1 : F) := by
+          rw [h3_1_1]
+          rw [pow_two]
+          apply IsSquare.mul_self (u_of_t / c_of_s)
+        have h3_1_3 : q % 4 ≠ 3 := by 
+          rw [FiniteField.isSquare_neg_one_iff] at h3_1_2
+          rw [field_cardinality] at h3_1_2
+          exact h3_1_2
+        contradiction
+    · intro h3_2
+      have h3_2_1 : -1 = (u_of_t * c_of_s)^2 := by 
+        ring
+        have h3_2_1_1 : c_of_s^2 = c_of_s^2 := by rfl
+        have h3_2_1_2 : c_of_s^2 ≠ 0 := by 
+          rw [pow_two]
+          apply mul_ne_zero
+          · apply c_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+          · apply c_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+        rw [← div_left_inj' h3_2_1_2]
+        rw [mul_div_assoc]
+        rw [← div_eq_one_iff_eq h3_2_1_2] at h3_2_1_1
+        rw [h3_2_1_1, mul_one]
+        rw [← add_left_inj (1 / c_of_s^2)]
+        have h3_2_1_3 : 1 / c_of_s^2 = 1 / c_of_s^2 := by rfl
+        rw [← neg_one_mul, mul_div_assoc, neg_one_mul]
+        rw [neg_add_eq_zero.2 h3_2_1_3]
+        symm
+        exact h3_2
+      have h3_2_2 : IsSquare (-1 : F) := by
+        rw [h3_2_1]
+        rw [pow_two]
+        apply IsSquare.mul_self (u_of_t * c_of_s)
+      have h3_2_3 : q % 4 ≠ 3 := by
+        rw [FiniteField.isSquare_neg_one_iff] at h3_2_2
+        rw [field_cardinality] at h3_2_2
+        exact h3_2_2
+      contradiction
+  contradiction
 
 theorem v_defined 
   (s : F)
@@ -622,7 +719,8 @@ theorem v_defined
   ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1},
   ∃ (w : F), w = v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   := by
-  sorry
+  intro t
+  use v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
 
 theorem X_defined
   (s : F)
