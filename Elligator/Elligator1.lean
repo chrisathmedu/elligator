@@ -12,6 +12,61 @@ variable (q_prime : Nat.Prime q)
 variable (q_mod_4_congruent_3 : q % 4 = 3)
 variable (field_cardinality : Fintype.card F = q)
 
+lemma q_ne_two 
+  (q : ℕ)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  : q ≠ 2 := by
+  intro h
+  have mod_two : 2 % 4 = 2 := by norm_num
+  nth_rw 1 [← h] at mod_two
+  rw [q_mod_4_congruent_3] at mod_two
+  norm_num at mod_two
+
+lemma q_not_dvd_two
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  : ¬(q ∣ 2) := by
+  intro h
+  -- Since q is prime and (q % 4 = 3 => q ≠ 2), it cannot divide 2. 
+  -- So in this assumption, q must be 2.
+  rw [Nat.prime_dvd_prime_iff_eq q_prime (Nat.prime_two)] at h
+  apply q_ne_two q q_prime q_mod_4_congruent_3 at h
+  exact h
+
+lemma two_ne_zero 
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  : 
+  (2 : F) ≠ 0 := by
+    intro h
+    have h1 : (2 : F) = 0 ↔ q ∣ 2 := by
+      sorry
+    rw [h1] at h
+    --apply prime_two_or_dvd_of_dvd_two_mul_pow_self_two q_prime h
+    --apply h1.2
+    -- Because q prime and does not divide 2, 2 cannot be zero since q is 
+    -- 0 in a field with q elements!
+    have h2 : ¬(q ∣ 2) := by
+      apply q_not_dvd_two q field_cardinality q_prime q_mod_4_congruent_3 
+    contradiction
+
+lemma q_sub_one_over_two_ne_zero
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  (q - 1) / 2 ≠ 0 := by 
+  apply Nat.div_ne_zero_iff.2
+  constructor
+  · norm_num
+  · sorry
+
 /-- χ(a) is the quadratic character of a in the finite field F with q elements, where q is a prime congruent to 3 modulo 4.
 
 This function was added, since Mathlib.NumberTheory.LegendreSymbol.Basic is restricted to ℤ.
@@ -39,16 +94,7 @@ lemma χ_a_zero_eq_zero
     change a^((Fintype.card F -1)/2) = 0
     rw [field_cardinality]
     rw [a_eq_zero]
-    apply zero_pow
-    intro h
-    have h0 : q > 1 := by 
-      apply Nat.Prime.one_lt
-      apply q_prime
-    sorry
-
-    --have h1 : q-1 ≠ 0 := by sorry
-    --have h2 : 2 ≠ 0 := by sorry
-    --apply div_ne_zero h1 h2
+    apply zero_pow (q_sub_one_over_two_ne_zero q field_cardinality q_prime q_mod_4_congruent_3)
 
 lemma χ_a_ne_zero
   (a : F)
@@ -307,49 +353,6 @@ noncomputable def y
   let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   (r_of_s * X_of_t - (1 + X_of_t)^2) / (r_of_s * X_of_t + (1 + X_of_t)^2)
-
-lemma q_ne_two 
-  (q : ℕ)
-  (q_prime : Nat.Prime q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  : q ≠ 2 := by
-  intro h
-  have mod_two : 2 % 4 = 2 := by norm_num
-  nth_rw 1 [← h] at mod_two
-  rw [q_mod_4_congruent_3] at mod_two
-  norm_num at mod_two
-
-lemma q_not_dvd_two
-  (q : ℕ)
-  (q_prime : Nat.Prime q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (field_cardinality : Fintype.card F = q)
-  : ¬(q ∣ 2) := by
-  intro h
-  -- Since q is prime and (q % 4 = 3 => q ≠ 2), it cannot divide 2. 
-  -- So in this assumption, q must be 2.
-  rw [Nat.prime_dvd_prime_iff_eq q_prime (Nat.prime_two)] at h
-  apply q_ne_two q q_prime q_mod_4_congruent_3 at h
-  exact h
-
-lemma two_ne_zero 
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime : Nat.Prime q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  : 
-  (2 : F) ≠ 0 := by
-    intro h
-    have h1 : (2 : F) = 0 ↔ q ∣ 2 := by
-      sorry
-    rw [h1] at h
-    --apply prime_two_or_dvd_of_dvd_two_mul_pow_self_two q_prime h
-    --apply h1.2
-    -- Because q prime and does not divide 2, 2 cannot be zero since q is 
-    -- 0 in a field with q elements!
-    have h2 : ¬(q ∣ 2) := by
-      apply q_not_dvd_two q q_prime q_mod_4_congruent_3 field_cardinality
-    contradiction
 
 lemma c_ne_zero 
   (s : F)
@@ -779,7 +782,7 @@ theorem v_defined
   intro t
   use v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
 
-lemma X_mul_Y_ne_zero
+lemma X_ne_zero
   (s : F)
   (s_h1 : s ≠ 0) 
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -790,59 +793,13 @@ lemma X_mul_Y_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   : 
   let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-  let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-  X_of_t * Y_of_t ≠ 0 := by 
+  X_of_t ≠ 0 := by
   let u_of_t := u t
   let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-  let χ_of_v_of_t := χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3
-  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-  let χ_of_v_of_t := χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3
-  let χ_of_sum := χ ((u t)^2 + 1 / c_of_s^2) q field_cardinality q_prime q_mod_4_congruent_3
-  change (χ_of_v_of_t * u_of_t) * ((χ_of_v_of_t * v_of_t)^((q + 1) / 4) * χ_of_v_of_t * χ_of_sum) ≠ 0
-  -- Show that every factor is non-zero
   apply mul_ne_zero
-  · apply mul_ne_zero
-    · apply χ_a_ne_zero q q_prime q_mod_4_congruent_3 field_cardinality v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t)
-    · apply u_ne_zero t
-  · apply mul_ne_zero
-    · apply mul_ne_zero
-      · rw [mul_pow (χ_of_v_of_t) (v_of_t) ((q + 1) / 4)]
-        apply mul_ne_zero
-        · apply pow_ne_zero (((q + 1) / 4) : ℕ)
-          apply χ_a_ne_zero q q_prime q_mod_4_congruent_3 field_cardinality v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t)
-        · apply pow_ne_zero (((q + 1) / 4) : ℕ)
-          apply v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
-      · apply χ_a_ne_zero q q_prime q_mod_4_congruent_3 field_cardinality v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t)
-    · have χ_sum_ne_zero : (u_of_t)^2 + 1 / c_of_s^2 ≠ 0 := by 
-        intro h3_2
-        have h3_2_1 : -1 = (u_of_t * c_of_s)^2 := by 
-          ring
-          have h3_2_1_1 : c_of_s^2 = c_of_s^2 := by rfl
-          have h3_2_1_2 : c_of_s^2 ≠ 0 := by 
-            rw [pow_two]
-            apply mul_ne_zero
-            · apply c_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-            · apply c_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-          rw [← div_left_inj' h3_2_1_2]
-          rw [mul_div_assoc]
-          rw [← div_eq_one_iff_eq h3_2_1_2] at h3_2_1_1
-          rw [h3_2_1_1, mul_one]
-          rw [← add_left_inj (1 / c_of_s^2)]
-          have h3_2_1_3 : 1 / c_of_s^2 = 1 / c_of_s^2 := by rfl
-          rw [← neg_one_mul, mul_div_assoc, neg_one_mul]
-          rw [neg_add_eq_zero.2 h3_2_1_3]
-          symm
-          exact h3_2
-        have h3_2_2 : IsSquare (-1 : F) := by
-          rw [h3_2_1]
-          rw [pow_two]
-          apply IsSquare.mul_self (u_of_t * c_of_s)
-        have h3_2_3 : q % 4 ≠ 3 := by
-          rw [FiniteField.isSquare_neg_one_iff] at h3_2_2
-          rw [field_cardinality] at h3_2_2
-          exact h3_2_2
-        contradiction
-      apply χ_a_ne_zero q q_prime q_mod_4_congruent_3 field_cardinality ((u t)^2 + 1 / c_of_s^2) χ_sum_ne_zero
+  · apply χ_a_ne_zero v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t) q field_cardinality q_prime q_mod_4_congruent_3
+  · apply u_ne_zero t
+
 
 theorem X_defined
   (s : F)
@@ -859,6 +816,65 @@ theorem X_defined
   intro t
   use X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
 
+lemma Y_ne_zero
+  (s : F)
+  (s_h1 : s ≠ 0) 
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  : 
+  let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  Y_of_t ≠ 0 := by 
+  let u_of_t := u t
+  let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  let χ_of_v_of_t := χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3
+  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  let χ_of_v_of_t := χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3
+  let χ_of_sum := χ ((u t)^2 + 1 / c_of_s^2) q field_cardinality q_prime q_mod_4_congruent_3
+  change (χ_of_v_of_t * v_of_t)^((q + 1) / 4) * χ_of_v_of_t * χ_of_sum ≠ 0
+  apply mul_ne_zero
+  · apply mul_ne_zero
+    · rw [mul_pow (χ_of_v_of_t) (v_of_t) ((q + 1) / 4)]
+      apply mul_ne_zero
+      · apply pow_ne_zero (((q + 1) / 4) : ℕ)
+        apply χ_a_ne_zero v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t) q field_cardinality q_prime q_mod_4_congruent_3 
+      · apply pow_ne_zero (((q + 1) / 4) : ℕ)
+        apply v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+    · apply χ_a_ne_zero v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t) q field_cardinality q_prime q_mod_4_congruent_3 
+  · have χ_sum_ne_zero : (u_of_t)^2 + 1 / c_of_s^2 ≠ 0 := by 
+      intro h3_2
+      have h3_2_1 : -1 = (u_of_t * c_of_s)^2 := by 
+        ring
+        have h3_2_1_1 : c_of_s^2 = c_of_s^2 := by rfl
+        have h3_2_1_2 : c_of_s^2 ≠ 0 := by 
+          rw [pow_two]
+          apply mul_ne_zero
+          · apply c_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+          · apply c_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+        rw [← div_left_inj' h3_2_1_2]
+        rw [mul_div_assoc]
+        rw [← div_eq_one_iff_eq h3_2_1_2] at h3_2_1_1
+        rw [h3_2_1_1, mul_one]
+        rw [← add_left_inj (1 / c_of_s^2)]
+        have h3_2_1_3 : 1 / c_of_s^2 = 1 / c_of_s^2 := by rfl
+        rw [← neg_one_mul, mul_div_assoc, neg_one_mul]
+        rw [neg_add_eq_zero.2 h3_2_1_3]
+        symm
+        exact h3_2
+      have h3_2_2 : IsSquare (-1 : F) := by
+        rw [h3_2_1]
+        rw [pow_two]
+        apply IsSquare.mul_self (u_of_t * c_of_s)
+      have h3_2_3 : q % 4 ≠ 3 := by
+        rw [FiniteField.isSquare_neg_one_iff] at h3_2_2
+        rw [field_cardinality] at h3_2_2
+        exact h3_2_2
+      contradiction
+    apply χ_a_ne_zero ((u t)^2 + 1 / c_of_s^2) χ_sum_ne_zero q field_cardinality q_prime q_mod_4_congruent_3 
+
 theorem Y_defined
   (s : F)
   (s_h1 : s ≠ 0) 
@@ -873,6 +889,23 @@ theorem Y_defined
   := by
   intro t
   use Y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+
+lemma X_mul_Y_ne_zero
+  (s : F)
+  (s_h1 : s ≠ 0) 
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  : 
+  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  X_of_t * Y_of_t ≠ 0 := by 
+  apply mul_ne_zero 
+  · apply X_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+  · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
 
 -- TODO this should result from lemma X_mul_Y_ne_zero. How to formalize this properly?
 -- Do I have to state the problematic divisors in those lemmas?
@@ -933,7 +966,32 @@ lemma x_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
   let x_of_t := x t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
-  x_of_t ≠ (0 : F) := by sorry
+  x_of_t ≠ (0 : F) := by 
+  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  change (c_of_s - 1) * s * X_of_t * (1 + X_of_t) / Y_of_t ≠ 0
+  apply div_ne_zero
+  · apply mul_ne_zero
+    · apply mul_ne_zero
+      · apply mul_ne_zero
+        · intro h1
+          have h1_1 : c_of_s = 1 := by 
+            rw [← add_left_inj 1] at h1
+            rw [zero_add] at h1
+            have h1_1_1 : (1 : F) - (1 : F) = 0 := by ring
+            rw [add_comm] at h1
+            rw [← add_sub_assoc] at h1
+            rw [add_comm 1 c_of_s] at h1
+            rw [add_sub_assoc] at h1
+            rw [h1_1_1, add_zero] at h1
+            exact h1
+          have h1_2 : c_of_s ≠ 1 := c_ne_one s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+          contradiction
+        · apply s_h1
+      · apply X_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+    · apply one_add_X_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+  · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
 
 theorem y_defined
   (s : F)
