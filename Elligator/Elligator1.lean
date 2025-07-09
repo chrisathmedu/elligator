@@ -98,7 +98,7 @@ lemma χ_a_zero_eq_zero
 
 lemma χ_a_ne_zero
   (a : F)
-  (a_zero : a ≠ 0)
+  (a_nonzero : a ≠ 0)
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime : Nat.Prime q)
@@ -107,6 +107,18 @@ lemma χ_a_ne_zero
   let χ_of_a := χ a q field_cardinality q_prime q_mod_4_congruent_3
   χ_of_a ≠ 0 := by
     change a^((Fintype.card F -1)/2) ≠ 0
+    sorry
+
+lemma neg_χ_a_ne_χ_a
+  (a : F)
+  (a_nonzero : a ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let χ_of_a := χ a q field_cardinality q_prime q_mod_4_congruent_3
+  χ_of_a ≠ -χ_of_a := by
     sorry
 
 lemma χ_a_square_eq_square
@@ -121,6 +133,18 @@ lemma χ_a_square_eq_square
   let χ_of_a := χ a q field_cardinality q_prime q_mod_4_congruent_3
   χ_of_a = 1 := by
     --change a^((q-1)/2) = 1
+    sorry
+
+lemma χ_of_a_pow_n_eq_χ_a
+  (a : F)
+  (n : {n : ℕ | Odd n})
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let χ_of_a := χ a q field_cardinality q_prime q_mod_4_congruent_3
+  χ_of_a^(n.val) = χ_of_a := by 
     sorry
 
 lemma χ_of_a_eq_neg_one
@@ -938,10 +962,12 @@ lemma one_add_X_ne_zero
   (1 + X_of_t) ≠ (0 : F) := by
     let u_of_t := u t
     let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+    let χ_of_v_of_t := χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3
     intro X
-    change 1 + χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3 * u t ≠ 0
+    change 1 + χ_of_v_of_t * u t ≠ 0
     intro h
-    have h1 : χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3 * u t = -1 := by
+    have h1 : χ_of_v_of_t * u_of_t = -1 := by
       rw [← add_right_inj (-1)] at h
       rw [add_zero] at h
       have h1_1 : (-1 : F) + (1 : F) = 0 := by ring
@@ -949,10 +975,51 @@ lemma one_add_X_ne_zero
       rw [h1_1] at h
       rw [zero_add] at h
       exact h
-    have h2 : X ≠ -1 := by
-      have h2_1 : u_of_t = - χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3 := by
-        sorry
+    have h2 : u_of_t = -χ_of_v_of_t := by
+      rw [← neg_one_mul (χ_of_v_of_t)]
+      change u_of_t = -1 * χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3
+      rw [← one_over_χ_of_a_eq_χ_a v_of_t q field_cardinality q_prime q_mod_4_congruent_3]
+      rw [← mul_left_inj' (χ_a_ne_zero v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t) q field_cardinality q_prime q_mod_4_congruent_3)]
+      ring_nf
+      rw [mul_inv_cancel₀ (χ_a_ne_zero v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t) q field_cardinality q_prime q_mod_4_congruent_3)]
+      rw [mul_comm]
+      change χ_of_v_of_t * u t = -1
+      exact h1
+    have h3 : v_of_t = -χ_of_v_of_t * (1 + r_of_s^2 - 2 + 1) := by 
+      change u_of_t^5 + (r_of_s^2 - 2) * u_of_t^3 + u_of_t = -χ_of_v_of_t * (1 + r_of_s^2 - 2 + 1)
+      repeat rw [h2]
+      have h3_1: Odd 5 := by 
+        apply Nat.odd_iff.2
+        norm_num
+      rw [← neg_one_mul, mul_pow, mul_pow]
+      rw [χ_of_a_pow_n_eq_χ_a v_of_t ⟨5, h3_1⟩ q field_cardinality q_prime q_mod_4_congruent_3]
+      have h3_2: Odd 3 := by 
+        apply Nat.odd_iff.2
+        norm_num
+      rw [χ_of_a_pow_n_eq_χ_a v_of_t ⟨3, h3_2⟩ q field_cardinality q_prime q_mod_4_congruent_3]
+      change (-1) ^ 5 * χ_of_v_of_t + (r_of_s ^ 2 - 2) * ((-1) ^ 3 * χ_of_v_of_t) + -1 * χ_of_v_of_t = -1 * χ_of_v_of_t * (1 + r_of_s ^ 2 - 2 + 1)
+      ring
+    have h4 : v_of_t = -χ_of_v_of_t * r_of_s^2 := by 
+      rw [add_comm] at h3
+      rw [← add_sub_assoc] at h3
+      rw [← add_assoc] at h3
+      have h4_1 : (1 : F) + (1 : F) = 2 := by ring
+      rw [h4_1] at h3
+      rw [add_comm] at h3
+      rw [add_sub_assoc] at h3
+      have h4_2 : (2 : F) - (2 : F) = 0 := by ring
+      rw [h4_2, add_zero] at h3
+      exact h3
+    have h5 : χ_of_v_of_t = -χ_of_v_of_t := by 
+      rw [h2] at h1
+      rw [← div_left_inj' (χ_a_ne_zero v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t) q field_cardinality q_prime q_mod_4_congruent_3)]
+      change χ_of_v_of_t / χ_of_v_of_t  = -χ_of_v_of_t / χ_of_v_of_t
+      ring_nf
+      rw [mul_inv_cancel₀ (χ_a_ne_zero v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t) q field_cardinality q_prime q_mod_4_congruent_3)]
+      -- TODO how to use h4
       sorry
+
+    have h6 : χ_of_v_of_t ≠ -χ_of_v_of_t := neg_χ_a_ne_χ_a v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t) q field_cardinality q_prime q_mod_4_congruent_3
     contradiction
 
 lemma x_ne_zero 
