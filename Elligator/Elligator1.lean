@@ -1071,7 +1071,28 @@ theorem y_add_one_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
   let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
-  y_of_t + 1 ≠ (0 : F) := by sorry
+  y_of_t + 1 ≠ (0 : F) := by 
+  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
+  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
+  intro y_of_t
+  intro h
+  have h1 : y_of_t = -1 := by 
+    rw [← add_left_inj (-1)] at h
+    have h1_1 : (1 : F) + (-1 : F) = 0 := by ring
+    rw [add_assoc] at h
+    rw [h1_1] at h
+    rw [add_zero, zero_add] at h
+    exact h
+  have h2 : (r_of_s * X_of_t - (1 + X_of_t)^2) / (r_of_s * X_of_t + (1 + X_of_t)^2) = -1 := by 
+    sorry
+  have h3 : r_of_s * X_of_t - (1 + X_of_t)^2 = -(r_of_s * X_of_t + (1 + X_of_t)^2) := by
+    sorry
+  have h4 : r_of_s * X_of_t = 0 := by sorry
+  have h5 : r_of_s * X_of_t ≠ 0 := by 
+    apply mul_ne_zero
+    · apply r_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+    · apply X_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+  contradiction
 
 theorem y_defined
   (s : F)
