@@ -121,10 +121,10 @@ lemma neg_χ_a_ne_χ_a
   χ_of_a ≠ -χ_of_a := by
     sorry
 
-lemma χ_a_square_eq_square
+lemma χ_a_eq_one
   (a : F)
   (a_nonzero : a ≠ 0)
-  (a_square : IsSquare a = true)
+  (a_square : IsSquare a)
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime : Nat.Prime q)
@@ -1012,13 +1012,37 @@ lemma one_add_X_ne_zero
       exact h3
     have h5 : χ_of_v_of_t = -χ_of_v_of_t := by 
       rw [h2] at h1
-      rw [← div_left_inj' (χ_a_ne_zero v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t) q field_cardinality q_prime q_mod_4_congruent_3)]
-      change χ_of_v_of_t / χ_of_v_of_t  = -χ_of_v_of_t / χ_of_v_of_t
-      ring_nf
-      rw [mul_inv_cancel₀ (χ_a_ne_zero v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t) q field_cardinality q_prime q_mod_4_congruent_3)]
-      -- TODO how to use h4
-      sorry
-
+      change χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3 * -χ_of_v_of_t = -1 at h1
+      rw [h4] at h1
+      rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b (-χ_of_v_of_t) (r_of_s ^ 2) q field_cardinality q_prime q_mod_4_congruent_3] at h1
+      nth_rw 1 [← neg_one_mul] at h1
+      rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b (-1) χ_of_v_of_t q field_cardinality q_prime q_mod_4_congruent_3] at h1
+      rw [χ_of_neg_one_eq_neg_one q field_cardinality q_prime q_mod_4_congruent_3] at h1
+      rw [χ_of_χ_of_a_eq_χ_of_a v_of_t q field_cardinality q_prime q_mod_4_congruent_3] at h1
+      change -1 * χ_of_v_of_t * χ (r_of_s ^ 2) q field_cardinality q_prime q_mod_4_congruent_3 * -χ_of_v_of_t = -1 at h1
+      have h5_1 : r_of_s^2 ≠ 0 := by 
+        rw [pow_two]
+        apply mul_ne_zero
+        · apply r_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+        · apply r_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+      have h5_2 : IsSquare (r_of_s^2) := by 
+        rw [pow_two]
+        apply IsSquare.mul_self r_of_s
+      rw [χ_a_eq_one (r_of_s^2) h5_1 h5_2 q field_cardinality q_prime q_mod_4_congruent_3] at h1
+      rw [mul_one] at h1
+      rw [neg_one_mul] at h1
+      have h5_3 : χ_of_v_of_t ≠ 0 := χ_a_ne_zero v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t) q field_cardinality q_prime q_mod_4_congruent_3
+      rw [← mul_left_inj' h5_3] at h1
+      change -χ_of_v_of_t * -χ_of_v_of_t * χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3 = -1 * χ_of_v_of_t at h1
+      rw [← one_over_χ_of_a_eq_χ_a v_of_t q field_cardinality q_prime q_mod_4_congruent_3] at h1
+      change -χ_of_v_of_t * -χ_of_v_of_t * (1 / χ_of_v_of_t) = -1 * χ_of_v_of_t at h1
+      rw [← inv_eq_one_div χ_of_v_of_t] at h1
+      rw [← neg_one_mul] at h1
+      ring_nf at h1
+      rw [pow_two, mul_assoc] at h1
+      rw [mul_inv_cancel₀ h5_3] at h1
+      rw [mul_one] at h1
+      exact h1
     have h6 : χ_of_v_of_t ≠ -χ_of_v_of_t := neg_χ_a_ne_χ_a v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t) q field_cardinality q_prime q_mod_4_congruent_3
     contradiction
 
@@ -1060,6 +1084,46 @@ lemma x_ne_zero
     · apply one_add_X_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
   · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
 
+lemma y_divisor_ne_zero 
+  (s : F)
+  (s_h1 : s ≠ 0) 
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  :
+  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
+  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
+  (r_of_s * X_of_t + (1 + X_of_t)^2) ≠ 0 := by
+    let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
+    intro r_of_s
+    intro X_of_t
+    intro h
+    have h1 : r_of_s * X_of_t = -(1 + X_of_t)^2 := by 
+      rw [← add_left_inj ((1 + X_of_t)^2)]
+      have h1_1 : -((1 + X_of_t)^2) + ((1 + X_of_t)^2) = 0 := by 
+        rw [neg_add_eq_zero.2]
+        ring
+      rw [h1_1]
+      exact h
+    have h2 : (r_of_s^2 + 4 * r_of_s) * X_of_t^2 = X_of_t^4 - 2 * X_of_t^2 + 1 := by
+      sorry
+    have h3 : Y_of_t^2 = -(1 - X_of_t)^2 * X_of_t^2 * (s + 2 / s)^2 := by 
+      calc 
+        Y_of_t^2 = X_of_t * (X_of_t^4 + (r_of_s^2 - 2) * X_of_t^2 + 1) := by sorry
+        _ = -(1 - X_of_t)^2 * X_of_t^2 * (s + 2 / s)^2 := by sorry
+    have h4 : IsSquare (-1 : F) := by sorry
+      --rw [← h2]
+      --rw [pow_two]
+      --apply IsSquare.mul_self c_of_s
+    have h5 : q % 4 ≠ 3 := by 
+      rw [FiniteField.isSquare_neg_one_iff] at h4
+      rw [field_cardinality] at h4
+      exact h4
+    contradiction
+
 theorem y_add_one_ne_zero
   (s : F)
   (s_h1 : s ≠ 0) 
@@ -1072,27 +1136,41 @@ theorem y_add_one_ne_zero
   :
   let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
   y_of_t + 1 ≠ (0 : F) := by 
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
-  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
-  intro y_of_t
-  intro h
-  have h1 : y_of_t = -1 := by 
-    rw [← add_left_inj (-1)] at h
-    have h1_1 : (1 : F) + (-1 : F) = 0 := by ring
-    rw [add_assoc] at h
-    rw [h1_1] at h
-    rw [add_zero, zero_add] at h
-    exact h
-  have h2 : (r_of_s * X_of_t - (1 + X_of_t)^2) / (r_of_s * X_of_t + (1 + X_of_t)^2) = -1 := by 
-    sorry
-  have h3 : r_of_s * X_of_t - (1 + X_of_t)^2 = -(r_of_s * X_of_t + (1 + X_of_t)^2) := by
-    sorry
-  have h4 : r_of_s * X_of_t = 0 := by sorry
-  have h5 : r_of_s * X_of_t ≠ 0 := by 
-    apply mul_ne_zero
-    · apply r_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-    · apply X_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
-  contradiction
+    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
+    let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
+    intro y_of_t
+    intro h
+    have h1 : y_of_t = -1 := by 
+      rw [← add_left_inj (-1)] at h
+      have h1_1 : (1 : F) + (-1 : F) = 0 := by ring
+      rw [add_assoc] at h
+      rw [h1_1] at h
+      rw [add_zero, zero_add] at h
+      exact h
+    have h2 : (r_of_s * X_of_t - (1 + X_of_t)^2) / (r_of_s * X_of_t + (1 + X_of_t)^2) = -1 := by 
+      change y_of_t = -1
+      exact h1
+    have h3 : r_of_s * X_of_t - (1 + X_of_t)^2 = -(r_of_s * X_of_t + (1 + X_of_t)^2) := by
+      have h3_1 : (r_of_s * X_of_t + (1 + X_of_t)^2) ≠ 0 := y_divisor_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+      rw [← div_left_inj' h3_1]
+      rw [← neg_one_mul]
+      rw [mul_div_assoc]
+      rw [div_self h3_1]
+      rw [mul_one]
+      exact h2
+    have h4 : r_of_s * X_of_t = 0 := by 
+      rw [← add_left_inj (r_of_s * X_of_t + (1 + X_of_t) ^ 2)] at h3
+      ring_nf at h3
+      rw [← div_left_inj' (two_ne_zero q field_cardinality q_prime q_mod_4_congruent_3)] at h3
+      rw [mul_div_assoc] at h3
+      rw [div_self (two_ne_zero q field_cardinality q_prime q_mod_4_congruent_3)] at h3
+      ring_nf at h3
+      exact h3
+    have h5 : r_of_s * X_of_t ≠ 0 := by 
+      apply mul_ne_zero
+      · apply r_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+      · apply X_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+    contradiction
 
 theorem y_defined
   (s : F)
@@ -1126,7 +1204,7 @@ theorem map_fulfills_curve_equation
   x_of_t^2 + y_of_t^2 = 1 + d_of_s * x_of_t^2 * y_of_t^2 := sorry
 
 -- Chapter 3.2 Theorem 1
-theorem u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_1_ne_zero
+theorem u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0) 
