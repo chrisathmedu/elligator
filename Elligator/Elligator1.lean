@@ -1373,8 +1373,39 @@ theorem map_fulfills_curve_equation
   let x_of_t := x t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-  x_of_t^2 + y_of_t^2 = 1 + d_of_s * x_of_t^2 * y_of_t^2 := sorry
-
+  x_of_t^2 + y_of_t^2 = 1 + d_of_s * x_of_t^2 * y_of_t^2 := by
+    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+    let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
+    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
+    let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
+    let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
+    intro x_of_t y_of_t d_of_s
+    have h1 : (c_of_s - 1)^2 * s^2 = 2 * (r_of_s - 2):= 
+      calc
+        (c_of_s - 1)^2 * s^2 = (c_of_s - 1)^2 * (2 / c_of_s) := by sorry
+        _ = 2 * (r_of_s - 2) := by sorry
+    have h2 : Y_of_t^2 * (1 - x_of_t^2) = X_of_t * (r_of_s * X_of_t - (1 + X_of_t)^2)^2 := by 
+      calc 
+        Y_of_t^2 * (1 - x_of_t^2) = Y_of_t^2 * (c_of_s - 1) * s * X_of_t * (1 + X_of_t)^2 := by 
+          sorry
+       _ = X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t - 2 * (r_of_s - 2) * X_of_t^2 * (1 + X_of_t)^2 := by 
+          sorry
+       _ = X_of_t * (r_of_s * X_of_t - (1 + X_of_t)^2)^2 := by 
+          sorry
+    have h3 : -d_of_s = (r_of_s + 2) / (r_of_s - 2) := by 
+      calc 
+        -d_of_s = (c_of_s + 2 + 1 / c_of_s) / (c_of_s - 2 + 1 / c_of_s) := by sorry
+        _ = (r_of_s + 2) / (r_of_s - 2) := by sorry
+    have h4 : -d_of_s * (c_of_s - 1)^2 * s^2 = 2 * (r_of_s + 2) := by 
+      calc 
+        -d_of_s * (c_of_s - 1)^2 * s^2 = -d_of_s * (2 / c_of_s) * (c_of_s - 1)^2 := by sorry
+        _ = 2 * (r_of_s + 2) := by sorry
+    have h5 : Y_of_t^2 * (1 - d_of_s * x_of_t^2) ≠ 0 := by sorry
+    have h6 : (1 - x_of_t^2) / (1 - d_of_s * x_of_t^2) = y_of_t^2 := by
+      calc
+        (1 - x_of_t^2) / (1 - d_of_s * x_of_t^2) = (r_of_s * X_of_t - (1 + X_of_t)^2)^2 / (r_of_s * X_of_t + (1 + X_of_t)^2)^2 := by sorry
+        _ = y_of_t^2 := by sorry
+    sorry
 
 /-- ϕ(t, s) is a function defined in the paper. It maps a numer `t` in F s to a point on the curve.
 
