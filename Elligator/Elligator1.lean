@@ -1232,6 +1232,7 @@ lemma y_divisor_ne_zero
   let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
   (r_of_s * X_of_t + (1 + X_of_t)^2) ≠ 0 := by
     let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
+    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
     intro r_of_s
     intro X_of_t
     intro h
@@ -1253,7 +1254,7 @@ lemma y_divisor_ne_zero
       rw [mul_assoc (-(1 + X_of_t)^2) r_of_s X_of_t]
       rw [h1]
       ring_nf
-    have h3 : Y_of_t^2 = -(1 - X_of_t)^2 * X_of_t^2 * (s + 2 / s)^2 := by 
+    have h3 : Y_of_t^2 = -(1 + X_of_t)^2 * X_of_t^2 * (s + 2 / s)^2 := by 
       calc 
         Y_of_t^2 = X_of_t * (X_of_t^4 + (r_of_s^2 - 2) * X_of_t^2 + 1) := by 
           rw [mul_add, mul_one]
@@ -1288,18 +1289,56 @@ lemma y_divisor_ne_zero
           rw [← h3_2, pow_add (1 + X_of_t) 2 2, ← h3_3]
           rw [← pow_two] 
           ring_nf
-        _ = r_of_s * X_of_t * X_of_t^2 * (2 * r_of_s + 4) := by sorry
-        _ = -(1 - X_of_t)^2 * X_of_t^2 * (s + 2 / s)^2 := by sorry
-    have h4 : IsSquare (-1 : F) := by sorry
-      --rw [← h2]
-      --rw [pow_two]
-      --apply IsSquare.mul_self c_of_s
+        _ = r_of_s * X_of_t * X_of_t^2 * (2 * r_of_s + 4) := by ring_nf
+        _ = -(1 + X_of_t)^2 * X_of_t^2 * (s + 2 / s)^2 := by 
+          rw [← h1]
+          change r_of_s * X_of_t * X_of_t ^ 2 * (2 * (c_of_s + 1 / c_of_s) + 4) = r_of_s * X_of_t * X_of_t ^ 2 * (s + 2 / s) ^ 2 
+          change r_of_s * X_of_t * X_of_t ^ 2 * (2 * (2 / s^2 + 1 / (2 / s^2)) + 4) = r_of_s * X_of_t * X_of_t ^ 2 * (s + 2 / s) ^ 2 
+          have h3_4 : (2 * (2 / s^2 + 1 / (2 / s^2)) + 4) = (s + 2 / s)^2 := by 
+            ring_nf
+            rw [inv_inv, mul_inv_cancel₀ s_h1, one_mul]
+            rw [mul_assoc _ 2⁻¹ 2]
+            rw [inv_mul_cancel₀ (two_ne_zero q field_cardinality q_prime q_mod_4_congruent_3)]
+            ring_nf
+          rw [h3_4]
+    have h4 : IsSquare (-1 : F) := by
+      have h4_1 : Y_of_t^2 / ((1 + X_of_t) * X_of_t * (s + 2 / s))^2 = -1 := by 
+        rw [← neg_one_mul] at h3
+        rw [mul_assoc (-1) ((1 + X_of_t)^2) (X_of_t^2)] at h3
+        rw [← mul_pow (1 + X_of_t) (X_of_t) 2] at h3
+        rw [mul_assoc (-1) (((1 + X_of_t) * X_of_t)^2) _] at h3
+        rw [← mul_pow (((1 + X_of_t) * X_of_t))] at h3
+        have h4_1_1 : ((1 + X_of_t) * X_of_t * (s + 2 / s))^2 ≠ 0 := by 
+          apply pow_ne_zero 2
+          apply mul_ne_zero
+          · apply mul_ne_zero
+            · apply one_add_X_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+            · apply X_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+          · intro h4_1_2
+            rw [← mul_right_inj' s_h1] at h4_1_2
+            ring_nf at h4_1_2
+            rw [mul_inv_cancel₀ s_h1, one_mul] at h4_1_2
+            rw [add_comm] at h4_1_2
+            have h4_1_2_1 : s^2 + 2 = 0 := by 
+              exact h4_1_2
+            have h4_1_2_2 : (s^2 - 2) * (s^2 + 2) = 0 := by 
+              rw [h4_1_2_1, mul_zero]
+            contradiction
+        rw [← div_left_inj' h4_1_1] at h3
+        rw [mul_div_assoc] at h3
+        rw [div_self h4_1_1, mul_one] at h3
+        exact h3
+      have h4_2 : (Y_of_t / ((1 + X_of_t) * X_of_t * (s + 2 / s)))^2 = -1 := by 
+        rw [← div_pow] at h4_1
+        exact h4_1
+      rw [← h4_2]
+      rw [pow_two]
+      apply IsSquare.mul_self
     have h5 : q % 4 ≠ 3 := by 
       rw [FiniteField.isSquare_neg_one_iff] at h4
       rw [field_cardinality] at h4
       exact h4
     contradiction
-
 
 /-- ϕ(t, s) is a function defined in the paper. It maps a numer `t` in F s to a point on the curve.
 
