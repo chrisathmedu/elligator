@@ -1157,22 +1157,6 @@ theorem y_defined
   use y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
 
 -- Chapter 3.2 Theorem 1
-theorem map_fulfills_curve_equation
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  (s : F)
-  (s_h1 : s ≠ 0) 
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime : Nat.Prime q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  let x_of_t := x t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-  let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-  let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-  x_of_t^2 + y_of_t^2 = 1 + d_of_s * x_of_t^2 * y_of_t^2 := sorry
-
--- Chapter 3.2 Theorem 1
 theorem u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
@@ -1216,7 +1200,42 @@ theorem map_fulfills_specific_equation
   let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-  Y_of_t ^2 = X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t := sorry
+  Y_of_t ^2 = X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t := by
+    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+    let u_of_t := u t
+    let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
+    let χ_of_v_of_t := χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3
+    let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
+    let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+    have h1 : X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t = χ_of_v_of_t * v_of_t := by
+      calc
+      X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t = χ_of_v_of_t * (u_of_t^5 + (r_of_s^2 -2 ) * u_of_t^3 + u_of_t) := by 
+        change (χ_of_v_of_t * u_of_t) ^ 5 + (r_of_s ^ 2 - 2) * (χ_of_v_of_t * u_of_t) ^ 3 + (χ_of_v_of_t * u_of_t) = χ_of_v_of_t * (u_of_t^5 + (r_of_s^2 -2 ) * u_of_t^3 + u_of_t)
+        rw [mul_pow (χ_of_v_of_t) (u_of_t) 5]
+        rw [mul_pow (χ_of_v_of_t) (u_of_t) 3]
+        have h1_1 : Odd 5 := by 
+          apply Nat.odd_iff.2
+          norm_num
+        have h1_2 : Odd 3 := by 
+          apply Nat.odd_iff.2
+          norm_num
+        rw [χ_of_a_pow_n_eq_χ_a v_of_t ⟨5, h1_1⟩ q field_cardinality q_prime q_mod_4_congruent_3]
+        rw [χ_of_a_pow_n_eq_χ_a v_of_t ⟨3, h1_2⟩ q field_cardinality q_prime q_mod_4_congruent_3]
+        change χ_of_v_of_t * u_of_t^5 + (r_of_s ^ 2 - 2) * (χ_of_v_of_t * u_of_t^3) + (χ_of_v_of_t * u_of_t) = χ_of_v_of_t * (u_of_t^5 + (r_of_s^2 -2 ) * u_of_t^3 + u_of_t)
+        ring_nf
+      _ = χ_of_v_of_t * v_of_t := by 
+        change χ_of_v_of_t * v_of_t = χ_of_v_of_t * v_of_t
+        rfl
+    -- TODO understand paper argumentation
+    have h2 : IsSquare (χ_of_v_of_t * v_of_t) := by
+      sorry
+    have h3 : (χ_of_v_of_t * v_of_t)^((q + 1) / 4) = χ_of_v_of_t * v_of_t := by 
+      sorry
+    have h4 : Y_of_t^2 = χ_of_v_of_t * v_of_t := by 
+      sorry
+    rw [← h1] at h4
+    exact h4
 
 lemma y_divisor_ne_zero 
   (s : F)
@@ -1339,6 +1358,23 @@ lemma y_divisor_ne_zero
       rw [field_cardinality] at h4
       exact h4
     contradiction
+
+-- Chapter 3.2 Theorem 1
+theorem map_fulfills_curve_equation
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  (s : F)
+  (s_h1 : s ≠ 0) 
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let x_of_t := x t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  x_of_t^2 + y_of_t^2 = 1 + d_of_s * x_of_t^2 * y_of_t^2 := sorry
+
 
 /-- ϕ(t, s) is a function defined in the paper. It maps a numer `t` in F s to a point on the curve.
 
