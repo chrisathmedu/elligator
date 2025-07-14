@@ -677,7 +677,6 @@ theorem d_nonsquare
       exact h2
     contradiction
 
-
 lemma one_sub_t_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
@@ -1531,7 +1530,22 @@ theorem map_fulfills_curve_equation
           ring_nf
     have h6 : (1 - d_of_s * x_of_t^2) ≠ 0 := by 
       intro h6_1
-      sorry
+      have h6_2 : IsSquare d_of_s := by 
+        rw [← add_right_inj (d_of_s * x_of_t^2), add_comm] at h6_1 
+        have h6_2_1 : 1 - d_of_s * x_of_t ^ 2 + d_of_s * x_of_t ^ 2 = 1 := by ring
+        rw [add_zero, h6_2_1] at h6_1
+        have h6_2_2 : x_of_t^2 ≠ 0 := by
+          rw [pow_two]
+          apply mul_ne_zero
+          · apply x_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+          · apply x_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+        rw [← div_left_inj' h6_2_2] at h6_1
+        rw [mul_div_assoc, div_self h6_2_2, mul_one] at h6_1
+        rw [← mul_one 1, ← pow_two, ← div_pow _ _ 2] at h6_1 
+        rw [← h6_1, pow_two]
+        apply IsSquare.mul_self
+      have h6_3 : ¬IsSquare d_of_s := by exact d_nonsquare s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+      contradiction
     have h7 : Y_of_t^2 * (1 - d_of_s * x_of_t^2) ≠ 0 := by 
       apply mul_ne_zero
       · rw [pow_two]
