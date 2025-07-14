@@ -597,7 +597,7 @@ theorem r_ne_zero
     exact h3
   contradiction
 
-theorem d_nonsquare 
+theorem d_nonsquare
   (s : F)
   (s_h1 : s ≠ 0) 
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -607,8 +607,10 @@ theorem d_nonsquare
   (q_mod_4_congruent_3 : q % 4 = 3)
   : 
   let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
-  ¬ (∃ w : F, w^2 = d_of_s) := by
-    change ¬∃ w, w ^ 2 = (-((2 / s^2) + 1)^2 / ((2 / s^2) - 1)^2)
+  ¬IsSquare d_of_s := by
+    intro d_of_s
+    rw [isSquare_iff_exists_mul_self d_of_s]
+    change ¬∃ r, (-((2 / s^2) + 1)^2 / ((2 / s^2) - 1)^2) = r * r
     rintro ⟨w, Pw⟩ 
     have h00 : (2 / s^2 - 1)^2 ≠ 0 := by
       rw [pow_two]
@@ -646,7 +648,7 @@ theorem d_nonsquare
         apply c_ne_neg_one s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 at h'
         exact h'
     have h1 : w^2 * ((2 / s^2) - 1)^2 / ((2 / s^2) + 1)^2 = -1 := by
-      rw [Pw]
+      rw [pow_two, ← Pw]
       rw [div_eq_mul_inv]
       rw [div_eq_mul_inv]
       rw [← neg_one_mul]
@@ -674,6 +676,7 @@ theorem d_nonsquare
       rw [field_cardinality] at h2
       exact h2
     contradiction
+
 
 lemma one_sub_t_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
@@ -1556,8 +1559,15 @@ theorem map_fulfills_curve_equation
           rw [← div_pow _ _ 2] 
           change y_of_t^2 = y_of_t^2
           rfl
-    nth_rw 1 [← h8]
-    sorry
+    rw [← mul_right_inj' h6] at h8
+    rw [← mul_div_assoc, mul_comm, mul_div_assoc, div_self h6, mul_one] at h8
+    rw [sub_mul, one_mul] at h8 
+    rw [← add_left_inj (x_of_t^2)] at h8
+    rw [← add_left_inj (y_of_t^2 * x_of_t^2 * d_of_s)] at h8
+    ring_nf at h8
+    symm at h8
+    rw [mul_assoc (d_of_s) (x_of_t ^ 2) (y_of_t ^ 2), mul_comm (d_of_s) (x_of_t ^ 2 * y_of_t ^ 2)]
+    exact h8
 
 /-- ϕ(t, s) is a function defined in the paper. It maps a numer `t` in F s to a point on the curve.
 
