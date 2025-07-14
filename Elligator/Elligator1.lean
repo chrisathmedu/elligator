@@ -235,6 +235,16 @@ lemma one_over_χ_of_a_eq_χ_a
   1 / χ_of_a  = χ_of_a := by 
     sorry
 
+lemma square_of_a
+  (a : {n : F // IsSquare n})
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  a.val^((q + 1) / 2) = a.val := by 
+    sorry
+
 variable (s : F)
 variable (s_h1 : s ≠ 0) 
 variable (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -481,7 +491,7 @@ lemma c_ne_neg_one
   apply s_pow_two_ne_neg_two s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 at h1
   exact h1
 
-theorem c_h 
+theorem c_add_one_ne_zero 
   (s : F)
   (s_h1 : s ≠ 0) 
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -491,14 +501,10 @@ theorem c_h
   (q_mod_4_congruent_3 : q % 4 = 3)
   : 
   let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-  c_of_s * (c_of_s - 1) * (c_of_s + 1) ≠ 0 := by
-  change (2 / s^2) * ((2 / s^2) - 1) * ((2 / s^2) + 1) ≠ 0
-  apply mul_ne_zero
-  · apply mul_ne_zero
-    · exact c_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-    · apply sub_ne_zero.2
-      exact c_ne_one s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-  · intro h
+  c_of_s + 1 ≠ 0 := by
+    intro c_of_s
+    intro h
+    change 2 / s^2 + 1 = 0 at h
     have h1 : (-1 : F) + 1 = 0 := by norm_num 
     rw [← h1] at h
     apply add_right_cancel_iff.1 at h
@@ -516,6 +522,37 @@ theorem c_h
     apply s_pow_two_ne_neg_two s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 at h2
     exact h2
 
+theorem c_sub_one_ne_zero 
+  (s : F)
+  (s_h1 : s ≠ 0) 
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  : 
+  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  c_of_s - 1 ≠ 0 := by
+    apply sub_ne_zero.2
+    exact c_ne_one s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+
+theorem c_h 
+  (s : F)
+  (s_h1 : s ≠ 0) 
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  : 
+  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  c_of_s * (c_of_s - 1) * (c_of_s + 1) ≠ 0 := by
+  change (2 / s^2) * ((2 / s^2) - 1) * ((2 / s^2) + 1) ≠ 0
+  apply mul_ne_zero
+  · apply mul_ne_zero
+    · exact c_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+    · exact c_sub_one_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  · exact c_add_one_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
 theorem r_ne_zero 
   (s : F)
   (s_h1 : s ≠ 0) 
@@ -1204,10 +1241,8 @@ theorem map_fulfills_specific_equation
     let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
     let u_of_t := u t
     let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
     let χ_of_v_of_t := χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3
-    let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
-    let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+    intro r_of_s X_of_t Y_of_t
     have h1 : X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t = χ_of_v_of_t * v_of_t := by
       calc
       X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t = χ_of_v_of_t * (u_of_t^5 + (r_of_s^2 -2 ) * u_of_t^3 + u_of_t) := by 
@@ -1227,15 +1262,14 @@ theorem map_fulfills_specific_equation
       _ = χ_of_v_of_t * v_of_t := by 
         change χ_of_v_of_t * v_of_t = χ_of_v_of_t * v_of_t
         rfl
-    -- TODO understand paper argumentation
     have h2 : IsSquare (χ_of_v_of_t * v_of_t) := by
       sorry
-    have h3 : (χ_of_v_of_t * v_of_t)^((q + 1) / 4) = χ_of_v_of_t * v_of_t := by 
-      sorry
-    have h4 : Y_of_t^2 = χ_of_v_of_t * v_of_t := by 
-      sorry
-    rw [← h1] at h4
-    exact h4
+    have h3 : (χ_of_v_of_t * v_of_t)^((q + 1) / 2) = χ_of_v_of_t * v_of_t := by 
+      apply square_of_a ⟨(χ_of_v_of_t * v_of_t), h2⟩ q field_cardinality q_prime q_mod_4_congruent_3
+    rw [h1]
+    let χ_of_sum := χ ((u t)^2 + 1 / c_of_s^2) q field_cardinality q_prime q_mod_4_congruent_3
+    change ((χ_of_v_of_t * v_of_t)^((q + 1) / 4) * χ_of_v_of_t * χ_of_sum)^2 = χ_of_v_of_t * v_of_t
+    sorry
 
 lemma y_divisor_ne_zero 
   (s : F)
@@ -1382,29 +1416,147 @@ theorem map_fulfills_curve_equation
     intro x_of_t y_of_t d_of_s
     have h1 : (c_of_s - 1)^2 * s^2 = 2 * (r_of_s - 2):= 
       calc
-        (c_of_s - 1)^2 * s^2 = (c_of_s - 1)^2 * (2 / c_of_s) := by sorry
-        _ = 2 * (r_of_s - 2) := by sorry
+        (c_of_s - 1)^2 * s^2 = (c_of_s - 1)^2 * (2 / c_of_s) := by 
+          have h1_1 : s^2 = 2 / c_of_s := by 
+            change s^2 = 2 / (2 / s^2)
+            ring_nf
+            rw [inv_inv]
+            rw [mul_assoc]
+            rw [inv_mul_cancel₀ (two_ne_zero q field_cardinality q_prime q_mod_4_congruent_3), mul_one]
+          rw [h1_1]
+        _ = 2 * (r_of_s - 2) := by 
+          rw [sub_pow_two, mul_one, one_pow 2]
+          rw [add_mul, sub_mul]
+          rw [← mul_div_assoc]
+          rw [one_mul]
+          rw [mul_comm, pow_two, ← mul_assoc]
+          rw [mul_div_assoc, div_self (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3), mul_one]
+          nth_rw 4 [← mul_one 2]
+          rw [add_comm, ← add_sub_assoc]
+          rw [mul_div_assoc, ← mul_add 2 (1 / c_of_s) c_of_s, add_comm]
+          change 2 * r_of_s - 2 * c_of_s * (2 / c_of_s) = 2 * (r_of_s - 2)
+          ring_nf
+          rw [mul_inv_cancel₀ (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3)]
+          ring_nf
     have h2 : Y_of_t^2 * (1 - x_of_t^2) = X_of_t * (r_of_s * X_of_t - (1 + X_of_t)^2)^2 := by 
       calc 
-        Y_of_t^2 * (1 - x_of_t^2) = Y_of_t^2 * (c_of_s - 1) * s * X_of_t * (1 + X_of_t)^2 := by 
-          sorry
+        Y_of_t^2 * (1 - x_of_t^2) = Y_of_t^2 - (c_of_s - 1)^2 * s^2 * X_of_t^2 * (1 + X_of_t)^2 := by 
+          change Y_of_t^2 * (1 - (((c_of_s - 1) * s * X_of_t * (1 + X_of_t)) / Y_of_t)^2) = Y_of_t^2 - (c_of_s - 1)^2 * s^2 * X_of_t^2 * (1 + X_of_t)^2
+          rw [mul_sub, mul_one]
+          have h2_1 : Y_of_t^2 ≠ 0 := by
+            rw [pow_two]
+            apply mul_ne_zero
+            · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+            · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+          rw [div_pow, ← mul_div_assoc, mul_comm, mul_div_assoc, div_self h2_1]
+          ring_nf
        _ = X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t - 2 * (r_of_s - 2) * X_of_t^2 * (1 + X_of_t)^2 := by 
-          sorry
+          rw [h1, map_fulfills_specific_equation t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3]
        _ = X_of_t * (r_of_s * X_of_t - (1 + X_of_t)^2)^2 := by 
-          sorry
+          ring_nf
     have h3 : -d_of_s = (r_of_s + 2) / (r_of_s - 2) := by 
       calc 
-        -d_of_s = (c_of_s + 2 + 1 / c_of_s) / (c_of_s - 2 + 1 / c_of_s) := by sorry
-        _ = (r_of_s + 2) / (r_of_s - 2) := by sorry
+        -d_of_s = (c_of_s + 2 + 1 / c_of_s) / (c_of_s - 2 + 1 / c_of_s) := by 
+          change -(-(c_of_s + 1)^2 / (c_of_s - 1)^2) = (c_of_s + 2 + 1 / c_of_s) / (c_of_s - 2 + 1 / c_of_s)
+          rw [← neg_one_mul]
+          nth_rw 2 [← neg_one_mul]
+          rw [mul_div_assoc, ← mul_assoc]
+          rw [add_pow_two, sub_pow_two]
+          have h3_1 : 1 / c_of_s ≠ 0 := by 
+            rw [← inv_eq_one_div]
+            apply inv_ne_zero
+            apply c_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+          have h3_2 : (1 / c_of_s) / (1 / c_of_s) = 1 := by 
+            rw [div_self h3_1]
+          have h3_3 : (-1 : F) * (-1) = 1 := by ring
+          rw [h3_3]
+          nth_rw 1 [← h3_2]
+          rw [← mul_div_mul_comm]
+          rw [mul_add, mul_add, mul_add, mul_sub, pow_two, ← mul_assoc]
+          rw [← inv_eq_one_div, inv_mul_cancel₀ (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3), one_mul]
+          rw [mul_one, ← mul_assoc, mul_comm, ← mul_assoc]
+          rw [mul_inv_cancel₀ (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3), one_mul]
+          ring_nf 
+        _ = (r_of_s + 2) / (r_of_s - 2) := by 
+          rw [add_assoc, add_comm 2 (1 / c_of_s), ← add_assoc]
+          nth_rw 3 [add_comm]
+          rw [← add_sub_assoc]
+          nth_rw 3 [add_comm]
+          change (r_of_s + 2) / (r_of_s - 2) = (r_of_s + 2) / (r_of_s - 2)
+          rfl
     have h4 : -d_of_s * (c_of_s - 1)^2 * s^2 = 2 * (r_of_s + 2) := by 
+      rw [h3, mul_assoc, h1]
+      rw [mul_comm, ← mul_div_assoc, mul_assoc, mul_comm (r_of_s - 2) (r_of_s + 2), ← mul_assoc]
+      have h4_1 : r_of_s - 2 ≠ 0 := by 
+        intro h4_1_1
+        have h4_1_2 : (c_of_s - 1) ^ 2 * s ^ 2 = 0 := by
+          rw [h4_1_1, mul_zero] at h1
+          exact h1
+        have h4_1_3 : (c_of_s - 1) ^ 2 * s ^ 2 ≠ 0 := by 
+          apply mul_ne_zero
+          · apply pow_ne_zero 2
+            exact c_sub_one_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+          · apply pow_ne_zero 2
+            apply s_h1
+        contradiction
+      rw [mul_div_assoc, div_self h4_1, mul_one] 
+    have h5 : Y_of_t^2 * (1 - d_of_s * x_of_t^2) = X_of_t * (r_of_s * X_of_t + (1 + X_of_t)^2)^2 := by 
       calc 
-        -d_of_s * (c_of_s - 1)^2 * s^2 = -d_of_s * (2 / c_of_s) * (c_of_s - 1)^2 := by sorry
-        _ = 2 * (r_of_s + 2) := by sorry
-    have h5 : Y_of_t^2 * (1 - d_of_s * x_of_t^2) ≠ 0 := by sorry
-    have h6 : (1 - x_of_t^2) / (1 - d_of_s * x_of_t^2) = y_of_t^2 := by
+        Y_of_t^2 * (1 - d_of_s * x_of_t^2) = Y_of_t^2 - d_of_s * (c_of_s - 1)^2 * s^2 * X_of_t^2 * (1 + X_of_t)^2 := by 
+          change Y_of_t^2 * (1 - d_of_s * (((c_of_s - 1) * s * X_of_t * (1 + X_of_t)) / Y_of_t)^2) = Y_of_t^2 - d_of_s * (c_of_s - 1)^2 * s^2 * X_of_t^2 * (1 + X_of_t)^2 
+          rw [mul_sub, mul_one]
+          have h2_1 : Y_of_t^2 ≠ 0 := by
+            rw [pow_two]
+            apply mul_ne_zero
+            · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+            · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+          rw [div_pow, ← mul_assoc, mul_comm (Y_of_t^2), ← mul_div_assoc, mul_assoc]
+          rw [mul_comm (Y_of_t ^ 2) (((c_of_s - 1) * s * X_of_t * (1 + X_of_t)) ^ 2)]
+          rw [← mul_assoc, mul_div_assoc, div_self h2_1]
+          ring_nf
+       _ = X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t + 2 * (r_of_s + 2) * X_of_t^2 * (1 + X_of_t)^2 := by 
+          rw [← neg_add_eq_sub, ← neg_one_mul] 
+          rw [← mul_assoc (-1 : F)]
+          rw [← mul_assoc (-1 : F)]
+          rw [← mul_assoc (-1 : F)]
+          rw [← mul_assoc (-1 : F)]
+          rw [neg_one_mul]
+          rw [add_comm]
+          rw [h4]
+          rw [map_fulfills_specific_equation t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3]
+       _ = X_of_t * (r_of_s * X_of_t + (1 + X_of_t)^2)^2 := by 
+          ring_nf
+    have h6 : (1 - d_of_s * x_of_t^2) ≠ 0 := by 
+      intro h6_1
+      sorry
+    have h7 : Y_of_t^2 * (1 - d_of_s * x_of_t^2) ≠ 0 := by 
+      apply mul_ne_zero
+      · rw [pow_two]
+        apply mul_ne_zero
+        · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+        · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+      · exact h6
+    have h8 : (1 - x_of_t^2) / (1 - d_of_s * x_of_t^2) = y_of_t^2 := by
       calc
-        (1 - x_of_t^2) / (1 - d_of_s * x_of_t^2) = (r_of_s * X_of_t - (1 + X_of_t)^2)^2 / (r_of_s * X_of_t + (1 + X_of_t)^2)^2 := by sorry
-        _ = y_of_t^2 := by sorry
+        (1 - x_of_t^2) / (1 - d_of_s * x_of_t^2) = (r_of_s * X_of_t - (1 + X_of_t)^2)^2 / (r_of_s * X_of_t + (1 + X_of_t)^2)^2 := by 
+          have h8_1 : Y_of_t^2 / Y_of_t^2 = 1 := by 
+            have h7_2 : Y_of_t^2 ≠ 0 := by
+              rw [pow_two]
+              apply mul_ne_zero
+              · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+              · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t
+            rw [div_self h7_2]
+          nth_rw 1 [← one_mul (1 - x_of_t ^ 2), ← h8_1]
+          rw [mul_div_assoc, ← mul_div_mul_comm]
+          rw [h2, h5]
+          rw [mul_div_mul_comm X_of_t _ X_of_t _]
+          rw [div_self (X_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t)]
+          rw [one_mul] 
+        _ = y_of_t^2 := by 
+          rw [← div_pow _ _ 2] 
+          change y_of_t^2 = y_of_t^2
+          rfl
+    nth_rw 1 [← h8]
     sorry
 
 /-- ϕ(t, s) is a function defined in the paper. It maps a numer `t` in F s to a point on the curve.
