@@ -159,7 +159,7 @@ lemma χ_of_a_pow_n_eq_χ_a
 lemma χ_of_a_eq_neg_one
   (a : F)
   (a_nonzero : a ≠ 0)
-  (a_nonsquare : IsSquare a = false)
+  (a_nonsquare : ¬IsSquare a)
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime : Nat.Prime q)
