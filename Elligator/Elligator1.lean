@@ -33,8 +33,8 @@ noncomputable def r
   (q_prime : Nat.Prime q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   : F := 
-  let c_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-  c_s + 1 / c_s
+  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  c_of_s + 1 / c_of_s
 
 /-- d(s) is a constant defined in the paper.
 
@@ -58,8 +58,26 @@ Paper definition at chapter 3.2 theorem 1.
 -/
 noncomputable def u 
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
   : F :=
   (1 - t.val) / (1 + t.val)
+
+theorem u_defined
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3) :
+  ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1}, ∃ (w : F), w = (u t q field_cardinality q_prime q_mod_4_congruent_3) := by
+    intro t
+    use u t q field_cardinality q_prime q_mod_4_congruent_3
+
+theorem u_defined2 :
+  ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1}, (1 + t.val) ≠ 0 := by
+    intro t
+    sorry
 
 /-- v(t, s) is a function defined in the paper.
 
@@ -75,8 +93,9 @@ noncomputable def v
   (q_prime : Nat.Prime q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   : F := 
+  let u_of_t := u t q field_cardinality q_prime q_mod_4_congruent_3
   let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-  (u t)^5 + (r_of_s^2 - 2) * (u t)^3 + u t
+  (u_of_t)^5 + (r_of_s^2 - 2) * (u_of_t)^3 + u_of_t
 
 /-- X(t, s) is a function defined in the paper.
 
@@ -92,9 +111,10 @@ noncomputable def X
   (q_prime : Nat.Prime q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   : F := 
+  let u_of_t := u t q field_cardinality q_prime q_mod_4_congruent_3
   let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let χ_of_v_of_t := LegendreSymbol.χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3
-  χ_of_v_of_t * u t
+  χ_of_v_of_t * u_of_t
 
 /-- Y(t, s) is a function defined in the paper.
 
@@ -110,10 +130,11 @@ noncomputable def Y
   (q_prime : Nat.Prime q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   : F :=
+  let u_of_t := u t q field_cardinality q_prime q_mod_4_congruent_3
   let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let χ_of_v_of_t := LegendreSymbol.χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3
-  let χ_of_sum := LegendreSymbol.χ ((u t)^2 + 1 / c_of_s^2) q field_cardinality q_prime q_mod_4_congruent_3
+  let χ_of_sum := LegendreSymbol.χ ((u_of_t)^2 + 1 / c_of_s^2) q field_cardinality q_prime q_mod_4_congruent_3
   (χ_of_v_of_t * v_of_t)^((q + 1) / 4) * χ_of_v_of_t * χ_of_sum  
 
 /-- x(t, s) is a function defined in the paper. It is the x-coordinate of the point on the curve.
@@ -477,14 +498,9 @@ lemma one_add_t_ne_zero
 lemma u_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
-  u t ≠ (0 : F) := by
+  u t q field_cardinality q_prime q_mod_4_congruent_3 ≠ (0 : F) := by
   change (1 - t.val) / (1 + t.val) ≠ 0
   apply div_ne_zero (one_sub_t_ne_zero t) (one_add_t_ne_zero t) 
-
-theorem u_defined :
-  ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1}, ∃ (w : F), w = u t := by
-  intro t
-  use u t
 
 lemma v_ne_zero
   (s : F)
@@ -499,7 +515,7 @@ lemma v_ne_zero
   v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 ≠ (0 : F) := by
   let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-  let u_of_t := u t
+  let u_of_t := u t q field_cardinality q_prime q_mod_4_congruent_3
   change u_of_t^5 + (r_of_s^2 - 2) * u_of_t^3 + u_of_t ≠ 0
   have h1 : (r_of_s^2 - 2) = c_of_s^2 + 1 / c_of_s^2 := by
     calc 
@@ -623,7 +639,7 @@ lemma X_ne_zero
   : 
   let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   X_of_t ≠ 0 := by
-  let u_of_t := u t
+  let u_of_t := u t q field_cardinality q_prime q_mod_4_congruent_3
   let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   apply mul_ne_zero
   · apply LegendreSymbol.χ_a_ne_zero v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t) q field_cardinality q_prime q_mod_4_congruent_3
@@ -656,12 +672,13 @@ lemma Y_ne_zero
   : 
   let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   Y_of_t ≠ 0 := by 
-  let u_of_t := u t
+  let u_of_t := u t q field_cardinality q_prime q_mod_4_congruent_3
   let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let χ_of_v_of_t := LegendreSymbol.χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3
   let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let χ_of_v_of_t := LegendreSymbol.χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3
-  let χ_of_sum := LegendreSymbol.χ ((u t)^2 + 1 / c_of_s^2) q field_cardinality q_prime q_mod_4_congruent_3
+  let χ_of_sum := LegendreSymbol.χ (u_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime q_mod_4_congruent_3
+  intro Y_of_t
   change (χ_of_v_of_t * v_of_t)^((q + 1) / 4) * χ_of_v_of_t * χ_of_sum ≠ 0
   apply mul_ne_zero
   · apply mul_ne_zero
@@ -701,7 +718,7 @@ lemma Y_ne_zero
         rw [field_cardinality] at h3_2_2
         exact h3_2_2
       contradiction
-    apply LegendreSymbol.χ_a_ne_zero ((u t)^2 + 1 / c_of_s^2) χ_sum_ne_zero q field_cardinality q_prime q_mod_4_congruent_3 
+    apply LegendreSymbol.χ_a_ne_zero (u_of_t^2 + 1 / c_of_s^2) χ_sum_ne_zero q field_cardinality q_prime q_mod_4_congruent_3 
 
 theorem Y_defined
   (s : F)
@@ -764,12 +781,12 @@ lemma one_add_X_ne_zero
   :
   let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
   (1 + X_of_t) ≠ (0 : F) := by
-    let u_of_t := u t
+    let u_of_t := u t q field_cardinality q_prime q_mod_4_congruent_3
     let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
     let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
     let χ_of_v_of_t := LegendreSymbol.χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3
     intro X
-    change 1 + χ_of_v_of_t * u t ≠ 0
+    change 1 + χ_of_v_of_t * u_of_t ≠ 0
     intro h
     have h1 : χ_of_v_of_t * u_of_t = -1 := by
       rw [← add_right_inj (-1)] at h
@@ -787,7 +804,7 @@ lemma one_add_X_ne_zero
       ring_nf
       rw [mul_inv_cancel₀ (LegendreSymbol.χ_a_ne_zero v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 t) q field_cardinality q_prime q_mod_4_congruent_3)]
       rw [mul_comm]
-      change χ_of_v_of_t * u t = -1
+      change χ_of_v_of_t * u_of_t = -1
       exact h1
     have h3 : v_of_t = -χ_of_v_of_t * (1 + r_of_s^2 - 2 + 1) := by 
       change u_of_t^5 + (r_of_s^2 - 2) * u_of_t^3 + u_of_t = -χ_of_v_of_t * (1 + r_of_s^2 - 2 + 1)
@@ -919,7 +936,7 @@ theorem map_fulfills_specific_equation
   let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   Y_of_t ^2 = X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t := by
     let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-    let u_of_t := u t
+    let u_of_t := u t q field_cardinality q_prime q_mod_4_congruent_3
     let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
     let χ_of_v_of_t := LegendreSymbol.χ v_of_t q field_cardinality q_prime q_mod_4_congruent_3
     intro r_of_s X_of_t Y_of_t
@@ -947,7 +964,7 @@ theorem map_fulfills_specific_equation
     have h3 : (χ_of_v_of_t * v_of_t)^((q + 1) / 2) = χ_of_v_of_t * v_of_t := by 
       apply LegendreSymbol.square_of_a ⟨(χ_of_v_of_t * v_of_t), h2⟩ q field_cardinality q_prime q_mod_4_congruent_3
     rw [h1]
-    let χ_of_sum := LegendreSymbol.χ ((u t)^2 + 1 / c_of_s^2) q field_cardinality q_prime q_mod_4_congruent_3
+    let χ_of_sum := LegendreSymbol.χ (u_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime q_mod_4_congruent_3
     change ((χ_of_v_of_t * v_of_t)^((q + 1) / 4) * χ_of_v_of_t * χ_of_sum)^2 = χ_of_v_of_t * v_of_t
     sorry
 
@@ -1132,12 +1149,13 @@ theorem u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero
   (q_prime : Nat.Prime q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
+  let u_of_t := u t q field_cardinality q_prime q_mod_4_congruent_3
   let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let x_of_t := x t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
-  u t * v_of_t * X_of_t  * Y_of_t * x_of_t * (y_of_t + 1) ≠ 0 := by
+  u_of_t * v_of_t * X_of_t  * Y_of_t * x_of_t * (y_of_t + 1) ≠ 0 := by
     apply mul_ne_zero
     · apply mul_ne_zero
       · apply mul_ne_zero
