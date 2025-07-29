@@ -65,20 +65,6 @@ noncomputable def u
   : F :=
   (1 - t.val) / (1 + t.val)
 
-theorem u_defined
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime : Nat.Prime q)
-  (q_mod_4_congruent_3 : q % 4 = 3) :
-  ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1}, ∃ (w : F), w = (u t q field_cardinality q_prime q_mod_4_congruent_3) := by
-    intro t
-    use u t q field_cardinality q_prime q_mod_4_congruent_3
-
-theorem u_defined2 :
-  ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1}, (1 + t.val) ≠ 0 := by
-    intro t
-    sorry
-
 /-- v(t, s) is a function defined in the paper.
 
 Paper definition at chapter 3.2 theorem 1.
@@ -611,6 +597,12 @@ lemma v_ne_zero
         exact h3_2_2
       contradiction
   contradiction
+
+theorem u_defined :
+  ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1}, (1 + t.val) ≠ 0 := by
+    intro t
+    intro h
+    sorry
 
 theorem v_defined 
   (s : F)
@@ -1390,10 +1382,10 @@ theorem ϕ_inv_only_two_specific_preimages
   (q_prime : Nat.Prime q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   : 
-  let ϕ_of_t := ϕ t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
-  let ϕ_of_neg_t := ϕ (-t) s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3;
+  let ϕ_of_t := ϕ t s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  let ϕ_of_neg_t := ϕ (-t) s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   ϕ_of_t = ϕ_of_neg_t  
-  ↔ ¬ (∃ (w : F) (h: w ≠ -t), ϕ w s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 = ϕ_of_t) := by 
+  ↔ ¬ (∃ (w : { n : F // n ≠ t ∧ n ≠ -t}), ϕ w.val s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 = ϕ_of_t) := by 
   sorry
 
 /-- E_over_F(s, q) is the set of points on the curve defined by the equation in the paper.
@@ -1408,11 +1400,11 @@ def E_over_F
   (field_cardinality : Fintype.card F = q)
   (q_prime : Nat.Prime q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  : Set ((F) × (F)) := 
+  : Set (F × F) := 
   let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   {p | p.fst^2 + p.snd^2 = 1 + d_of_s * p.fst^2 * p.snd^2}
 
-def ϕ_over_F_prop1 
+noncomputable def ϕ_over_F_prop1 
   (s : F)
   (s_h1 : s ≠ 0) 
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -1421,7 +1413,7 @@ def ϕ_over_F_prop1
   (q_prime : Nat.Prime q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   (point : {p : (F) × (F) // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3})
-  := 
+  : Prop := 
   let y := point.val.snd
   y + 1 ≠ 0
 
@@ -1452,10 +1444,10 @@ def ϕ_over_F_prop2
   (q_prime : Nat.Prime q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   (point : {p : (F) × (F) // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3})
-  := 
+  : Prop := 
   let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let η_of_point := η s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 point
-  ∃ (w : F), w^2 = (1 + η_of_point * r_of_s)^2 - 1
+  IsSquare ((1 + η_of_point * r_of_s)^2 - 1)
 
 def ϕ_over_F_prop3
   (s : F)
@@ -1466,7 +1458,7 @@ def ϕ_over_F_prop3
   (q_prime : Nat.Prime q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   (point : {p : (F) × (F) // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3})
-  := 
+  : Prop := 
   let x := point.val.fst
   let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   let χ_of_c_of_s := LegendreSymbol.χ c_of_s q field_cardinality q_prime q_mod_4_congruent_3
@@ -1550,7 +1542,7 @@ noncomputable def X2
   (q_mod_4_congruent_3 : q % 4 = 3)
   (point : {p : (F) × (F) // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3})
   (h : point.val ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3)
-  := 
+  : F := 
   let η_of_point := η s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 ⟨point.val, h⟩
   let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
   (-(1 + η_of_point * r_of_s) + ((1 + η_of_point * r_of_s)^2 - 1)^((q + 1) / 4))
@@ -1711,7 +1703,7 @@ noncomputable def ι
   : (F × F)
   := 
   let σ_of_τ := σ q field_cardinality q_prime q_mod_4_congruent_3 τ
-  ϕ (σ_of_τ) s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
+  ϕ σ_of_τ s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3
 
 theorem S_cardinality 
   (q : ℕ)
