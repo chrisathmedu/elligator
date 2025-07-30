@@ -5,7 +5,7 @@
 % If you want to split the blueprint content into several files then
 % the current file can be a simple sequence of \input. Otherwise It
 % can start with a \section or \chapter for instance.
-\begin{definition}[Elligator 1 c]
+\begin{definition}[Decoding Function Variable c]
   \label{def:Elligator1.c}
   \lean{Elligator1.c}
   \leanok
@@ -20,7 +20,12 @@
   c_of_s * (c_of_s - 1) * (c_of_s + 1) ≠ 0
 \end{theorem}
 
-\begin{definition}[Elligator 1 r]
+\begin{proof}
+  \leanok
+  This obviously follows from what we did so far.
+\end{proof}
+
+\begin{definition}[Decoding Function Variable r]
   \label{def:Elligator1.r}
   \lean{Elligator1.r}
   \leanok
@@ -28,7 +33,7 @@
   TODO
 \end{definition}
 
-\begin{definition}[Elligator 1 d]
+\begin{definition}[Decoding Function Variable d]
   \label{def:Elligator1.d}
   \lean{Elligator1.d}
   \leanok
@@ -36,14 +41,14 @@
   TODO
 \end{definition}
 
-\begin{definition}[Elligator 1 u]
+\begin{definition}[Decoding Function Variable u]
   \label{def:Elligator1.u}
   \lean{Elligator1.u}
   \leanok
   TODO
 \end{definition}
 
-\begin{definition}[Elligator 1 v]
+\begin{definition}[Decoding Function Variable v]
   \label{def:Elligator1.v}
   \lean{Elligator1.v}
   \leanok
@@ -58,7 +63,7 @@
   TODO
 \end{definition}
 
-\begin{definition}[Elligator 1 X]
+\begin{definition}[Decoding Function Variable X]
   \label{def:Elligator1.X}
   \lean{Elligator1.X}
   \leanok
@@ -66,7 +71,7 @@
   TODO
 \end{definition}
 
-\begin{definition}[Elligator 1 Y]
+\begin{definition}[Decoding Function Variable Y]
   \label{def:Elligator1.Y}
   \lean{Elligator1.Y}
   \leanok
@@ -74,7 +79,7 @@
   TODO
 \end{definition}
 
-\begin{definition}[Elligator 1 x]
+\begin{definition}[Decoding Function Variable x]
   \label{def:Elligator1.x}
   \lean{Elligator1.x}
   \leanok
@@ -82,7 +87,7 @@
   TODO
 \end{definition}
 
-\begin{definition}[Elligator 1 y]
+\begin{definition}[Decoding Function Variable y]
   \label{def:Elligator1.y}
   \lean{Elligator1.y}
   \leanok
@@ -90,33 +95,180 @@
   TODO
 \end{definition}
 
-\begin{definition}[Decoding Function ϕ]
-  \label{def:Elligator1.ϕ}
-  \lean{Elligator1.ϕ}
-  \uses{def:Elligator1.x, def:Elligator1.y}
-  \leanok
-  TODO
-\end{definition}
-
-\begin{theorem}[Variables fulfill Specific Equation]
-  \label{thm:map_fulfills_specific_equation}
+\begin{theorem}[Decoding Function Variables fulfill Specific Equation]
+  \label{thm:Elligator1.map_fulfills_specific_equation}
   \lean{Elligator1.map_fulfills_specific_equation}
-  \leanok
   \uses{def:Elligator1.c, def:Elligator1.X, def:Elligator1.Y}
-  There is a homotopy of immersions of $𝕊^2$ into $ℝ^3$ from the inclusion map to
-  the antipodal map $a : q ↦ -q$.
+  TODO
 \end{theorem}
 
-\begin{theorem}[Variables fulfill Curve Equation]
+\begin{theorem}[Decoding Function Variables fulfill Curve Equation]
   \label{thm:Elligator1.map_fulfills_curve_equation}
   \lean{Elligator1.map_fulfills_curve_equation}
   \leanok
   \uses{def:Elligator1.x, def:Elligator1.y, def:Elligator1.d, thm:Elligator1.map_fulfills_specific_equation}
-  There is a homotopy of immersions of $𝕊^2$ into $ℝ^3$ from the inclusion map to
-  the antipodal map $a : q ↦ -q$.
+  TODO
 \end{theorem}
-  
+
 \begin{proof}
   \leanok
   This obviously follows from what we did so far.
 \end{proof}
+
+\begin{definition}[Decoding Function ϕ]
+  \label{def:Elligator1.ϕ}
+  \lean{Elligator1.ϕ}
+  \uses{def:Elligator1.x, def:Elligator1.y, thm:Elligator1.map_fulfills_curve_equation}
+  \leanok
+  In the situation of Theorem 1, the \textbf{decoding function} for the complete Edwards Curve $E : x^2 + y^2 = 1 + d x^2 y^2$ is the function $\phi : \text{F}_q \to E(\text{F}_q)$ defined as follows:
+
+  $\phi(\pm 1) = (0, 1)$; $\text{if } t \notin \{\pm 1\}, \quad \text{then} \quad \phi(t) = (x, y)$.
+\end{definition}
+
+\begin{theorem}[Preimages of ϕ]
+  \label{thm:Elligator1.ϕ_inv_only_two_specific_preimages}
+  \lean{Elligator1.ϕ_inv_only_two_specific_preimages}
+  \uses{def:Elligator1.ϕ}
+  TODO
+\end{theorem}
+
+\begin{definition}[Elliptic Curve over Finite Field]
+  \label{def:Elligator1.E_over_F}
+  \lean{Elligator1.E_over_F}
+  \leanok
+  \uses{def:Elligator1.d}
+  TODO
+\end{definition}
+
+\begin{theorem}[ϕ(F sub q) Property 1]
+  \label{thm:Elligator1.ϕ_over_F_prop1}
+  \lean{Elligator1.ϕ_over_F_prop1}
+  \uses{def:Elligator1.y, def:Elligator1.E_over_F}
+  TODO
+\end{theorem}
+
+\begin{definition}[Inverted Map Variable η]
+  \label{def:Elligator1.η}
+  \lean{Elligator1.η}
+  \leanok
+  \uses{def:Elligator1.d, def:Elligator1.E_over_F}
+  TODO
+\end{definition}
+
+\begin{theorem}[ϕ(F sub q) Property 2]
+  \label{thm:Elligator1.ϕ_over_F_prop2}
+  \lean{Elligator1.ϕ_over_F_prop2}
+  \uses{def:Elligator1.η, def:Elligator1.r, def:Elligator1.E_over_F}
+  TODO
+\end{theorem}
+
+\begin{theorem}[ϕ(F sub q) Property 3]
+  \label{thm:Elligator1.ϕ_over_F_prop3}
+  \lean{Elligator1.ϕ_over_F_prop3}
+  \uses{def:Elligator1.η, def:Elligator1.r, def:Elligator1.c, def:LegendreSymbol.χ, def:Elligator1.E_over_F}
+  TODO
+\end{theorem}
+
+\begin{definition}[Inverted Map Set ϕ(F sub q)]
+  \label{def:Elligator1.ϕ_over_F}
+  \lean{Elligator1.ϕ_over_F}
+  \uses{thm:Elligator1.ϕ_over_F_prop1, thm:Elligator1.ϕ_over_F_prop2, thm:Elligator1.ϕ_over_F_prop3, def:Elligator1.E_over_F}
+  TODO
+\end{definition}
+
+\begin{theorem}[Point on Curve fulfilling properties also in ϕ(F sub q)]
+  \label{thm:Elligator1.point_in_E_over_F_with_props_iff_point_in_ϕ_over_F}
+  \lean{Elligator1.point_in_E_over_F_with_props_iff_point_in_ϕ_over_F}
+  \uses{thm:Elligator1.ϕ_over_F_prop1, thm:Elligator1.ϕ_over_F_prop2, thm:Elligator1.ϕ_over_F_prop3, def:Elligator1.E_over_F, def:Elligator1.ϕ_over_F}
+  TODO
+\end{theorem}
+
+\begin{definition}[Inverted Map Variable X2]
+  \label{def:Elligator1.X2}
+  \lean{Elligator1.X2}
+  \uses{def:Elligator1.η, def:Elligator1.E_over_F, def:Elligator1.r}
+  TODO
+\end{definition}
+
+\begin{definition}[Inverted Map Variable z]
+  \label{def:Elligator1.z}
+  \lean{Elligator1.z}
+  \uses{def:Elligator1.c, def:Elligator1.x , def:Elligator1.E_over_F, def:Elligator1.X2, def:LegendreSymbol.χ}
+  TODO
+\end{definition}
+
+\begin{definition}[Inverted Map Variable u2]
+  \label{def:Elligator1.u2}
+  \lean{Elligator1.u2}
+  \uses{def:Elligator1.X2, def:Elligator1.z}
+  TODO
+\end{definition}
+
+\begin{definition}[Inverted Map Variable t2]
+  \label{def:Elligator1.t2}
+  \lean{Elligator1.t2}
+  \uses{def:Elligator1.u2}
+  TODO
+\end{definition}
+
+\begin{theorem}[Inverted Map Point to Representative]
+  \label{thm:Elligator1.invmap_representative}
+  \lean{Elligator1.invmap_representative}
+  \uses{def:Elligator1.ϕ, def:Elligator1.t2, def:Elligator1.ϕ_over_F, def:Elligator1.E_over_F}
+  TODO
+\end{theorem}
+
+\begin{definition}[Binary Digits b]
+  \label{def:Elligator1.b}
+  \lean{Elligator1.b}
+  TODO
+\end{definition}
+
+\begin{definition}[Set of Potential Representatives S]
+  \label{def:Elligator1.S}
+  \lean{Elligator1.S}
+    \uses{def:Elligator1.b}
+  TODO
+\end{definition}
+
+\begin{definition}[Binary to Natural Number Function σ]
+  \label{def:Elligator1.σ}
+  \lean{Elligator1.σ}
+    \uses{def:Elligator1.b}
+  TODO
+\end{definition}
+
+\begin{definition}[Injective Map ι]
+  \label{def:Elligator1.ι}
+  \lean{Elligator1.ι}
+  \uses{def:Elligator1.σ, def:Elligator1.ϕ}
+  TODO
+\end{definition}
+
+\begin{theorem}[Cardinality of S]
+  \label{thm:Elligator1.S_cardinality}
+  \lean{Elligator1.S_cardinality}
+  \uses{def:Elligator1.S}
+  TODO
+\end{theorem}
+
+\begin{theorem}[ι is Injective Map]
+  \label{thm:Elligator1.ι_injective_map}
+  \lean{Elligator1.ι_injective_map}
+  \uses{def:Elligator1.ι}
+  TODO
+\end{theorem}
+
+\begin{definition}[Set ι of S]
+  \label{def:Elligator1.ι_S}
+  \lean{Elligator1.ι_S}
+  \uses{def:Elligator1.ι, def:Elligator1.S}
+  TODO
+\end{definition}
+
+\begin{theorem}[ι(S) equals ϕ(F sub q)]
+  \label{thm:Elligator1.ι_S_eq_ϕ_over_F}
+  \lean{Elligator1.ι_S_eq_ϕ_over_F}
+  \uses{def:Elligator1.ι, def:Elligator1.ϕ_over_F}
+  TODO
+\end{theorem}

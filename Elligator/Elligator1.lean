@@ -1725,6 +1725,20 @@ theorem ι_injective_map
   → τ₁ = τ₂ := by
   sorry
 
+theorem ι_injective_map
+  (s : F)
+  (s_h1 : s ≠ 0) 
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  ∀ (τ₁ τ₂ : {n : List Binary // n ∈ S (b q q_prime q_mod_4_congruent_3)}),
+  ι s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 τ₁ = ι s s_h1 s_h2 q field_cardinality q_prime q_mod_4_congruent_3 τ₂
+  → τ₁ = τ₂ := by
+  sorry
+
 noncomputable def ι_S
   (s : F)
   (s_h1 : s ≠ 0) 
