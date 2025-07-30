@@ -5,3 +5,118 @@
 % If you want to split the blueprint content into several files then
 % the current file can be a simple sequence of \input. Otherwise It
 % can start with a \section or \chapter for instance.
+\begin{definition}[Elligator 1 c]
+  \label{def:Elligator1.c}
+  \lean{Elligator1.c}
+  \leanok
+  TODO
+\end{definition}
+
+\begin{theorem}[c Property]
+  \label{thm:Elligator1.c_h}
+  \lean{Elligator1.c_h}
+  \leanok
+  \uses{def:Elligator1.c}
+  c_of_s * (c_of_s - 1) * (c_of_s + 1) ≠ 0
+\end{theorem}
+
+\begin{definition}[Elligator 1 r]
+  \label{def:Elligator1.r}
+  \lean{Elligator1.r}
+  \leanok
+  \uses{def:Elligator1.c}
+  TODO
+\end{definition}
+
+\begin{definition}[Elligator 1 d]
+  \label{def:Elligator1.d}
+  \lean{Elligator1.d}
+  \leanok
+  \uses{def:Elligator1.c}
+  TODO
+\end{definition}
+
+\begin{definition}[Elligator 1 u]
+  \label{def:Elligator1.u}
+  \lean{Elligator1.u}
+  \leanok
+  TODO
+\end{definition}
+
+\begin{definition}[Elligator 1 v]
+  \label{def:Elligator1.v}
+  \lean{Elligator1.v}
+  \leanok
+  \uses{def:Elligator1.u, def:Elligator1.r}
+  TODO
+\end{definition}
+
+\begin{definition}[Legendre Symbol χ]
+  \label{def:LegendreSymbol.χ}
+  \lean{LegendreSymbol.χ}
+  \leanok
+  TODO
+\end{definition}
+
+\begin{definition}[Elligator 1 X]
+  \label{def:Elligator1.X}
+  \lean{Elligator1.X}
+  \leanok
+  \uses{def:Elligator1.u, def:Elligator1.v, def:LegendreSymbol.χ}
+  TODO
+\end{definition}
+
+\begin{definition}[Elligator 1 Y]
+  \label{def:Elligator1.Y}
+  \lean{Elligator1.Y}
+  \leanok
+  \uses{def:Elligator1.u, def:Elligator1.c, def:Elligator1.v, def:LegendreSymbol.χ}
+  TODO
+\end{definition}
+
+\begin{definition}[Elligator 1 x]
+  \label{def:Elligator1.x}
+  \lean{Elligator1.x}
+  \leanok
+  \uses{def:Elligator1.X, def:Elligator1.c, def:Elligator1.Y}
+  TODO
+\end{definition}
+
+\begin{definition}[Elligator 1 y]
+  \label{def:Elligator1.y}
+  \lean{Elligator1.y}
+  \leanok
+  \uses{def:Elligator1.r, def:Elligator1.X, def:Elligator1.Y}
+  TODO
+\end{definition}
+
+\begin{definition}[Decoding Function ϕ]
+  \label{def:Elligator1.ϕ}
+  \lean{Elligator1.ϕ}
+  \uses{def:Elligator1.x, def:Elligator1.y}
+  \leanok
+  TODO
+\end{definition}
+
+\begin{theorem}[Variables fulfill Specific Equation]
+  \label{thm:map_fulfills_specific_equation}
+  \lean{Elligator1.map_fulfills_specific_equation}
+  \leanok
+  \uses{def:Elligator1.c, def:Elligator1.X, def:Elligator1.Y}
+  There is a homotopy of immersions of $𝕊^2$ into $ℝ^3$ from the inclusion map to
+  the antipodal map $a : q ↦ -q$.
+\end{theorem}
+
+\begin{theorem}[Variables fulfill Curve Equation]
+  \label{thm:Elligator1.map_fulfills_curve_equation}
+  \lean{Elligator1.map_fulfills_curve_equation}
+  \leanok
+  \uses{def:Elligator1.x, def:Elligator1.y, def:Elligator1.d, thm:Elligator1.map_fulfills_specific_equation}
+  There is a homotopy of immersions of $𝕊^2$ into $ℝ^3$ from the inclusion map to
+  the antipodal map $a : q ↦ -q$.
+\end{theorem}
+  
+\begin{proof}
+  \leanok
+  This obviously follows from what we did so far.
+\end{proof}
