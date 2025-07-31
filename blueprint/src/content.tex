@@ -5,6 +5,15 @@
 % If you want to split the blueprint content into several files then
 % the current file can be a simple sequence of \input. Otherwise It
 % can start with a \section or \chapter for instance.
+
+
+\begin{definition}[Legendre Symbol χ]
+  \label{def:LegendreSymbol.χ}
+  \lean{LegendreSymbol.χ}
+  \leanok
+  TODO
+\end{definition}
+
 \begin{definition}[Decoding Function Variable c]
   \label{def:Elligator1.c}
   \lean{Elligator1.c}
@@ -16,6 +25,13 @@
   \label{thm:Elligator1.c_h}
   \lean{Elligator1.c_h}
   \leanok
+  \uses{def:Elligator1.c}
+  TODO
+\end{theorem}
+
+\begin{theorem}[c defined]
+  \label{thm:Elligator1.c_defined}
+  \lean{Elligator1.c_defined}
   \uses{def:Elligator1.c}
   TODO
 \end{theorem}
@@ -33,6 +49,14 @@
   TODO
 \end{definition}
 
+\begin{theorem}[r nonzero]
+  \label{thm:Elligator1.r_ne_zero}
+  \lean{Elligator1.r_ne_zero}
+  \leanok
+  \uses{def:Elligator1.r}
+  TODO
+\end{theorem}
+
 \begin{definition}[Decoding Function Variable d]
   \label{def:Elligator1.d}
   \lean{Elligator1.d}
@@ -41,12 +65,28 @@
   TODO
 \end{definition}
 
+\begin{theorem}[d nonsquare]
+  \label{thm:Elligator1.d_nonsquare}
+  \lean{Elligator1.d_nonsquare}
+  \leanok
+  \uses{def:Elligator1.d}
+  TODO
+\end{theorem}
+
 \begin{definition}[Decoding Function Variable u]
   \label{def:Elligator1.u}
   \lean{Elligator1.u}
   \leanok
   TODO
 \end{definition}
+
+\begin{theorem}[u nonzero]
+  \label{thm:Elligator1.u_ne_zero}
+  \lean{Elligator1.u_ne_zero}
+  \leanok
+  \uses{def:Elligator1.u}
+  TODO
+\end{theorem}
 
 \begin{definition}[Decoding Function Variable v]
   \label{def:Elligator1.v}
@@ -56,12 +96,20 @@
   TODO
 \end{definition}
 
-\begin{definition}[Legendre Symbol χ]
-  \label{def:LegendreSymbol.χ}
-  \lean{LegendreSymbol.χ}
-  \leanok
+\begin{theorem}[v defined]
+  \label{thm:Elligator1.v_defined}
+  \lean{Elligator1.v_defined}
+  \uses{def:Elligator1.v}
   TODO
-\end{definition}
+\end{theorem}
+
+\begin{theorem}[v nonzero]
+  \label{thm:Elligator1.v_ne_zero}
+  \lean{Elligator1.v_ne_zero}
+  \leanok
+  \uses{def:Elligator1.v}
+  TODO
+\end{theorem}
 
 \begin{definition}[Decoding Function Variable X]
   \label{def:Elligator1.X}
@@ -71,6 +119,21 @@
   TODO
 \end{definition}
 
+\begin{theorem}[X defined]
+  \label{thm:Elligator1.X_defined}
+  \lean{Elligator1.X_defined}
+  \uses{def:Elligator1.X}
+  TODO
+\end{theorem}
+
+\begin{theorem}[X nonzero]
+  \label{thm:Elligator1.X_ne_zero}
+  \lean{Elligator1.X_ne_zero}
+  \leanok
+  \uses{def:Elligator1.X}
+  TODO
+\end{theorem}
+
 \begin{definition}[Decoding Function Variable Y]
   \label{def:Elligator1.Y}
   \lean{Elligator1.Y}
@@ -78,6 +141,21 @@
   \uses{def:Elligator1.u, def:Elligator1.c, def:Elligator1.v, def:LegendreSymbol.χ}
   TODO
 \end{definition}
+
+\begin{theorem}[Y defined]
+  \label{thm:Elligator1.Y_defined}
+  \lean{Elligator1.Y_defined}
+  \uses{def:Elligator1.Y}
+  TODO
+\end{theorem}
+
+\begin{theorem}[Y nonzero]
+  \label{thm:Elligator1.Y_ne_zero}
+  \lean{Elligator1.Y_ne_zero}
+  \leanok
+  \uses{def:Elligator1.Y}
+  TODO
+\end{theorem}
 
 \begin{definition}[Decoding Function Variable x]
   \label{def:Elligator1.x}
@@ -87,6 +165,21 @@
   TODO
 \end{definition}
 
+\begin{theorem}[x defined]
+  \label{thm:Elligator1.x_defined}
+  \lean{Elligator1.x_defined}
+  \uses{def:Elligator1.x}
+  TODO
+\end{theorem}
+
+\begin{theorem}[x nonzero]
+  \label{thm:Elligator1.x_ne_zero}
+  \lean{Elligator1.x_ne_zero}
+  \leanok
+  \uses{def:Elligator1.x}
+  TODO
+\end{theorem}
+
 \begin{definition}[Decoding Function Variable y]
   \label{def:Elligator1.y}
   \lean{Elligator1.y}
@@ -94,6 +187,29 @@
   \uses{def:Elligator1.r, def:Elligator1.X, def:Elligator1.Y}
   TODO
 \end{definition}
+
+\begin{theorem}[y defined]
+  \label{def:Elligator1.y_defined}
+  \lean{Elligator1.y_defined}
+  \uses{def:Elligator1.y}
+  TODO
+\end{theorem}
+
+\begin{theorem}[y + 1nonzero]
+  \label{thm:Elligator1.y_add_one_ne_zero}
+  \lean{Elligator1.y_add_one_ne_zero}
+  \leanok
+  \uses{def:Elligator1.y}
+  TODO
+\end{theorem}
+
+\begin{theorem}[Variables Product nonzero]
+  \label{thm:Elligator1.u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero}
+  \lean{Elligator1.u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero}
+  \leanok
+  \uses{thm:Elligator1.y_add_one_ne_zero, thm:Elligator1.x_ne_zero, thm:Elligator1.X_ne_zero, thm:Elligator1.Y_ne_zero, thm:Elligator1.u_ne_zero, thm:Elligator1.v_ne_zero}
+  TODO
+\end{theorem}
 
 \begin{theorem}[Decoding Function Variables fulfill Specific Equation]
   \label{thm:Elligator1.map_fulfills_specific_equation}
