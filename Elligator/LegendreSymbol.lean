@@ -45,7 +45,9 @@ lemma χ_a_ne_zero
   let χ_of_a := χ a q field_cardinality q_prime q_mod_4_congruent_3
   χ_of_a ≠ 0 := by
     change a^((Fintype.card F -1)/2) ≠ 0
-    sorry
+    rw [field_cardinality]
+    apply pow_ne_zero ((q - 1) / 2) at a_nonzero
+    exact a_nonzero
 
 lemma neg_χ_a_ne_χ_a
   (a : F)
@@ -57,7 +59,18 @@ lemma neg_χ_a_ne_χ_a
   :
   let χ_of_a := χ a q field_cardinality q_prime q_mod_4_congruent_3
   χ_of_a ≠ -χ_of_a := by
-    sorry
+    let χ_of_a := χ a q field_cardinality q_prime q_mod_4_congruent_3
+    change a^((Fintype.card F -1)/2) ≠ -a^((Fintype.card F -1)/2)
+    rw [field_cardinality]
+    intro h
+    rw [← add_right_inj (a ^ ((q - 1) / 2))] at h
+    ring_nf at h
+    rw [← field_cardinality] at h
+    change χ_of_a * 2 = 0 at h
+    apply mul_ne_zero at h
+    · exact h
+    · exact χ_a_ne_zero a a_nonzero q field_cardinality q_prime q_mod_4_congruent_3
+    · exact FiniteFieldBasic.two_ne_zero q field_cardinality q_prime q_mod_4_congruent_3
 
 lemma χ_a_eq_one
   (a : F)
