@@ -15,6 +15,16 @@ lemma q_ne_two
   rw [q_mod_4_congruent_3] at mod_two
   norm_num at mod_two
 
+lemma q_sub_one_even
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  Even (Fintype.card F - 1) := by
+    rw [field_cardinality]
+    apply Nat.Prime.even_sub_one q_prime (q_ne_two q q_prime q_mod_4_congruent_3)
+
 lemma q_not_dvd_two
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)

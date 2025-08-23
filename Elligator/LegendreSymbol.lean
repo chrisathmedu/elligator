@@ -83,8 +83,20 @@ lemma χ_a_eq_one
   :
   let χ_of_a := χ a q field_cardinality q_prime q_mod_4_congruent_3
   χ_of_a = 1 := by
-    --change a^((q-1)/2) = 1
-    sorry
+    change a^((Fintype.card F - 1)/2) = 1
+    have h1 : ∃ r, a = r * r := by apply IsSquare.exists_mul_self a a_square
+    rcases h1 with ⟨r, h1_1⟩
+    rw [h1_1, ← pow_two]
+    ring_nf
+    have h2 : (Fintype.card F - 1) / 2 * 2 = Fintype.card F - 1 := by
+      apply Nat.div_two_mul_two_of_even (FiniteFieldBasic.q_sub_one_even q field_cardinality q_prime q_mod_4_congruent_3)
+       
+    rw [h2]
+    have h3 : r ≠ 0 := by 
+      intro h3_1
+      rw [h3_1, mul_zero] at h1_1
+      contradiction
+    apply FiniteField.pow_card_sub_one_eq_one r h3
 
 lemma χ_of_a_pow_n_eq_χ_a
   (a : F)
