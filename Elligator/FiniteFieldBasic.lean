@@ -67,6 +67,15 @@ lemma neg_one_ne_zero
   (-1 : F) ≠ 0 := by
     sorry
 
+lemma neg_one_non_square
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Nat.Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  : 
+  ¬IsSquare (-1 : F) := by
+    sorry
+
 lemma q_sub_one_over_two_ne_zero
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)

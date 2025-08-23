@@ -90,7 +90,6 @@ lemma χ_a_eq_one
     ring_nf
     have h2 : (Fintype.card F - 1) / 2 * 2 = Fintype.card F - 1 := by
       apply Nat.div_two_mul_two_of_even (FiniteFieldBasic.q_sub_one_even q field_cardinality q_prime q_mod_4_congruent_3)
-       
     rw [h2]
     have h3 : r ≠ 0 := by 
       intro h3_1
@@ -120,7 +119,7 @@ lemma χ_of_a_eq_neg_one
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let χ_of_a := χ a q field_cardinality q_prime q_mod_4_congruent_3
-  χ_of_a = -1 := sorry
+  χ_of_a = -1 := by sorry
 
 lemma χ_of_neg_one_eq_neg_one 
   (q : ℕ)
@@ -129,7 +128,10 @@ lemma χ_of_neg_one_eq_neg_one
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let χ_of_neg_one := χ (-1 : F) q field_cardinality q_prime q_mod_4_congruent_3 
-  χ_of_neg_one = -1 := sorry
+  χ_of_neg_one = -1 := by
+    apply χ_of_a_eq_neg_one
+    · apply FiniteFieldBasic.neg_one_ne_zero q field_cardinality q_prime q_mod_4_congruent_3
+    · apply FiniteFieldBasic.neg_one_non_square q field_cardinality q_prime q_mod_4_congruent_3
 
 lemma χ_of_χ_of_a_eq_χ_of_a
   (a : F)
