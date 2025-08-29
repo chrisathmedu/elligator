@@ -1367,7 +1367,70 @@ theorem ϕ_inv_only_two_specific_preimages
           rw [h2_1]
           unfold ϕ 
           simp
-      · sorry
+      · have h2_1 : (t ≠ 1 ∧ t ≠ -1) := by
+          rw [ne_eq, ne_eq]
+          rw [← not_or]
+          exact h2
+        let t1 := t
+        let t2 := -t1
+        have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by
+          unfold t2 t1
+          rw [ne_eq, ne_eq]
+          constructor
+          · intro h2_2_1
+            have h2_2_1_1 : t = -1 := by
+              rw [← neg_one_mul]
+              nth_rw 2 [← h2_2_1]
+              simp
+            have h2_2_1_2 : t ≠ -1 := by exact h2_1.right
+            contradiction
+          · intro h2_2_2
+            have h2_2_1_1 : t = 1 := by
+              simp at h2_2_2
+              exact h2_2_2
+            have h2_2_1_2 : t ≠ 1 := by exact h2_1.left
+            contradiction
+        let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        let u1 := u ⟨t1, h2_1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
+        let u2 := u ⟨t2, h2_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
+        let v1 := v ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        let v2 := v ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        let X1 := X ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        let X2 := X ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        let Y1 := Y ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        let Y2 := Y ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        let x1 := x ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        let x2 := x ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        let y1 := y ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        let y2 := y ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        have h2_3 : u2 = 1 / u1 := by
+          sorry
+        have h2_4 : v2 = 1 / u1^5 + (r_of_s^2 - 2) * 1 / u1^3 + 1 / u1 := by
+          sorry
+        have h2_5 : v2 * u1^6 = v1 := by
+          sorry
+        have h2_6 : v2 = v1 / u1^6 := by
+          sorry
+        let χ_of_u1_pow_6 := LegendreSymbol.χ (u1^6) q field_cardinality q_prime_power q_mod_4_congruent_3
+        have h2_7 : χ_of_u1_pow_6 = 1 := by
+          sorry
+        let χ_of_v1 := LegendreSymbol.χ v1 q field_cardinality q_prime_power q_mod_4_congruent_3
+        let χ_of_v2 := LegendreSymbol.χ v2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        have h2_8 : χ_of_v2 = χ_of_v1 := by
+          sorry
+        have h2_9 : X2 = 1 / X1 := by
+          sorry
+        have h2_10 : y2 = y1 := by
+          sorry
+        have h2_11 : Y2 = Y1 / X1^3 := by
+          sorry
+        have h2_12 : x2 = x1 := by
+          sorry
+        change ϕ t1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        unfold ϕ
+        rw [dif_pos h2_2, dif_pos h2_1]
+        change (x1, y1) = (x2, y2)
+        rw [h2_10, h2_12]
 
 /-- E_over_F(s, q) is the set of points on the curve defined by the equation in the paper.
 
