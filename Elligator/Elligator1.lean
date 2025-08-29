@@ -1355,17 +1355,18 @@ theorem ϕ_inv_only_two_specific_preimages
     constructor
     · intro h1
       sorry
+    -- Original: Theorem 3 Proof A
     · intro h1
       by_cases h2 : t = 1 ∨ t = -1
       · rcases h2 with h2_1 | h2_1
         · change ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ (-t) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
           rw [h2_1]
           unfold ϕ 
-          have h2_1_1 : ¬(1 ≠ 1 ∧ 1 ≠ -1) := by sorry
-          have h2_1_2 : ¬(-1 ≠ 1 ∧ -1 ≠ -1) := by sorry
-          rw [if_neg h2_1_1, if_neg h2_1_2]
-          sorry 
-        · sorry 
+          simp
+        · change ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ (-t) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+          rw [h2_1]
+          unfold ϕ 
+          simp
       · sorry
 
 /-- E_over_F(s, q) is the set of points on the curve defined by the equation in the paper.
