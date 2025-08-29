@@ -1363,7 +1363,7 @@ theorem ϕ_inv_only_two_specific_preimages
           unfold ϕ 
           have h2_1_1 : ¬(1 ≠ 1 ∧ 1 ≠ -1) := by sorry
           have h2_1_2 : ¬(-1 ≠ 1 ∧ -1 ≠ -1) := by sorry
-          rw [if_neg h2_1_1, h2_1_2]
+          rw [if_neg h2_1_1, if_neg h2_1_2]
           sorry 
         · sorry 
       · sorry
