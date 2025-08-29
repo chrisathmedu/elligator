@@ -24,6 +24,8 @@ lemma q_sub_one_even
   Even (Fintype.card F - 1) := by
     rw [field_cardinality]
     --apply Nat.Prime.even_sub_one q_prime_power (q_ne_two q q_prime_power q_mod_4_congruent_3)
+    -- TODO use:
+    --apply Odd.mul
     sorry
 
 lemma q_not_dvd_two

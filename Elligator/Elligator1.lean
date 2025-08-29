@@ -604,24 +604,15 @@ lemma v_ne_zero
 
 theorem u_defined :
   ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1}, (1 + t.val) ≠ 0 := by
-    intro t
-    intro h
-    sorry
-
-theorem v_defined 
-  (s : F)
-  (s_h1 : s ≠ 0) 
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1},
-  ∃ (w : F), w = v t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  := by
-    intro t
-    use v t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    intro t h1
+    have h1_1 : t.val = -1 := by 
+      rw [← add_left_inj (-1 : F)] at h1
+      ring_nf at h1 
+      exact h1
+    have h1_2 : t.val ≠ -1 := by 
+      rcases t with ⟨h1_2_1, h1_2_2, h1_2_3⟩ 
+      exact h1_2_3
+    contradiction
 
 lemma X_ne_zero
   (s : F)
@@ -640,21 +631,6 @@ lemma X_ne_zero
     apply mul_ne_zero
     · apply LegendreSymbol.χ_a_ne_zero v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t) q field_cardinality q_prime_power q_mod_4_congruent_3
     · apply u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t
-
-theorem X_defined
-  (s : F)
-  (s_h1 : s ≠ 0) 
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1},
-  ∃ (w : F), w = X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  := by
-    intro t
-    use X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
 lemma Y_ne_zero
   (s : F)
@@ -716,21 +692,6 @@ lemma Y_ne_zero
         contradiction
       apply LegendreSymbol.χ_a_ne_zero (u_of_t^2 + 1 / c_of_s^2) χ_sum_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 
 
-theorem Y_defined
-  (s : F)
-  (s_h1 : s ≠ 0) 
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1},
-  ∃ (w : F), w = Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  := by
-    intro t
-    use Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-
 lemma X_mul_Y_ne_zero
   (s : F)
   (s_h1 : s ≠ 0) 
@@ -748,8 +709,6 @@ lemma X_mul_Y_ne_zero
     · apply X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
     · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
 
--- TODO this should result from lemma X_mul_Y_ne_zero. How to formalize this properly?
--- Do I have to state the problematic divisors in those lemmas?
 theorem x_defined
   (s : F)
   (s_h1 : s ≠ 0) 
@@ -759,11 +718,9 @@ theorem x_defined
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1},
-  ∃ (w : F), w = x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  := by
+  ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1}, Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ≠ 0 := by
     intro t
-    use x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    exact Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
 
 lemma one_add_X_ne_zero 
   (s : F)
@@ -900,21 +857,6 @@ lemma x_ne_zero
         · apply X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
       · apply one_add_X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
     · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
-
-theorem y_defined
-  (s : F)
-  (s_h1 : s ≠ 0) 
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1},
-  ∃ (w : F), w = y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  := by
-    intro t
-    use y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
 -- Chapter 3.2 Theorem 1
 theorem map_fulfills_specific_equation
@@ -1087,6 +1029,23 @@ lemma y_divisor_ne_zero
       rw [field_cardinality] at h4
       exact h4
     contradiction
+
+theorem y_defined
+  (s : F)
+  (s_h1 : s ≠ 0) 
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1},
+  ((r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
+  * (X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
+  + (1 + (X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3))^2)
+  ≠ 0 := by
+    intro t
+    exact y_divisor_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
 
 theorem y_add_one_ne_zero
   (s : F)
