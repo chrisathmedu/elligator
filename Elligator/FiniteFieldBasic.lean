@@ -15,6 +15,25 @@ lemma q_ne_two
     rw [q_mod_4_congruent_3] at mod_two
     norm_num at mod_two
 
+lemma q_odd
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  Odd (Fintype.card F) := by
+    rw [field_cardinality]
+    sorry
+
+lemma q_add_one_even
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  Even (q + 1) := by
+    sorry
+
 lemma q_sub_one_even
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
