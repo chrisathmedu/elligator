@@ -177,6 +177,22 @@ lemma c_ne_zero
   · rw [pow_two]
     apply mul_ne_zero s_h1 s_h1
 
+theorem Y_defined
+  (s : F)
+  (s_h1 : s ≠ 0) 
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1}, (c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)^2 ≠ 0 := by
+    intro t
+    rw [pow_two]
+    apply mul_ne_zero
+    · exact c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    · exact c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+
 lemma s_pow_two_ne_two 
   (s : F)
   (s_h1 : s ≠ 0) 
