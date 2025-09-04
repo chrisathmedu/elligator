@@ -1420,6 +1420,12 @@ theorem ϕ_inv_only_two_specific_preimages
         let y1 := y ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
         let y2 := y ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
         have h2_3 : u2 = 1 / u1 := by
+          unfold u2
+          unfold u
+          unfold t2
+          unfold t1
+          --simp
+          --change (1 - t) / ( 1 + t) = 1 / u1 
           sorry
         have h2_4 : v2 = 1 / u1^5 + (r_of_s^2 - 2) * 1 / u1^3 + 1 / u1 := by
           sorry
