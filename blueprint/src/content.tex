@@ -94,7 +94,6 @@
   \label{def:Elligator1.u}
   \lean{Elligator1.u}
   \leanok
-  In the situation of the definitions of $c$, $r$ and $d$.
   Let $t \in \text{F}_q \setminus \{ \pm 1 \}$.
 
   Define $u = (1 - t) / (1 + t)$.
@@ -134,7 +133,10 @@
   \lean{Elligator1.v}
   \leanok
   \uses{def:Elligator1.u, def:Elligator1.r}
-  TODO
+  In the situation of the definitions of $u$ and $r$.
+  Let $t \in \text{F}_q \setminus \{ \pm 1 \}$.
+
+  Define $v = u^5 + (r^2 - 2) u^3 + u$.
 \end{definition}
 
 \begin{proof}
@@ -146,7 +148,9 @@
   \lean{Elligator1.v_ne_zero}
   \leanok
   \uses{def:Elligator1.v}
-  TODO
+  In the situation of the definition of $v$.
+
+  Then $v \neq 0$.
 \end{theorem}
 
 \begin{proof}
@@ -159,7 +163,10 @@
   \lean{Elligator1.X}
   \leanok
   \uses{def:Elligator1.u, def:Elligator1.v, def:LegendreSymbol.χ}
-  TODO
+  In the situation of the definitions of $u$ and $v$.
+  Let $t \in \text{F}_q \setminus \{ \pm 1 \}$.
+
+  Define $X = \chi (v) u$.
 \end{definition}
 
 \begin{proof}
@@ -171,7 +178,9 @@
   \lean{Elligator1.X_ne_zero}
   \leanok
   \uses{def:Elligator1.X}
-  TODO
+  In the situation of the definition of $X$.
+
+  Then $X \neq 0$.
 \end{theorem}
 
 \begin{proof}
@@ -184,7 +193,11 @@
   \lean{Elligator1.Y}
   \leanok
   \uses{def:Elligator1.u, def:Elligator1.c, def:Elligator1.v, def:LegendreSymbol.χ}
-  TODO
+  In the situation of the definitions of $c$, $u$ and $v$.
+  Let $q$ be a prime power congruent to $3$ modulo $4$.
+  Let $t \in \text{F}_q \setminus \{ \pm 1 \}$.
+
+  Define $Y = ( \chi (v) v )^{(q + 1) / 4} \chi ( v ) \chi (u^2 + 1 / c^2)$.
 \end{definition}
 
 \begin{theorem}[Y nonzero]
@@ -192,7 +205,9 @@
   \lean{Elligator1.Y_ne_zero}
   \leanok
   \uses{def:Elligator1.Y}
-  TODO
+  In the situation of the definition of $Y$.
+
+  Then $Y \neq 0$.
 \end{theorem}
 
 \begin{proof}
@@ -205,14 +220,20 @@
   \lean{Elligator1.x}
   \leanok
   \uses{def:Elligator1.X, def:Elligator1.c, def:Elligator1.Y}
-  TODO
+  In the situation of the definitions of $c$, $X$, $s$ and $Y$.
+  Let $q$ be a prime power congruent to $3$ modulo $4$.
+  Let $t \in \text{F}_q \setminus \{ \pm 1 \}$.
+
+  Define $x = (c - 1) s X (1 + X) / Y$.
 \end{definition}
 
 \begin{theorem}[x defined]
   \label{thm:Elligator1.x_defined}
   \lean{Elligator1.x_defined}
   \uses{def:Elligator1.x}
-  TODO
+  In the situation of the definition of $x$.
+
+  Then $x$ is defined.
 \end{theorem}
 
 \begin{proof}
@@ -224,7 +245,9 @@
   \lean{Elligator1.x_ne_zero}
   \leanok
   \uses{def:Elligator1.x}
-  TODO
+  In the situation of the definition of $x$.
+
+  Then $x \neq 0$.
 \end{theorem}
 
 \begin{proof}
@@ -237,14 +260,20 @@
   \lean{Elligator1.y}
   \leanok
   \uses{def:Elligator1.r, def:Elligator1.X, def:Elligator1.Y}
-  TODO
+  In the situation of the definitions of $r$ and $X$.
+  Let $q$ be a prime power congruent to $3$ modulo $4$.
+  Let $t \in \text{F}_q \setminus \{ \pm 1 \}$.
+
+  Define $y = (r X - (1 + X)^2) / (r X + (1 + X)^2)$.
 \end{definition}
 
 \begin{theorem}[y defined]
   \label{def:Elligator1.y_defined}
   \lean{Elligator1.y_defined}
   \uses{def:Elligator1.y}
-  TODO
+  In the situation of the definition of $y$.
+
+  Then $y$ is defined.
 \end{theorem}
 
 \begin{proof}
@@ -256,7 +285,9 @@
   \lean{Elligator1.y_add_one_ne_zero}
   \leanok
   \uses{def:Elligator1.y}
-  TODO
+  In the situation of the definition of $y$.
+
+  Then $y \neq 0$.
 \end{theorem}
 
 \begin{proof}
@@ -269,7 +300,9 @@
   \lean{Elligator1.u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero}
   \leanok
   \uses{thm:Elligator1.y_add_one_ne_zero, thm:Elligator1.x_ne_zero, thm:Elligator1.X_ne_zero, thm:Elligator1.Y_ne_zero, thm:Elligator1.u_ne_zero, thm:Elligator1.v_ne_zero}
-  TODO
+  In the situation of the definitions of $u$, $v$, $X$, $Y$, $x$ and $y$.
+
+  Then $uvXYx (y + 1) \neq 0$.
 \end{theorem}
 
 \begin{proof}
@@ -280,9 +313,11 @@
 \begin{theorem}[Decoding Function Variables fulfill Specific Equation]
   \label{thm:Elligator1.map_fulfills_specific_equation}
   \lean{Elligator1.map_fulfills_specific_equation}
-  \uses{def:Elligator1.c, def:Elligator1.X, def:Elligator1.Y}
+  \uses{def:Elligator1.r, def:Elligator1.X, def:Elligator1.Y}
   \leanok
-  TODO
+  In the situation of the definitions of $X$, $Y$ and $r$.
+
+  Then $Y^2 = X^5 + (r^2 - 2) X^3 + X$.
 \end{theorem}
 
 \begin{proof}
@@ -294,12 +329,14 @@
   \lean{Elligator1.map_fulfills_curve_equation}
   \leanok
   \uses{def:Elligator1.x, def:Elligator1.y, def:Elligator1.d, thm:Elligator1.map_fulfills_specific_equation}
-  TODO
+  In the situation of the definitions of $x$, $y$ and $d$.
+
+  Then $x^2 + y^2 = 1 + d x^2 y^2$.
 \end{theorem}
 
 \begin{proof}
   \leanok
-  This obviously follows from what we did so far.
+  TODO
 \end{proof}
 
 \begin{definition}[Decoding Function ϕ]
