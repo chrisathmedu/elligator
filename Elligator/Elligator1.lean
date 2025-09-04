@@ -1420,19 +1420,68 @@ theorem ϕ_inv_only_two_specific_preimages
         let y1 := y ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
         let y2 := y ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
         have h2_3 : u2 = 1 / u1 := by
-          unfold u2
-          unfold u
-          unfold t2
-          unfold t1
-          --simp
-          --change (1 - t) / ( 1 + t) = 1 / u1 
-          sorry
+          calc
+            u2 = (1 - t2) / (1 + t2) := by 
+              unfold u2 u
+              simp
+           _ = (1 + t) / (1 - t) := by
+             unfold t2 t1
+             simp 
+             ring_nf
+           _ = 1 / u1 := by 
+             unfold u1 u
+             simp
+             unfold t1
+             rfl
         have h2_4 : v2 = 1 / u1^5 + (r_of_s^2 - 2) * 1 / u1^3 + 1 / u1 := by
-          sorry
+          calc
+            v2 = u2^5 + (r_of_s^2 - 2) * u2^3 + u2 := by
+              unfold v2 v u2
+              rfl
+            _ = 1 / u1^5 + (r_of_s^2 - 2) * 1/ u1^3 + 1 / u1 := by
+              rw [h2_3]
+              ring_nf
         have h2_5 : v2 * u1^6 = v1 := by
-          sorry
+          calc
+            v2 * u1^6 = u1 + (r_of_s^2 - 2) * u1^3 + u1^5 := by
+              rw [h2_4]
+              rw [add_mul _ _ (u1^6)]
+              rw [add_mul _ _ (u1^6)]
+              have u1_ne_zero : u1 ≠ 0 := by
+                unfold u1
+                exact u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩
+              have h2_5_1 : 1 / u1 ^ 5 * u1 ^ 6 = u1 := by 
+                rw [mul_comm, ← mul_div_assoc, mul_one]
+                have h2_5_1_1 : 5 ≤ 6 := by norm_num
+                rw [div_eq_mul_inv, ← pow_sub₀ u1 u1_ne_zero h2_5_1_1]
+                simp
+              have h2_5_2 : 1 / u1 ^ 3 * u1 ^ 6 = u1^3 := by 
+                rw [mul_comm, ← mul_div_assoc, mul_one]
+                have h2_5_2_1 : 3 ≤ 6 := by norm_num
+                rw [div_eq_mul_inv, ← pow_sub₀ u1 u1_ne_zero h2_5_2_1]
+              have h2_5_3 : 1 / u1 * u1 ^ 6 = u1^5 := by 
+                rw [mul_comm, ← mul_div_assoc, mul_one]
+                have h2_5_3_1 : 1 ≤ 6 := by norm_num
+                nth_rw 2 [← pow_one u1]
+                rw [div_eq_mul_inv, ← pow_sub₀ u1 u1_ne_zero h2_5_3_1]
+              rw [h2_5_1, mul_div_assoc, mul_assoc, h2_5_2, h2_5_3] 
+            _ = v1 := by
+              unfold v1 v u1 t1
+              rw [add_assoc]
+              nth_rw 2 [add_comm]
+              rw [add_comm]
         have h2_6 : v2 = v1 / u1^6 := by
-          sorry
+          have h2_6_1 : u1^6 ≠ 0 := by sorry
+          rw [← mul_right_inj' h2_6_1]
+          rw [← h2_5]
+          ring_nf
+          have h2_6_2 : 6 ≤ 12 := by norm_num
+          have u1_ne_zero : u1 ≠ 0 := by
+            unfold u1
+            exact u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩
+          rw [mul_comm (u1^12) v2, inv_pow, mul_assoc, ← pow_sub₀ u1 u1_ne_zero h2_6_2]
+          simp
+          rw [mul_comm]
         let χ_of_u1_pow_6 := LegendreSymbol.χ (u1^6) q field_cardinality q_prime_power q_mod_4_congruent_3
         have h2_7 : χ_of_u1_pow_6 = 1 := by
           sorry
