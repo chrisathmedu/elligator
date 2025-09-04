@@ -10,14 +10,19 @@
   \label{def:LegendreSymbol.χ}
   \lean{LegendreSymbol.χ}
   \leanok
-  TODO
+    Define $\chi : \text{F}_q \to \text{F}_q$ by $\chi (a) = a^{(q - 1) / 2}$ with a prime power $q \equiv 3 \pmod{4}$.
+
+    The function $\chi$ is called a \textbf{quadratic character}.
 \end{definition}
 
 \begin{definition}[Decoding Function Variable c]
   \label{def:Elligator1.c}
   \lean{Elligator1.c}
   \leanok
-  TODO
+    Let $q$ be a prime power congruent to $3$ modulo $4$.
+    Let $s$ be a nonzero element of \text{F}_q with $(s^2 - 2) (s^2 + 2) \neq 0$.
+
+    Define $c = 2 / s^2$.
 \end{definition}
 
 \begin{theorem}[c Property]
@@ -25,7 +30,9 @@
   \lean{Elligator1.c_h}
   \leanok
   \uses{def:Elligator1.c}
-  TODO
+  In the situation of the definition of $c$.
+
+  Then $c (c - 1) (c + 1) \neq 0$.
 \end{theorem}
 
 \begin{proof}
@@ -38,7 +45,9 @@
   \lean{Elligator1.r}
   \leanok
   \uses{def:Elligator1.c}
-  TODO
+  In the situation of the definition of $c$.
+
+  Define $r = c + 1 / c$.
 \end{definition}
 
 \begin{theorem}[r nonzero]
@@ -46,7 +55,9 @@
   \lean{Elligator1.r_ne_zero}
   \leanok
   \uses{def:Elligator1.r}
-  TODO
+  In the situation of the definition of $r$.
+
+  Then $r \neq 0$.
 \end{theorem}
 
 \begin{proof}
@@ -59,7 +70,9 @@
   \lean{Elligator1.d}
   \leanok
   \uses{def:Elligator1.c}
-  TODO
+  In the situation of the definition of $c$.
+
+  Define $d = - (c + 1)^2 / (c - 1)^2$.
 \end{definition}
 
 \begin{theorem}[d nonsquare]
@@ -67,14 +80,24 @@
   \lean{Elligator1.d_nonsquare}
   \leanok
   \uses{def:Elligator1.d}
-  TODO
+  In the situation of the definition of $d$.
+
+  Then $d$ is not a square.
 \end{theorem}
+
+\begin{proof}
+  \leanok
+  TODO
+\end{proof}
 
 \begin{definition}[Decoding Function Variable u]
   \label{def:Elligator1.u}
   \lean{Elligator1.u}
   \leanok
-  TODO
+  In the situation of the definitions of $c$, $r$ and $d$.
+  Let $t \in \text{F}_q \setminus \{ \pm 1 \}$.
+
+  Define $u = (1 - t) / (1 + t).
 \end{definition}
 
 \begin{theorem}[u nonzero]
@@ -82,7 +105,23 @@
   \lean{Elligator1.u_ne_zero}
   \leanok
   \uses{def:Elligator1.u}
+  In the situation of the definition of $u$.
+
+  Then $u \neq 0$.
+\end{theorem}
+
+\begin{proof}
+  \leanok
   TODO
+\end{proof}
+
+\begin{theorem}[u defined]
+  \label{thm:Elligator1.u_defined}
+  \lean{Elligator1.u_defined}
+  \uses{def:Elligator1.X2}
+  In the situation of the definition of $u$.
+
+  Then $u$ is defined.
 \end{theorem}
 
 \begin{proof}
