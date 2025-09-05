@@ -1352,6 +1352,64 @@ noncomputable def ϕ
   )
   else (0, 1) 
 
+lemma Y_comparison
+  (t : F)
+  (s : F)
+  (s_h1 : s ≠ 0) 
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (h2_1 : t ≠ 1 ∧ t ≠ -1)
+  (h2_2 : -t ≠ 1 ∧ -t ≠ -1)
+  :
+  let t1 := t
+  let t2 := -t1
+  let X1 := X ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let X2 := X ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let Y1 := Y ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let Y2 := Y ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  Y2 = Y1 / X1^3 := by
+    intro t1 t2 X1 X2 Y1 Y2
+    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let u1 := u ⟨t1, h2_1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
+    let u2 := u ⟨t2, h2_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
+    let v1 := v ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let v2 := v ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let x1 := x ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let x2 := x ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let y1 := y ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let y2 := y ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let χ_of_u1 := LegendreSymbol.χ u1 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let χ_of_u2 := LegendreSymbol.χ u2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let χ_of_v1 := LegendreSymbol.χ v1 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let χ_of_v2 := LegendreSymbol.χ v2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let χ_of_u1_mul_v1  := LegendreSymbol.χ (u1 * v1) q field_cardinality q_prime_power q_mod_4_congruent_3
+    have first_factor : (χ_of_v2 * v2)^((q + 1) / 4) = (χ_of_v1 * v1)^((q + 1) / 4) * χ_of_u1 / u1^3:= by sorry
+    have second_factor : χ_of_v2 = χ_of_v1 := by sorry
+    have third_factor : LegendreSymbol.χ (u2^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3 = LegendreSymbol.χ (u1 * v1 * (u1^2 + 1 / c_of_s^2)) q field_cardinality q_prime_power q_mod_4_congruent_3 := by sorry
+    calc
+      Y2 = Y1 * χ_of_u1 * χ_of_u1_mul_v1 / u1^3 := by
+        unfold Y2 Y
+        change (χ_of_v2 * v2)^((q + 1) / 4) * χ_of_v2 * LegendreSymbol.χ (u2^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3  = Y1 * χ_of_u1 * χ_of_u1_mul_v1 / u1 ^ 3
+        rw [first_factor, second_factor, third_factor]
+        rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b (u1 * v1) (u1^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3]
+        change (χ_of_v1 * v1) ^ ((q + 1) / 4) * χ_of_u1 / u1 ^ 3 * χ_of_v1 * (χ_of_u1_mul_v1 * (LegendreSymbol.χ (u1 ^ 2 + 1 / c_of_s ^ 2) q field_cardinality q_prime_power q_mod_4_congruent_3)) = Y1 * χ_of_u1 * χ_of_u1_mul_v1 / u1 ^ 3
+        have h1 : (χ_of_v1 * v1) ^ ((q + 1) / 4) * χ_of_u1 / u1 ^ 3 * χ_of_v1 * (χ_of_u1_mul_v1 * (LegendreSymbol.χ (u1 ^ 2 + 1 / c_of_s ^ 2) q field_cardinality q_prime_power q_mod_4_congruent_3)) = (χ_of_v1 * v1) ^ ((q + 1) / 4) * χ_of_v1 * (LegendreSymbol.χ (u1 ^ 2 + 1 / c_of_s ^ 2) q field_cardinality q_prime_power q_mod_4_congruent_3) * χ_of_u1 * χ_of_u1_mul_v1 / u1 ^ 3 := by 
+          sorry
+        rw [h1]
+        change Y1 * χ_of_u1 * χ_of_u1_mul_v1 / u1 ^ 3 = Y1 * χ_of_u1 * χ_of_u1_mul_v1 / u1 ^ 3
+        rfl
+        --rw [mul_comm χ_of_u1_mul_v1]
+        --rw [mul_div_assoc, mul_comm ((χ_of_v1 * v1) ^ ((q + 1) / 4)) (χ_of_u1 / u1 ^ 3)]
+        --rw [mul_assoc (χ_of_u1 / u1 ^ 3) ((χ_of_v1 * v1) ^ ((q + 1) / 4)) (χ_of_v1 * (LegendreSymbol.χ (u1 ^ 2 + 1 / c_of_s ^ 2) q field_cardinality q_prime_power q_mod_4_congruent_3) * χ_of_u1_mul_v1)]
+        --rw [mul_comm (χ_of_u1 / u1 ^ 3) ((χ_of_v1 * v1) ^ ((q + 1) / 4) * χ_of_v1 * (LegendreSymbol.χ (u1 ^ 2 + 1 / c_of_s ^ 2) q field_cardinality q_prime_power q_mod_4_congruent_3) * χ_of_u1_mul_v1)]
+        sorry
+      _ = Y1 / (χ_of_v1 * u1)^3 := by sorry
+      _ = Y1 / X1^3 := by sorry
+
 -- Chapter 3.3 Theorem 3.1
 theorem ϕ_inv_only_two_specific_preimages 
   (t : F)
@@ -1471,7 +1529,7 @@ theorem ϕ_inv_only_two_specific_preimages
               nth_rw 2 [add_comm]
               rw [add_comm]
         have h2_6 : v2 = v1 / u1^6 := by
-          have h2_6_1 : u1^6 ≠ 0 := by sorry
+          have h2_6_1 : u1^6 ≠ 0 := by apply pow_ne_zero 6 (u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩)
           rw [← mul_right_inj' h2_6_1]
           rw [← h2_5]
           ring_nf
@@ -1484,19 +1542,124 @@ theorem ϕ_inv_only_two_specific_preimages
           rw [mul_comm]
         let χ_of_u1_pow_6 := LegendreSymbol.χ (u1^6) q field_cardinality q_prime_power q_mod_4_congruent_3
         have h2_7 : χ_of_u1_pow_6 = 1 := by
-          sorry
+          have h2_7_1 : u1^6 = u1^2 * u1^2 * u1^2 := by ring_nf
+          unfold χ_of_u1_pow_6 
+          rw [h2_7_1]
+          rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b (u1^2 * u1^2) (u1^2) q field_cardinality q_prime_power q_mod_4_congruent_3]
+          rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b (u1^2) (u1^2) q field_cardinality q_prime_power q_mod_4_congruent_3]
+          have h2_7_2 : u1 ≠ 0 := by exact u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩ 
+          rw [LegendreSymbol.χ_of_a_pow_two_eq_one u1 (u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩) q field_cardinality q_prime_power q_mod_4_congruent_3]
+          simp
         let χ_of_v1 := LegendreSymbol.χ v1 q field_cardinality q_prime_power q_mod_4_congruent_3
         let χ_of_v2 := LegendreSymbol.χ v2 q field_cardinality q_prime_power q_mod_4_congruent_3
         have h2_8 : χ_of_v2 = χ_of_v1 := by
-          sorry
+          unfold χ_of_v2 χ_of_v1
+          rw [← h2_5]
+          rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b v2 (u1^6) q field_cardinality q_prime_power q_mod_4_congruent_3]
+          change χ_of_v2 = χ_of_v2 * χ_of_u1_pow_6
+          rw [h2_7]
+          simp
         have h2_9 : X2 = 1 / X1 := by
-          sorry
+          calc
+            X2 = χ_of_v2 * u2 := by 
+              change χ_of_v2 * u2 = χ_of_v2 * u2
+              rfl
+            _ = χ_of_v1 / u1 := by 
+              rw [h2_8, h2_3]
+              ring_nf
+            _ = 1 / (χ_of_v1 * u1) := by
+              unfold χ_of_v1
+              nth_rw 1 [← LegendreSymbol.one_over_χ_of_a_eq_χ_a v1 q field_cardinality q_prime_power q_mod_4_congruent_3]
+              ring_nf
+            _ = 1 / X1 := by
+              change 1 / X1 = 1 / X1
+              rfl
         have h2_10 : y2 = y1 := by
-          sorry
-        have h2_11 : Y2 = Y1 / X1^3 := by
-          sorry
+          calc
+            y2 = (r_of_s * X2 - (1 + X2)^2) / (r_of_s * X2 + (1 + X2)^2) := by
+              change (r_of_s * X2 - (1 + X2)^2) / (r_of_s * X2 + (1 + X2)^2) = (r_of_s * X2 - (1 + X2)^2) / (r_of_s * X2 + (1 + X2)^2)
+              rfl
+            _ = (r_of_s * (1 / X1) - (1 + (1 / X1))^2) / (r_of_s * (1 / X1) + (1 + (1 / X1))^2) := by 
+              rw [h2_9]
+            _ = (r_of_s * X1 - (X1 + 1)^2) / (r_of_s * X1 + (X1 + 1)^2) := by 
+              have h2_10_1 : X1^2 / X1^2 = 1 := by 
+                have h2_10_1_1 : X1^2 ≠ 0 := by
+                  rw [pow_two]
+                  apply mul_ne_zero
+                  · apply X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩
+                  · apply X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩
+                apply div_self h2_10_1_1 
+              rw [← mul_one ((r_of_s * (1 / X1) - (1 + 1 / X1) ^ 2) / (r_of_s * (1 / X1) + (1 + 1 / X1) ^ 2))]
+              nth_rw 7 [← h2_10_1]
+              rw [← mul_div_mul_comm]
+              rw [sub_mul, add_mul]
+              have h2_10_2 : (1 / X1) * X1^2 = X1 := by
+                rw [mul_comm, ← mul_div_assoc, mul_one]
+                rw [pow_two, mul_div_assoc, div_self (X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩)]
+                simp
+              have h2_10_3 : (1 + 1 / X1) ^ 2 * X1^2 = (X1 + 1)^2 := by
+                rw [← mul_pow _ _ 2]
+                rw [add_mul, one_mul]
+                rw [mul_comm, ← mul_div_assoc, mul_one]
+                rw [div_self (X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩)]
+              rw [mul_assoc]
+              rw [h2_10_2, h2_10_3]
+            _ = y1 := by
+              rw [add_comm]
+              unfold y1 y X1
+              simp
+              rfl
+        let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        let χ_of_u1 := LegendreSymbol.χ u1 q field_cardinality q_prime_power q_mod_4_congruent_3
+        let χ_of_v1 := LegendreSymbol.χ v1 q field_cardinality q_prime_power q_mod_4_congruent_3
+        let χ_of_u1_mul_v1 := LegendreSymbol.χ (u1 * v1) q field_cardinality q_prime_power q_mod_4_congruent_3
+        have h2_11 : Y2 = Y1 / X1^3 := by exact Y_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2
         have h2_12 : x2 = x1 := by
-          sorry
+          have X_pow_three_ne_zero : X1^3 ≠ 0 := by
+            apply pow_ne_zero 3 (X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩)
+          calc
+            x2 = (c_of_s - 1) * s * X2 * (1 + X2) / Y2 := by 
+              change (c_of_s - 1) * s * X2 * (1 + X2) / Y2 = (c_of_s - 1) * s * X2 * (1 + X2) / Y2
+              rfl
+            _ = (c_of_s - 1) * s * 1 / X1 * (1 + 1 / X1) / (Y1 / X1^3) := by
+              rw [h2_9, h2_11]
+              ring_nf
+            _ = (c_of_s - 1) * s * X1 * (1 + X1) / Y1 := by 
+              have h2_12_1 : X1^3 / X1^3 = 1 := by 
+                apply div_self X_pow_three_ne_zero 
+              rw [← mul_one ((c_of_s - 1) * s * 1 / X1 * (1 + 1 / X1) / (Y1 / X1 ^ 3))]
+              nth_rw 5 [← h2_12_1]
+              rw [← mul_div_mul_comm]
+              have h2_12_2 : (c_of_s - 1) * s * 1 / X1 * (1 + 1 / X1) * X1 ^ 3 = (c_of_s - 1) * s * X1 * (1 + X1) := by
+                calc
+                  (c_of_s - 1) * s * 1 / X1 * (1 + 1 / X1) * X1 ^ 3 = (c_of_s - 1) * s * X1^3 / X1 * (1 + 1 / X1) := by
+                    repeat rw [mul_assoc]
+                    rw [mul_comm (1 + 1 / X1) (X1^3)]
+                    rw [← mul_assoc]
+                    rw [← mul_assoc, mul_one, div_mul_eq_mul_div]
+                    ring_nf
+                  _ = (c_of_s - 1) * s * X1^2 * (1 + 1 / X1) := by 
+                    have h2_12_2_1 : X1^3 = X1^2 * X1 := by ring_nf
+                    rw [h2_12_2_1, mul_div_assoc, mul_div_assoc]
+                    rw [div_self (X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩)]
+                    rw [mul_one]
+                  _ = (c_of_s - 1) * s * X1 * (1 + X1) := by
+                    have h2_12_2_1 : X1^2 * (1 + 1 / X1) = X1 * (1 + X1) := by 
+                      rw [pow_two, mul_assoc, mul_add, ← mul_div_assoc]
+                      rw [mul_one]
+                      rw [div_self (X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩)]
+                      nth_rw 1 [add_comm]
+                    rw [mul_assoc ((c_of_s - 1) * s), h2_12_2_1] 
+                    repeat rw [← mul_assoc]
+              have h2_12_3 : (Y1 / X1 ^ 3 * X1 ^ 3) = Y1 := by
+                rw [mul_comm, ← mul_div_assoc, mul_comm]
+                rw [mul_div_assoc, div_self X_pow_three_ne_zero]
+                simp 
+              rw [h2_12_2, h2_12_3]
+            _ = x1 := by
+              unfold x1
+              simp
+              rfl
         change ϕ t1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
         unfold ϕ
         rw [dif_pos h2_2, dif_pos h2_1]

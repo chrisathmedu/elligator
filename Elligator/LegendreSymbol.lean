@@ -122,6 +122,18 @@ lemma χ_of_a_even_pow_n_eq_one
   χ_of_a^(n.val) = 1 := by 
     sorry
 
+lemma χ_of_a_pow_two_eq_one
+  (a : F)
+  (a_nonzero : a ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let χ_of_a := χ (a^2) q field_cardinality q_prime_power q_mod_4_congruent_3
+  χ_of_a = 1 := by 
+    sorry
+
 lemma χ_of_a_eq_neg_one
   (a : F)
   (a_nonzero : a ≠ 0)
