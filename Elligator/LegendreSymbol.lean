@@ -226,3 +226,17 @@ lemma square_of_a
   a.val^((q + 1) / 2) = a.val := by 
     sorry
 
+lemma χ_of_a_eq_χ_a_mul_b_pow_two
+  (a : F)
+  {b : F}
+  (b_nonzero : b ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
+  let χ_of_a_mul_b_pow_two := χ (a * b^2) q field_cardinality q_prime_power q_mod_4_congruent_3
+  χ_of_a = χ_of_a_mul_b_pow_two := by 
+  -- Introduced in paper theory theorem 3.A proof
+    sorry
