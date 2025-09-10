@@ -2235,11 +2235,18 @@ theorem X2_defined
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {p : (F) × (F) // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
   :
-  ∀ point : {p : F × F // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3},
-  ∃ (w : F), w = X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point (point_in_E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
-  := by
-  sorry
+  let y := point.val.snd
+  2 * (y + 1) ≠ 0 := by
+    intro y
+    have h1 : y + 1 ≠ 0 := by 
+    -- TODO how to use property as implication
+      --exact point.property.left
+      sorry
+    apply mul_ne_zero
+    · exact (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
+    · exact h1
 
 theorem z_defined
   (s : F)
@@ -2250,24 +2257,10 @@ theorem z_defined
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  ∀ point : {p : F × F // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3},
-  ∃ (w : F), w = z s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  c_of_s^2 ≠ 0
   := by
-  sorry
-
-theorem u2_defined
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  ∀ point : {p : F × F // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3},
-  ∃ (w : F), w = u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  := by
-  sorry
+    exact (c_pow_two_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
 
 theorem t2_defined
   (s : F)
@@ -2277,11 +2270,12 @@ theorem t2_defined
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {p : (F) × (F) // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
   :
-  ∀ point : {p : F × F // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3},
-  ∃ (w : F), w = t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  := by
-  sorry
+  let u2_of_point := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  (1 + u2_of_point) ≠ 0 := by
+    intro u2_of_point
+    sorry
 
 /-- `invmap_representative` is ...
 
