@@ -1706,6 +1706,7 @@ lemma Y_comparison
       -- TODO square argumentation to be understood
       have h1_2 : IsSquare (χ_of_u1 * u1^3) := by sorry
       have h1_3 : (u1^6)^((q + 1) / 4) = χ_of_u1 * u1^3  := by
+        -- TODO understand
         sorry
       --apply LegendreSymbol.square_of_a ⟨(χ_of_v_of_t * v_of_t), h2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
       calc
@@ -2286,7 +2287,7 @@ theorem t2_defined
 
 Paper definition at chapter 3.3 Theorem 3.3.
 -/
-theorem invmap_representative
+theorem invmap_representative_base_case
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -2295,11 +2296,49 @@ theorem invmap_representative
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   (point : {p : (F) × (F) // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (t' : { n : F // n = 1 ∨ n = -1})
+  (representative : t'.val = t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
   :
-  let t2_of_point := t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let ϕ_of_t2_of_point := ϕ t2_of_point s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ϕ_of_t2_of_point = point :=
-  sorry
+  let ϕ_of_t' := ϕ t'.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ_of_t' = (0, 1) := by
+    intro ϕ_of_t'
+    unfold ϕ_of_t'
+    --rw [t'.property.left]
+    rcases t'.property with h1_1 | h1_1
+    · rw [h1_1]
+      unfold ϕ 
+      simp
+    · rw [h1_1]
+      unfold ϕ 
+      simp
+
+/-- `invmap_representative` is ...
+
+Paper definition at chapter 3.3 Theorem 3.3.
+-/
+theorem invmap_representative_main_case
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {p : (F) × (F) // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (t' : { n : F // n ≠ 1 ∧ n ≠ -1})
+  (representative : t'.val = t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
+  :
+  let ϕ_of_t' := ϕ t'.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let x_of_t' := x t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let y_of_t' := y t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  ϕ_of_t' = (x_of_t', y_of_t') := by
+    intro ϕ_of_t' x_of_t' y_of_t'
+    unfold ϕ_of_t' ϕ
+    rw [dif_pos t'.property]
+
+-- TODO how to get invmap_representative* theorems into one theorem handling both
+-- cases? This currently fails since the rhs is not settable to (0,1) and (x,y)
+-- by case or rather derivable as such depending on the t case.
 
 noncomputable def b
   (q : ℕ)
