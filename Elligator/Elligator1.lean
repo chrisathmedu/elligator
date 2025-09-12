@@ -1917,8 +1917,84 @@ lemma y_comparison
         simp
         rfl
 
--- Original: Theorem 3 Proof A
-lemma ϕ_inv_only_two_specific_preimages_mp
+lemma ϕ_of_t_eq_ϕ_of_neg_t_base_case
+  (t : { t : F // t = 1 ∨ t = -1})
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let ϕ_of_t := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let ϕ_of_neg_t := ϕ (-t.val) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ_of_t = ϕ_of_neg_t := by
+    rcases t.property with h2_1 | h2_1
+    · change ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ (-t.val) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+      rw [h2_1]
+      unfold ϕ
+      simp
+    · change ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ (-t.val) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+      rw [h2_1]
+      unfold ϕ
+      simp
+
+lemma ϕ_of_t_eq_ϕ_of_neg_t_main_case
+  (t : { t : F // t ≠ 1 ∧ t ≠ -1})
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let ϕ_of_t := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let ϕ_of_neg_t := ϕ (-t.val) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ_of_t = ϕ_of_neg_t := by
+    let t1 := t.val
+    let t2 := -t.val
+    have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by
+      unfold t2
+      rw [ne_eq, ne_eq]
+      constructor
+      · intro h2_2_1
+        have h2_2_1_1 : t1 = -1 := by
+          rw [← neg_one_mul]
+          nth_rw 2 [← h2_2_1]
+          unfold t1
+          simp
+        have h2_2_1_2 : t.val ≠ -1 := by exact t.property.right
+        contradiction
+      · intro h2_2_2
+        have h2_2_1_1 : t.val = 1 := by
+          simp at h2_2_2
+          exact h2_2_2
+        have h2_2_1_2 : t.val ≠ 1 := by exact t.property.left
+        contradiction
+    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let u1 := u t q field_cardinality q_prime_power q_mod_4_congruent_3
+    let v1 := v t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let v2 := v ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let x1 := x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let x2 := x ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let y1 := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let y2 := y ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let x1 := x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let x2 := x ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let y1 := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let y2 := y ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    have h2_10 : y2 = y1 := by exact y_comparison t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t.property h2_2
+    have h2_12 : x2 = x1 := by exact x_comparison t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t.property h2_2
+    change ϕ t1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    unfold ϕ
+    rw [dif_pos h2_2, dif_pos t.property]
+    change (x1, y1) = (x2, y2)
+    rw [h2_10, h2_12]
+
+-- Original: Theorem 3.1 forward statement, Proof A
+lemma ϕ_of_t_eq_ϕ_of_neg_t
   (t : F)
   (s : F)
   (s_h1 : s ≠ 0)
@@ -1930,60 +2006,15 @@ lemma ϕ_inv_only_two_specific_preimages_mp
   :
   let ϕ_of_t := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let ϕ_of_neg_t := ϕ (-t) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ¬ (∃ (w : { n : F // n ≠ t ∧ n ≠ -t}), ϕ w.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ_of_t) → ϕ_of_t = ϕ_of_neg_t := by
-    intro ϕ_of_t ϕ_of_neg_t h1
+  ϕ_of_t = ϕ_of_neg_t := by
+    intro ϕ_of_t ϕ_of_neg_t
     by_cases h2 : t = 1 ∨ t = -1
-    · rcases h2 with h2_1 | h2_1
-      · change ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ (-t) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-        rw [h2_1]
-        unfold ϕ
-        simp
-      · change ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ (-t) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-        rw [h2_1]
-        unfold ϕ
-        simp
+    · exact ϕ_of_t_eq_ϕ_of_neg_t_base_case ⟨t, h2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     · have h2_1 : (t ≠ 1 ∧ t ≠ -1) := by
         rw [ne_eq, ne_eq]
         rw [← not_or]
         exact h2
-      let t1 := t
-      let t2 := -t1
-      have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by
-        unfold t2 t1
-        rw [ne_eq, ne_eq]
-        constructor
-        · intro h2_2_1
-          have h2_2_1_1 : t = -1 := by
-            rw [← neg_one_mul]
-            nth_rw 2 [← h2_2_1]
-            simp
-          have h2_2_1_2 : t ≠ -1 := by exact h2_1.right
-          contradiction
-        · intro h2_2_2
-          have h2_2_1_1 : t = 1 := by
-            simp at h2_2_2
-            exact h2_2_2
-          have h2_2_1_2 : t ≠ 1 := by exact h2_1.left
-          contradiction
-      let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-      let u1 := u ⟨t1, h2_1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
-      let v1 := v ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-      let v2 := v ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-      let x1 := x ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-      let x2 := x ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-      let y1 := y ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-      let y2 := y ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-      let x1 := x ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-      let x2 := x ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-      let y1 := y ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-      let y2 := y ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-      have h2_10 : y2 = y1 := by exact y_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2
-      have h2_12 : x2 = x1 := by exact x_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2
-      change ϕ t1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-      unfold ϕ
-      rw [dif_pos h2_2, dif_pos h2_1]
-      change (x1, y1) = (x2, y2)
-      rw [h2_10, h2_12]
+      exact ϕ_of_t_eq_ϕ_of_neg_t_main_case ⟨t, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
 -- Original: Theorem 3 Proof B latter part
 lemma ϕ_inv_only_two_specific_preimages_mpr
@@ -1997,9 +2028,8 @@ lemma ϕ_inv_only_two_specific_preimages_mpr
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let ϕ_of_t := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let ϕ_of_neg_t := ϕ (-t) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ϕ_of_t = ϕ_of_neg_t → ¬ (∃ (w : { n : F // n ≠ t ∧ n ≠ -t}), ϕ w.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ_of_t) := by
-    intro ϕ_of_t ϕ_of_neg_t h1
+  ¬ ∃ (w : { n : F // n ≠ t ∧ n ≠ -t}), ϕ w.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ_of_t := by
+    intro ϕ_of_t
     sorry
 
 -- Chapter 3.3 Theorem 3.1
@@ -2120,6 +2150,44 @@ noncomputable def ϕ_over_F
     ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨p, h⟩)
   }
 
+-- Original: Theorem 3 Proof B
+theorem point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mp
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {p : (F) × (F) // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  :
+  ((h : point.val ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) →
+    ϕ_over_F_prop1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩
+    ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩
+    ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩)
+    → point.val ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 := by
+    sorry
+
+-- Original: Theorem 3 Proof B
+theorem point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mpr
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {p : (F) × (F) // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  :
+  point.val ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 
+  → ((h : point.val ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) →
+    ϕ_over_F_prop1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩
+    ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩
+    ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩)
+  := by
+    sorry
+
+-- Original: Theorem 3 Proof B and C
 theorem point_in_E_over_F_with_props_iff_point_in_ϕ_over_F
   (s : F)
   (s_h1 : s ≠ 0)
@@ -2135,7 +2203,9 @@ theorem point_in_E_over_F_with_props_iff_point_in_ϕ_over_F
     ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩
     ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩)
   ↔ point.val ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 := by
-    sorry
+    constructor
+    · exact point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mp s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    · exact point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mpr s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
 
 -- Used to build definitions for arguments which sometimes require different
 -- assumptions regarding group membership.
