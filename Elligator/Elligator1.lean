@@ -2219,6 +2219,101 @@ theorem point_in_ϕ_over_F_with_prop1
         exact h1
       exact point_in_ϕ_over_F_with_prop1_base_case ⟨t, h1_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
+theorem point_in_ϕ_over_F_with_prop2_base_case
+  (t : {n : F // n = 1 ∨ n = -1})
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
+    intro point
+    unfold ϕ_over_F_prop2  
+    intro r_of_s η_of_point
+    have h1 : ¬ (t.val ≠ 1 ∧ t.val ≠ -1) := by
+      rcases t.property with h1_1 | h1_1
+      · rw [h1_1]
+        simp
+      · rw [h1_1]
+        simp
+    unfold η_of_point η point ϕ 
+    rw [dif_neg h1]
+    ring_nf
+    rw [isSquare_iff_exists_sq 0]
+    use 0
+    simp
+
+lemma y_h1
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  X_of_t^2 + (2 + r_of_s * (y_of_t - 1) / (y_of_t + 1)) * X_of_t + 1 = 0 := by
+    sorry
+
+theorem point_in_ϕ_over_F_with_prop2_main_case
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
+    intro point
+    unfold ϕ_over_F_prop2  
+    intro r_of_s η_of_point
+    let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    have h1 : X_of_t^2 + 2 * (1 + η_of_point * r_of_s) * X_of_t + 1 = 0 := by sorry
+    have h2 : IsSquare (4 * (1 + η_of_point * r_of_s)^2 - 4) := by sorry 
+    -- TODO search IsSquare lemmas to conclude from h2
+    sorry
+
+-- Original: Theorem 3.3 Proof B prop 2 argumentation
+theorem point_in_ϕ_over_F_with_prop2
+  (t : F)
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
+    intro point
+    unfold ϕ_over_F_prop2
+    intro y
+    by_cases h1 : t ≠ 1 ∧ t ≠ -1
+    · exact point_in_ϕ_over_F_with_prop2_main_case ⟨t, h1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    · have h1_1 : (t = 1 ∨ t = -1) := by
+        rw [ne_eq, ne_eq] at h1
+        rw [← not_or, not_not] at h1
+        exact h1
+      exact point_in_ϕ_over_F_with_prop2_base_case ⟨t, h1_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+
 -- Original: Theorem 3 Proof B
 theorem point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mp
   (s : F)
