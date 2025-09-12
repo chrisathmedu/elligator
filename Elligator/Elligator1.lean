@@ -2029,7 +2029,7 @@ lemma ϕ_inv_only_two_specific_preimages_mpr
   :
   let ϕ_of_t := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   ¬ ∃ (w : { n : F // n ≠ t ∧ n ≠ -t}), ϕ w.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ_of_t := by
-    intro ϕ_of_t
+    intro ϕ_of_t h1
     sorry
 
 -- Chapter 3.3 Theorem 3.1
@@ -2076,9 +2076,9 @@ noncomputable def ϕ_over_F_prop1
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : (F) × (F) // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : F × F)
   : Prop :=
-  let y := point.val.snd
+  let y := point.snd
   y + 1 ≠ 0
 
 /-- η(s, q, point) is a function defined in the paper.
@@ -2149,6 +2149,75 @@ noncomputable def ϕ_over_F
     ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨p, h⟩
     ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨p, h⟩)
   }
+
+theorem point_in_ϕ_over_F_with_prop1_base_case
+  (t : {n : F // n = 1 ∨ n = -1})
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ_over_F_prop1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
+    intro point
+    unfold ϕ_over_F_prop1 
+    intro y
+    have h1 : ¬ (t.val ≠ 1 ∧ t.val ≠ -1) := by
+      rcases t.property with h1_1 | h1_1
+      · rw [h1_1]
+        simp
+      · rw [h1_1]
+        simp
+    unfold y point ϕ 
+    rw [dif_neg h1]
+    ring_nf
+    exact (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
+
+theorem point_in_ϕ_over_F_with_prop1_main_case
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ_over_F_prop1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
+    intro point
+    unfold ϕ_over_F_prop1
+    intro y
+    unfold y point ϕ
+    rw [dif_pos t.property]
+    exact y_add_one_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
+
+-- Original: Theorem 3.3 Proof B prop 1 argumentation
+theorem point_in_ϕ_over_F_with_prop1
+  (t : F)
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ_over_F_prop1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
+    intro point
+    unfold ϕ_over_F_prop1
+    intro y
+    by_cases h1 : t ≠ 1 ∧ t ≠ -1
+    · exact point_in_ϕ_over_F_with_prop1_main_case ⟨t, h1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    · have h1_1 : (t = 1 ∨ t = -1) := by
+        rw [ne_eq, ne_eq] at h1
+        rw [← not_or, not_not] at h1
+        exact h1
+      exact point_in_ϕ_over_F_with_prop1_base_case ⟨t, h1_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
 -- Original: Theorem 3 Proof B
 theorem point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mp
