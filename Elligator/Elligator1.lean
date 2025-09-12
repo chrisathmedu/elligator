@@ -2068,10 +2068,12 @@ def E_over_F
   let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   {p | p.fst^2 + p.snd^2 = 1 + d_of_s * p.fst^2 * p.snd^2}
 
+-- Properties do not have to assume that the given `point` is element of E(F)
+-- since these are just returning a Prop which would be false in the other case.
+--
+-- Actual assumption of E(F) is done in theorems using the following `def`s.
+
 noncomputable def ϕ_over_F_prop1
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
@@ -2086,17 +2088,13 @@ noncomputable def ϕ_over_F_prop1
 Paper definition at chapter 3.3 theorem 3.
 -/
 noncomputable def η
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : (F) × (F) // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
-  : F
-  :=
-  let y := point.val.snd
+  (point : F × F)
+  : F :=
+  let y := point.snd
   (y - 1) / (2 * (y + 1))
 
 def ϕ_over_F_prop2
@@ -2107,10 +2105,10 @@ def ϕ_over_F_prop2
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : (F) × (F) // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : F × F)
   : Prop :=
   let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let η_of_point := η s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
   IsSquare ((1 + η_of_point * r_of_s)^2 - 1)
 
 def ϕ_over_F_prop3
@@ -2121,13 +2119,13 @@ def ϕ_over_F_prop3
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : (F) × (F) // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : F × F)
   : Prop :=
-  let x := point.val.fst
+  let x := point.fst
   let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let χ_of_c_of_s := LegendreSymbol.χ c_of_s q field_cardinality q_prime_power q_mod_4_congruent_3
   let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let η_of_point := η s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
   η_of_point * r_of_s = -2 → x = 2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s
 
 -- Chapter 3.3 Theorem 3.2
@@ -2145,9 +2143,11 @@ noncomputable def ϕ_over_F
   {
     p |
     (h : p ∈ E_over_F_of_s) →
-    (ϕ_over_F_prop1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨p, h⟩
-    ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨p, h⟩
-    ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨p, h⟩)
+    (
+        ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 p
+      ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 p
+      ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 p
+    )
   }
 
 theorem point_in_ϕ_over_F_with_prop1_base_case
@@ -2161,7 +2161,7 @@ theorem point_in_ϕ_over_F_with_prop1_base_case
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ϕ_over_F_prop1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
+  ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
     intro point
     unfold ϕ_over_F_prop1 
     intro y
@@ -2187,7 +2187,7 @@ theorem point_in_ϕ_over_F_with_prop1_main_case
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ϕ_over_F_prop1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
+  ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
     intro point
     unfold ϕ_over_F_prop1
     intro y
@@ -2207,7 +2207,7 @@ theorem point_in_ϕ_over_F_with_prop1
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ϕ_over_F_prop1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
+  ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
     intro point
     unfold ϕ_over_F_prop1
     intro y
@@ -2231,7 +2231,7 @@ theorem point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mp
   (point : {p : (F) × (F) // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
   :
   ((h : point.val ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) →
-    ϕ_over_F_prop1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩
+    ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
     ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩
     ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩)
     → point.val ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 := by
@@ -2316,7 +2316,7 @@ noncomputable def X2
   (point : {p : (F) × (F) // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
   (h : point.val ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
   : F :=
-  let η_of_point := η s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩
+  let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
   let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   (-(1 + η_of_point * r_of_s) + ((1 + η_of_point * r_of_s)^2 - 1)^((q + 1) / 4))
 
