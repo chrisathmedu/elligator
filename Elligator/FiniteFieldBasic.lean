@@ -4,7 +4,7 @@ variable {F : Type*} [Field F] [Fintype F]
 
 namespace FiniteFieldBasic
 
-lemma q_ne_two 
+lemma q_ne_two
   (q : ℕ)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -99,6 +99,13 @@ lemma q_not_dvd_two
     simp_all
 
 
+lemma odd_prime_power_gt_two
+  (q : ℕ)
+  (q_prime_power : IsPrimePow q)
+  (hq: Odd q)
+  :
+  q > 2 := by sorry
+
 lemma two_ne_zero
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
@@ -107,6 +114,9 @@ lemma two_ne_zero
   :
   (2 : F) ≠ 0 := by
     intro h
+    have hq0: Odd q := by sorry
+    have hq: q > 2 := by apply odd_prime_power_gt_two q q_prime_power hq0
+
     have h1 : (2 : F) = 0 ↔ 2 ∣ q := by
       sorry
     rw [h1] at h
@@ -114,6 +124,7 @@ lemma two_ne_zero
     --apply h1.2
     -- Because q prime and does not divide 2, 2 cannot be zero since q is
     -- 0 in a field with q elements!
+
     have h2 : ¬(2 | q) := by
       apply q_not_dvd_two q field_cardinality q_prime_power q_mod_4_congruent_3
     contradiction
@@ -167,6 +178,24 @@ lemma p_odd_power_odd
       use 2*k*k1 + k + k1
       simp_all
 
+lemma power_odd_p_odd
+  (p k : ℕ)
+  (hk: 0 < k)
+  (hp: Odd (p^k))
+  :
+  Odd p := by
+    cases k
+    · simp_all
+    · rename_i k
+      have hpn_one: p^(k+1) = p^k * p := by ring
+      -- cases hp
+      --rename_i k1 hk1
+      have h: Odd (p^k * p) → Odd (p^k) ∧ Odd p := by
+        exact fun a ↦ (fun {m n} ↦ Nat.odd_mul.mp) a
+      rw [hpn_one] at hp
+      have h': Odd (p^k) ∧ Odd p := by apply h hp
+      simp_all
+
 lemma q_sub_one_over_two_ne_zero
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
@@ -190,7 +219,7 @@ lemma q_sub_one_over_two_ne_zero
       cases hpk
       rename_i hk hpk
       have p_odd: Odd p := by
-        sorry
+        apply p_odd_power_odd
       have q_gte_q: q ≥ p := by
         simp_all
         rw [<- hpk]
