@@ -98,13 +98,66 @@ lemma q_not_dvd_two
       exact Nat.not_even_iff_odd.mpr hq
     simp_all
 
+lemma power_odd_p_odd
+  (p k : ℕ)
+  (hk: 0 < k)
+  (hp: Odd (p^k))
+  :
+  Odd p := by
+    cases k
+    · simp_all
+    · rename_i k
+      have hpn_one: p^(k+1) = p^k * p := by ring
+      -- cases hp
+      --rename_i k1 hk1
+      have h: Odd (p^k * p) → Odd (p^k) ∧ Odd p := by
+        exact fun a ↦ (fun {m n} ↦ Nat.odd_mul.mp) a
+      rw [hpn_one] at hp
+      have h': Odd (p^k) ∧ Odd p := by apply h hp
+      simp_all
 
 lemma odd_prime_power_gt_two
   (q : ℕ)
   (q_prime_power : IsPrimePow q)
   (hq: Odd q)
   :
-  q > 2 := by sorry
+  q > 2 := by
+    rw [IsPrimePow] at q_prime_power
+    cases q_prime_power
+    rename_i p hk
+    cases hk
+    rename_i k hp
+    cases hp
+    rename_i right
+    cases right
+    rename_i hprime k_gt_zero q_p_power
+    have odd_p_pow_k: Odd (p^k) := by
+      rw [<- q_p_power] at hq
+      exact hq
+    have hp: Odd p := by apply power_odd_p_odd p k k_gt_zero odd_p_pow_k
+    have hp1: p > 2 := by
+      refine Nat.two_lt_of_ne ?_ ?_ ?_
+      · intro h_zero
+        simp_all
+      · intro h_one
+        simp_all
+      · intro p_two
+        rw [p_two] at hp
+        have even_two: Even 2 := by
+          exact Nat.even_iff.mpr rfl
+        have not_odd_two: ¬ Odd 2 := by exact Nat.not_odd_iff_even.mpr even_two
+        contradiction
+    have h_p_pow_gt_two: p^k > 2 := by
+      cases k
+      · simp_all
+      · rename_i k
+        have p_k_p_one: p^(k+1) = p^k * p := by ring
+        rw [p_k_p_one]
+        have p_k_gt_zero: p^k > 0 := by
+          refine Nat.pow_pos ?_
+          linarith
+        exact lt_mul_of_one_le_of_lt p_k_gt_zero hp1
+    simp_all
 
 lemma two_ne_zero
   (q : ℕ)
@@ -114,7 +167,10 @@ lemma two_ne_zero
   :
   (2 : F) ≠ 0 := by
     intro h
-    have hq0: Odd q := by sorry
+    have hq0: Odd q := by
+      rw [<- field_cardinality]
+      apply q_odd q field_cardinality q_prime_power q_mod_4_congruent_3
+
     have hq: q > 2 := by apply odd_prime_power_gt_two q q_prime_power hq0
 
     have h1 : (2 : F) = 0 ↔ 2 ∣ q := by
@@ -178,24 +234,6 @@ lemma p_odd_power_odd
       use 2*k*k1 + k + k1
       simp_all
 
-lemma power_odd_p_odd
-  (p k : ℕ)
-  (hk: 0 < k)
-  (hp: Odd (p^k))
-  :
-  Odd p := by
-    cases k
-    · simp_all
-    · rename_i k
-      have hpn_one: p^(k+1) = p^k * p := by ring
-      -- cases hp
-      --rename_i k1 hk1
-      have h: Odd (p^k * p) → Odd (p^k) ∧ Odd p := by
-        exact fun a ↦ (fun {m n} ↦ Nat.odd_mul.mp) a
-      rw [hpn_one] at hp
-      have h': Odd (p^k) ∧ Odd p := by apply h hp
-      simp_all
-
 lemma q_sub_one_over_two_ne_zero
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
@@ -221,7 +259,7 @@ lemma q_sub_one_over_two_ne_zero
       have p_power_odd: Odd (p^k) := by
         rw [<- hpk] at q_odd
         exact q_odd
-    
+
       have p_odd: Odd p := by
         apply power_odd_p_odd p k hk p_power_odd
 
