@@ -141,8 +141,31 @@ lemma neg_one_non_square
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  ¬IsSquare (-1 : F) := by
+  ¬IsSquare (-1 : F) :=
     sorry
+
+lemma p_odd_power_odd
+  (p k : ℕ)
+  (hp: Odd p)
+  :
+  Odd (p^k) := by
+    induction' k
+    · simp
+    · rename_i n hn
+      rw [Odd] at hn
+      cases hn
+      rename_i k hyp
+      have hpn_one: p^(n+1) = p^n * p := by ring
+      rw [Odd, hpn_one]
+      rw [Odd] at hp
+      cases hp
+      rename_i k1 hp
+      rw [hyp] at hpn_one
+      nth_rw 2 [hp] at hpn_one
+      have h0: (2*k+1)*(2*k1 + 1) = 4*k*k1 + 2*k + 2*k1 + 1 := by ring
+      have h1: 4*k*k1 + 2*k + 2*k1 + 1 = 2*(2*k*k1 + k + k1) + 1:= by ring
+      use 2*k*k1 + k + k1
+      simp_all
 
 lemma q_sub_one_over_two_ne_zero
   (q : ℕ)
@@ -150,9 +173,37 @@ lemma q_sub_one_over_two_ne_zero
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  (q - 1) / 2 ≠ 0 := by 
+  (q - 1) / 2 ≠ 0 := by
+    have q_odd: Odd q := by
+        rw [<- field_cardinality]
+        apply q_odd q field_cardinality q_prime_power q_mod_4_congruent_3
     apply Nat.div_ne_zero_iff.2
     constructor
     · norm_num
-    · sorry
-
+    · rw [IsPrimePow] at q_prime_power
+      cases q_prime_power
+      rename_i p hp
+      cases hp
+      rename_i k hk
+      cases hk
+      rename_i hp hpk
+      cases hpk
+      rename_i hk hpk
+      have p_odd: Odd p := by
+        sorry
+      have q_gte_q: q ≥ p := by
+        simp_all
+        rw [<- hpk]
+        exact Nat.le_pow hk
+      have p_gt_2: p > 2 := by
+        simp_all
+        refine odd_prime_power_gt_two p ?_ p_odd
+        rw [IsPrimePow]
+        use p, 1
+        simp_all
+      simp_all
+      refine (Nat.le_sub_one_iff_lt ?_).mpr ?_
+      · refine Nat.zero_lt_of_ne_zero ?_
+        intro hq
+        simp_all
+      · exact Nat.lt_of_lt_of_le p_gt_2 q_gte_q
