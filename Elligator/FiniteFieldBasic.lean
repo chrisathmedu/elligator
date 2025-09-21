@@ -218,8 +218,13 @@ lemma q_sub_one_over_two_ne_zero
       rename_i hp hpk
       cases hpk
       rename_i hk hpk
+      have p_power_odd: Odd (p^k) := by
+        rw [<- hpk] at q_odd
+        exact q_odd
+    
       have p_odd: Odd p := by
-        apply p_odd_power_odd
+        apply power_odd_p_odd p k hk p_power_odd
+
       have q_gte_q: q ≥ p := by
         simp_all
         rw [<- hpk]
