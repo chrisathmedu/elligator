@@ -125,14 +125,22 @@ lemma neg_one_ne_zero
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   (-1 : F) ≠ 0 := by
-    sorry
+    have he: Odd (-1 : F) := by
+      rw [Odd]
+      use (-1)
+      ring
+    have hne: Even (0 : F) := by
+      rw [Even]
+      use 0
+      simp
+    simp_all
 
 lemma neg_one_non_square
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  : 
+  :
   ¬IsSquare (-1 : F) := by
     sorry
 
