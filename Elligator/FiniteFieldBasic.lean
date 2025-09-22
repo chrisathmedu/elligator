@@ -172,16 +172,21 @@ lemma two_ne_zero
       apply q_odd q field_cardinality q_prime_power q_mod_4_congruent_3
 
     have hq: q > 2 := by apply odd_prime_power_gt_two q q_prime_power hq0
+    simp_all
 
     have h1 : (2 : F) = 0 ↔ 2 ∣ q := by
-      sorry
+      constructor
+      · intro h1
+        sorry
+      · intro h2
+        exact h
     rw [h1] at h
     --apply prime_two_or_dvd_of_dvd_two_mul_pow_self_two q_prime_power h
     --apply h1.2
     -- Because q prime and does not divide 2, 2 cannot be zero since q is
     -- 0 in a field with q elements!
 
-    have h2 : ¬(2 | q) := by
+    have h2 : ¬(2 ∣ q) := by
       apply q_not_dvd_two q field_cardinality q_prime_power q_mod_4_congruent_3
     contradiction
 
