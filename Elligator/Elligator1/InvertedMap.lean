@@ -643,8 +643,11 @@ theorem ϕ_inv_only_two_specific_preimages
   ↔ ¬ (∃ (w : { n : F // n ≠ t ∧ n ≠ -t}), ϕ w.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ_of_t) := by
     intro ϕ_of_t ϕ_of_neg_t
     constructor
-    · exact ϕ_inv_only_two_specific_preimages_mpr t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    · exact ϕ_inv_only_two_specific_preimages_mp t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    · sorry
+    · sorry
+    -- TODO rethink actual statement
+    --· exact ϕ_inv_only_two_specific_preimages_mpr t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    --· exact ϕ_inv_only_two_specific_preimages_mp t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
 theorem point_in_ϕ_over_F_with_prop1_base_case
   (t : {n : F // n = 1 ∨ n = -1})
@@ -826,8 +829,8 @@ theorem point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mp
   :
   ((h : point.val ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) →
     ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
-    ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩
-    ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩)
+    ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+    ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val)
     → point.val ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 := by
     sorry
 
@@ -844,9 +847,9 @@ theorem point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mpr
   :
   point.val ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 
   → ((h : point.val ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) →
-    ϕ_over_F_prop1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩
-    ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩
-    ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩)
+    ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+    ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+    ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val)
   := by
     sorry
 
@@ -862,9 +865,9 @@ theorem point_in_E_over_F_with_props_iff_point_in_ϕ_over_F
   (point : {p : (F) × (F) // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
   :
   ((h : point.val ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) →
-    ϕ_over_F_prop1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩
-    ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩
-    ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, h⟩)
+    ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+    ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+    ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val)
   ↔ point.val ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 := by
     constructor
     · exact point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mp s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
