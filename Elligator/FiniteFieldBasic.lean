@@ -1,4 +1,4 @@
-import Elligator.Common
+import Mathlib
 
 variable {F : Type*} [Field F] [Fintype F]
 
