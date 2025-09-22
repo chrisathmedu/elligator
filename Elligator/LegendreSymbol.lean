@@ -1,5 +1,5 @@
+import Mathlib
 import Elligator.FiniteFieldBasic
-import Elligator.Common
 
 namespace LegendreSymbol
 
