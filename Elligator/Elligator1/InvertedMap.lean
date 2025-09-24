@@ -746,6 +746,8 @@ theorem point_in_ϕ_over_F_with_prop2_base_case
     use 0
     simp
 
+-- Used in Theorem 3 Proof B part as implication for point_in_ϕ_over_F_with_prop2_main_case
+-- argument.
 lemma y_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
@@ -763,6 +765,8 @@ lemma y_h1
   X_of_t^2 + (2 + r_of_s * (y_of_t - 1) / (y_of_t + 1)) * X_of_t + 1 = 0 := by
     sorry
 
+set_option trace.Meta.Tactic.simp true
+
 theorem point_in_ϕ_over_F_with_prop2_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
@@ -778,13 +782,31 @@ theorem point_in_ϕ_over_F_with_prop2_main_case
     intro point
     unfold ϕ_over_F_prop2  
     intro r_of_s η_of_point
-    let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    -- TODO make depend on point -> update statements below and check whole proof logic
     let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
     let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    have h1 : X_of_t^2 + 2 * (1 + η_of_point * r_of_s) * X_of_t + 1 = 0 := by sorry
+    have h1 : X_of_t^2 + 2 * (1 + η_of_point * r_of_s) * X_of_t + 1 = 0 := by
+      calc
+        X_of_t^2 + 2 * (1 + η_of_point * r_of_s) * X_of_t + 1 = X_of_t^2 + 2 * (1 + 1 / 2 * ((y_of_t - 1) / (y_of_t + 1)) * r_of_s) * X_of_t + 1 := by
+          -- Unfold until reaching the y which is equivalent to y_of_t for comparison
+          unfold η_of_point η point ϕ 
+          simp only [Subtype.coe_eta, dite_eq_ite, one_div]
+          rw [if_pos t.prop]
+          change X_of_t ^ 2 + 2 * (1 + (y_of_t - 1) / (2 * (y_of_t + 1)) * r_of_s) * X_of_t + 1 = X_of_t ^ 2 + 2 * (1 + 2⁻¹ * ((y_of_t - 1) / (y_of_t + 1)) * r_of_s) * X_of_t + 1 
+          rw [inv_eq_one_div]
+          rw [← mul_div_mul_comm] 
+          ring_nf
+        _ = X_of_t^2 + (2 + r_of_s * (y_of_t - 1) / (y_of_t + 1)) * X_of_t + 1 := by
+          rw [mul_add 2]
+          rw [div_eq_mul_inv 1 2, mul_one, one_mul, mul_assoc (2⁻¹), ← mul_assoc 2 (2⁻¹) _]
+          rw [mul_inv_cancel₀]
+          ring_nf
+          exact (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
+        _ = 0 := by 
+          rw [y_h1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
     have h2 : IsSquare (4 * (1 + η_of_point * r_of_s)^2 - 4) := by sorry 
     have h3 : IsSquare (2^2 * ((1 + η_of_point * r_of_s)^2 - 1)) := by sorry
     --apply IsSquare.mul h3 at h3
