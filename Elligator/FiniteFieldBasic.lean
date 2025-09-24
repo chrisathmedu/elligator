@@ -190,6 +190,36 @@ lemma two_ne_zero
       apply q_not_dvd_two q field_cardinality q_prime_power q_mod_4_congruent_3
     contradiction
 
+lemma one_ne_zero
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  (1 : F) ≠ 0 := by
+    have he: Odd (-1 : F) := by
+      rw [Odd]
+      use (-1)
+      ring
+    have hne: Even (0 : F) := by
+      rw [Even]
+      use 0
+      simp
+    simp_all
+
+lemma four_ne_zero
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  (4 : F) ≠ 0 := by
+    have h1 : (4 : F) = 2 * 2 := by norm_num
+    rw [h1]
+    apply mul_ne_zero
+    · exact (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
+    · exact (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
+
 lemma neg_one_ne_zero
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)

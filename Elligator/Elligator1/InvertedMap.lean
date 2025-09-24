@@ -839,12 +839,21 @@ theorem point_in_ϕ_over_F_with_prop2_main_case
           exact (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
         _ = 0 := by 
           rw [y_h1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
-    have h2 : IsSquare (4 * (1 + η_of_point * r_of_s)^2 - 4) := by sorry 
-    have h3 : IsSquare (2^2 * ((1 + η_of_point * r_of_s)^2 - 1)) := by sorry
-    --apply IsSquare.mul h3 at h3
-
-    -- TODO search IsSquare lemmas to conclude from h2
-    sorry
+    have h2 : NeZero (2 : F) := by
+      rw [neZero_iff]
+      apply (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
+    rw [pow_two] at h1
+    nth_rw 1 [← one_mul X_of_t, mul_assoc] at h1
+    apply (@quadratic_eq_zero_iff_discrim_eq_sq F _ 1 (2 * (1 + η_of_point * r_of_s)) 1 h2 _ (FiniteFieldBasic.one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3) X_of_t).mp at h1
+    unfold discrim at h1
+    rw [mul_pow 2 _ 2] at h1
+    have h3 : 2^2 = (4 : F) := by norm_num
+    rw [mul_one, h3, ← mul_sub, mul_comm] at h1
+    rw [← div_left_inj' (FiniteFieldBasic.four_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)] at h1
+    rw [mul_div_assoc, div_self (FiniteFieldBasic.four_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)] at h1
+    rw [mul_one, ← h3, ← div_pow _ _ 2] at h1
+    rw [h1]
+    apply IsSquare.sq
 
 -- Original: Theorem 3.3 Proof B prop 2 argumentation
 theorem point_in_ϕ_over_F_with_prop2
