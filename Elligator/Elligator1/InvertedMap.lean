@@ -1013,9 +1013,28 @@ theorem Y_η_h1
     intro Y_of_t c_of_s χ_of_c_of_s r_of_s
     let χ_of_one_add_one_div_c_of_s_pow_two := (LegendreSymbol.χ (1 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3)
     let χ_of_r_of_s := (LegendreSymbol.χ r_of_s q field_cardinality q_prime_power q_mod_4_congruent_3)
-    let χ_of_r_of_s_div_c_of_s := (LegendreSymbol.χ (r_of_s * c_of_s) q field_cardinality q_prime_power q_mod_4_congruent_3)
+    let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let u_of_t := u t q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let χ_of_v_of_t := (LegendreSymbol.χ v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3)
+    let χ_of_r_of_s_div_c_of_s := (LegendreSymbol.χ (r_of_s / c_of_s) q field_cardinality q_prime_power q_mod_4_congruent_3)
+    let χ_of_r_of_s_pow_two := (LegendreSymbol.χ (r_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3)
+    let χ_of_sum := LegendreSymbol.χ (u_of_t ^ 2 + 1 / c_of_s ^ 2) q field_cardinality q_prime_power q_mod_4_congruent_3
     calc
-      Y_of_t = (r_of_s^2)^((q + 1) / 4) * χ_of_one_add_one_div_c_of_s_pow_two := by sorry
+      Y_of_t = (r_of_s^2)^((q + 1) / 4) * χ_of_one_add_one_div_c_of_s_pow_two := by
+        unfold Y_of_t Y
+        rw [(v_η_h1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 η_h1)]
+        rw [(u_η_h1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 η_h1)]
+        change (χ_of_r_of_s_pow_two  * r_of_s^2) ^ ((q + 1) / 4) * χ_of_r_of_s_pow_two * (LegendreSymbol.χ (1 ^ 2 + 1 / c_of_s ^ 2) q field_cardinality q_prime_power q_mod_4_congruent_3) = (r_of_s ^ 2) ^ ((q + 1) / 4) * χ_of_one_add_one_div_c_of_s_pow_two
+        have h1 : r_of_s^2 ≠ 0 := by
+          rw [pow_two]
+          apply mul_ne_zero
+          · exact r_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+          · exact r_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        have h2 : IsSquare (r_of_s^2) := by apply IsSquare.sq
+        unfold χ_of_r_of_s_pow_two 
+        rw [LegendreSymbol.χ_a_eq_one (r_of_s^2) h1 h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
+        nth_rw 2 [pow_two] 
+        rw [mul_one, one_mul, mul_one]
       _ = χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s := by sorry
       _ = r_of_s * χ_of_c_of_s := by sorry
 
