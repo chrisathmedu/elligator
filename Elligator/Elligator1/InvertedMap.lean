@@ -822,14 +822,14 @@ theorem point_in_ϕ_over_F_with_prop3_base_case
   ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
     intro point
     unfold ϕ_over_F_prop3
-    intro x η_of_point χ_of_c_of_s r_of_s η_of_point_1 h1 
+    intro x c_of_s χ_of_c_of_s r_of_s η_of_point h1
     have h2 : ¬ (t.val ≠ 1 ∧ t.val ≠ -1) := by
       rcases t.property with h2_1 | h2_1
       · rw [h2_1]
         simp
       · rw [h2_1]
         simp
-    unfold η_of_point_1 η point ϕ at h1
+    unfold η_of_point η point ϕ at h1
     rw [dif_neg h2] at h1
     ring_nf at h1
     simp at h1
@@ -849,14 +849,39 @@ theorem point_in_ϕ_over_F_with_prop3_main_case
   let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
     intro point
-    unfold ϕ_over_F_prop3  
-    intro r_of_s η_of_point
+    unfold ϕ_over_F_prop3
+    intro x_of_point c_of_s χ_of_c_of_s r_of_s η_of_point h1
     let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
-    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    sorry
+    let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let u_of_t := u t q field_cardinality q_prime_power q_mod_4_congruent_3
+    let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let χ_of_c_of_s := LegendreSymbol.χ c_of_s q field_cardinality q_prime_power q_mod_4_congruent_3
+    have h1 : (X_of_t - 1)^2 = 0 := by sorry
+    have h2 : X_of_t = 1 := by sorry
+    have h3 : u_of_t = 1 := by sorry
+    have h4 : t.val = 0 := by sorry
+    have h5 : v_of_t = r_of_s^2 := by sorry
+    have h6 : Y_of_t = r_of_s * χ_of_c_of_s := by
+      let χ_of_one_add_one_div_c_of_s_pow_two := (LegendreSymbol.χ (1 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3)
+      let χ_of_r_of_s := (LegendreSymbol.χ r_of_s q field_cardinality q_prime_power q_mod_4_congruent_3)
+      let χ_of_r_of_s_div_c_of_s := (LegendreSymbol.χ (r_of_s * c_of_s) q field_cardinality q_prime_power q_mod_4_congruent_3)
+      calc
+        Y_of_t = (r_of_s^2)^((q + 1) / 4) * χ_of_one_add_one_div_c_of_s_pow_two := by sorry
+        _ = χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s := by sorry
+        _ = r_of_s * χ_of_c_of_s := by sorry
+    unfold x_of_point point ϕ 
+    rw [dif_pos t.prop]
+    unfold x
+    simp
+    change (c_of_s - 1) * s * X_of_t * (1 + X_of_t) / Y_of_t = 2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s
+    rw [h2, h6]
+    simp
+    nth_rw 2 [mul_div_assoc] 
+    unfold χ_of_c_of_s 
+    nth_rw 2 [← LegendreSymbol.one_over_χ_of_a_eq_χ_a c_of_s q field_cardinality q_prime_power q_mod_4_congruent_3]
+    change (c_of_s - 1) * s * (1 + 1) / (r_of_s * χ_of_c_of_s) = 2 * s * (c_of_s - 1) * (1 / χ_of_c_of_s / r_of_s)
+    ring_nf
 
 -- Original: Theorem 3.3 Proof B prop 3 argumentation
 theorem point_in_ϕ_over_F_with_prop3
