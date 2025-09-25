@@ -822,20 +822,19 @@ theorem point_in_ϕ_over_F_with_prop3_base_case
   ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
     intro point
     unfold ϕ_over_F_prop3
-    intro r_of_s η_of_point
-    have h1 : ¬ (t.val ≠ 1 ∧ t.val ≠ -1) := by
-      rcases t.property with h1_1 | h1_1
-      · rw [h1_1]
+    intro x η_of_point χ_of_c_of_s r_of_s η_of_point_1 h1 
+    have h2 : ¬ (t.val ≠ 1 ∧ t.val ≠ -1) := by
+      rcases t.property with h2_1 | h2_1
+      · rw [h2_1]
         simp
-      · rw [h1_1]
+      · rw [h2_1]
         simp
-    unfold η_of_point η point ϕ 
-    rw [dif_neg h1]
-    ring_nf
-    --rw [isSquare_iff_exists_sq 0]
-    --use 0
-    --simp
-    sorry
+    unfold η_of_point_1 η point ϕ at h1
+    rw [dif_neg h2] at h1
+    ring_nf at h1
+    simp at h1
+    have h3 : (2 : F) ≠ 0 := by apply FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+    contradiction 
 
 theorem point_in_ϕ_over_F_with_prop3_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
