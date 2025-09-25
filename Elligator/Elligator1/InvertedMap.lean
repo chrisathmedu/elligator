@@ -970,7 +970,9 @@ theorem y_η_h1
     unfold y_of_t y
     let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     change (r_of_s * X_of_t - (1 + X_of_t) ^ 2) / (r_of_s * X_of_t + (1 + X_of_t) ^ 2) = (r_of_s - 4) / (r_of_s + 4)
-    sorry
+    unfold X_of_t
+    rw [X_η_h2 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 η_h1]
+    ring_nf
 
 -- Original: Theorem 3.3 Proof B prop 3 argumentation
 theorem point_in_ϕ_over_F_with_prop3
