@@ -983,7 +983,10 @@ theorem v_η_h1
   let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   v_of_t = r_of_s^2 := by
     intro v_of_t r_of_s
-    sorry
+    unfold v_of_t v
+    rw [(u_η_h1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 η_h1)]
+    ring_nf
+    rfl
 
 -- Used in the main case of Theorem 3 Proof part B
 theorem Y_η_h1
@@ -1036,14 +1039,6 @@ theorem point_in_ϕ_over_F_with_prop3_main_case
     let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let χ_of_c_of_s := LegendreSymbol.χ c_of_s q field_cardinality q_prime_power q_mod_4_congruent_3
     let χ_of_v_of_s := LegendreSymbol.χ v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
-    have h6 : Y_of_t = r_of_s * χ_of_c_of_s := by
-      let χ_of_one_add_one_div_c_of_s_pow_two := (LegendreSymbol.χ (1 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3)
-      let χ_of_r_of_s := (LegendreSymbol.χ r_of_s q field_cardinality q_prime_power q_mod_4_congruent_3)
-      let χ_of_r_of_s_div_c_of_s := (LegendreSymbol.χ (r_of_s * c_of_s) q field_cardinality q_prime_power q_mod_4_congruent_3)
-      calc
-        Y_of_t = (r_of_s^2)^((q + 1) / 4) * χ_of_one_add_one_div_c_of_s_pow_two := by sorry
-        _ = χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s := by sorry
-        _ = r_of_s * χ_of_c_of_s := by sorry
     unfold x_of_point point ϕ 
     rw [dif_pos t.prop]
     unfold x
