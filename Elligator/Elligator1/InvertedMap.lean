@@ -1042,26 +1042,6 @@ theorem Y_η_h1
 
         sorry
 
--- Implicated by main case of Theorem 3 Proof part B
-lemma ϕ_of_zero
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  let ϕ_of_zero := ϕ (0 : F) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
-  let χ_of_c_of_s  := (LegendreSymbol.χ c_of_s q field_cardinality q_prime_power q_mod_4_congruent_3)
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ϕ_of_zero  = (2 * (c_of_s - 1) * s * χ_of_c_of_s / r_of_s, (r_of_s - 4) / (r_of_s + 4)) := by
-    sorry
-
-
-
-
 theorem point_in_ϕ_over_F_with_prop3_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
@@ -1148,6 +1128,54 @@ theorem point_in_ϕ_over_F_with_prop3
         rw [← not_or, not_not] at h1
         exact h1
       exact point_in_ϕ_over_F_with_prop3_base_case ⟨t, h1_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+
+-- Implicated by main case of Theorem 3 Proof part B
+lemma ϕ_of_zero
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let ϕ_of_zero := ϕ (0 : F) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let χ_of_c_of_s  := (LegendreSymbol.χ c_of_s q field_cardinality q_prime_power q_mod_4_congruent_3)
+  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ_of_zero  = (2 * (c_of_s - 1) * s * χ_of_c_of_s / r_of_s, (r_of_s - 4) / (r_of_s + 4)) := by
+    intro ϕ_of_zero c_of_s χ_of_c_of_s r_of_s 
+    unfold ϕ_of_zero ϕ
+    have h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by
+      constructor
+      · symm
+        exact FiniteFieldBasic.one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+      · symm
+        exact FiniteFieldBasic.neg_one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+    rw [dif_pos h1]
+    let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 ϕ_of_zero 
+    have h2 : η_of_point * r_of_s = -2 := by
+      unfold η_of_point r_of_s η r ϕ_of_zero ϕ
+      rw [dif_pos h1]
+      let y_of_zero := y ⟨(0 : F), h1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+      let X_of_zero := X ⟨(0 : F), h1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+      change (y_of_zero - 1) / (2 * (y_of_zero + 1)) * (c_of_s + 1 / c_of_s) = -2 
+      -- TODO how to show this without proofing all the η props proven before again.
+      -- would have to use y_η_h1 
+      -- TODO paper theory ends in -4 = -2...
+      sorry
+    rw [y_η_h1 ⟨0, h1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2]
+    let x_of_t := ϕ_of_zero.1
+    have h3 : x_of_t = 2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s := by
+      apply point_in_ϕ_over_F_with_prop3 (0 : F) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+      exact h2
+    unfold x_of_t ϕ_of_zero ϕ at h3
+    rw [dif_pos h1] at h3
+    simp at h3
+    rw [h3]
+    change (2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s, (r_of_s - 4) / (r_of_s + 4)) = (2 * (c_of_s - 1) * s * χ_of_c_of_s / r_of_s, (r_of_s - 4) / (r_of_s + 4))
+    ring_nf
+
 
 -- Original: Theorem 3 Proof B
 theorem point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mp
