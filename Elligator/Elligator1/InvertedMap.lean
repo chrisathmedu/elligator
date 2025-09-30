@@ -1035,8 +1035,32 @@ theorem Y_η_h1
         rw [LegendreSymbol.χ_a_eq_one (r_of_s^2) h1 h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
         nth_rw 2 [pow_two] 
         rw [mul_one, one_mul, mul_one]
-      _ = χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s := by sorry
-      _ = r_of_s * χ_of_c_of_s := by sorry
+      _ = χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s := by
+
+        sorry
+      _ = r_of_s * χ_of_c_of_s := by
+
+        sorry
+
+-- Implicated by main case of Theorem 3 Proof part B
+lemma ϕ_of_zero
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let ϕ_of_zero := ϕ (0 : F) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let χ_of_c_of_s  := (LegendreSymbol.χ c_of_s q field_cardinality q_prime_power q_mod_4_congruent_3)
+  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ_of_zero  = (2 * (c_of_s - 1) * s * χ_of_c_of_s / r_of_s, (r_of_s - 4) / (r_of_s + 4)) := by
+    sorry
+
+
+
 
 theorem point_in_ϕ_over_F_with_prop3_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
