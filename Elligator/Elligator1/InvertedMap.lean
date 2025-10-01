@@ -254,6 +254,37 @@ lemma X_comparison
         change 1 / X1 = 1 / X1
         rfl
 
+lemma X_comparison_implication
+  (t : F)
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (h2_1 : t ≠ 1 ∧ t ≠ -1)
+  (h2_2 : -t ≠ 1 ∧ -t ≠ -1)
+  :
+  let t1 := t
+  let t2 := -t1
+  let X1 := X ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let X2 := X ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  X1 + X2 = -2 * (1 + η_of_point * r_of_s) := by
+    intro t1 t2 X1 X2 point η_of_point r_of_s
+    let u1 := u ⟨t1, h2_1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
+    let u2 := u ⟨t2, h2_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
+    let v1 := v ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let v2 := v ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let χ_of_v1 := LegendreSymbol.χ v1 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let χ_of_v2 := LegendreSymbol.χ v2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    unfold X2
+    rw [X_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2]
+    exact (y_h3 ⟨t, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
+
 lemma Y_comparison
   (t : F)
   (s : F)
@@ -1036,10 +1067,10 @@ theorem Y_η_h1
         nth_rw 2 [pow_two] 
         rw [mul_one, one_mul, mul_one]
       _ = χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s := by
-
+        -- TODO understand
         sorry
       _ = r_of_s * χ_of_c_of_s := by
-
+        -- TODO same square root argument as above (χ(r)r = r ?) ... understand
         sorry
 
 theorem point_in_ϕ_over_F_with_prop3_main_case
