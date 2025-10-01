@@ -376,6 +376,41 @@ theorem r_ne_zero
       exact h3
     contradiction
 
+theorem four_add_r_ne_zero
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  4 + r_of_s ≠ 0 := by
+    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    change 4 + (c_of_s + 1 / c_of_s) ≠ 0
+    intro h
+    have h1 : IsSquare (3 : F) := by
+      rw [← add_assoc] at h
+      rw [← add_right_inj (-(4 + c_of_s))] at h
+      ring_nf at h
+      rw [← mul_left_inj' (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)] at h
+      unfold c_of_s at h
+      rw [inv_mul_cancel₀ (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)] at h
+      rw [sub_mul] at h
+      change 1 = (-4 * c_of_s - c_of_s * c_of_s) at h
+      have h1_1 : (0 : F) = 4 - 4 := by norm_num
+      have h1_2 : -4 * c_of_s - c_of_s * c_of_s = -(c_of_s + 2)^2 + 4 := by ring_nf
+      rw [h1_2, ← add_right_inj (-4)] at h
+      rw [← mul_left_inj' (FiniteFieldBasic.neg_one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)] at h
+      simp at h
+      norm_num at h
+      rw [h, pow_two]
+      apply IsSquare.mul_self
+    have h2 : ¬IsSquare (3 : F) := by
+      exact FiniteFieldBasic.three_nonsquare q field_cardinality q_prime_power q_mod_4_congruent_3
+    contradiction
+
 theorem d_nonsquare
   (s : F)
   (s_h1 : s ≠ 0)

@@ -246,6 +246,15 @@ lemma neg_one_non_square
   ¬IsSquare (-1 : F) :=
     sorry
 
+theorem three_nonsquare
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  ¬IsSquare (3 : F) := by
+    sorry
+
 lemma p_odd_power_odd
   (p k : ℕ)
   (hp: Odd p)

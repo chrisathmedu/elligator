@@ -1155,15 +1155,28 @@ lemma ϕ_of_zero
     rw [dif_pos h1]
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 ϕ_of_zero 
     have h2 : η_of_point * r_of_s = -2 := by
-      unfold η_of_point r_of_s η r ϕ_of_zero ϕ
+      unfold η_of_point η ϕ_of_zero ϕ
       rw [dif_pos h1]
       let y_of_zero := y ⟨(0 : F), h1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
       let X_of_zero := X ⟨(0 : F), h1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
-      change (y_of_zero - 1) / (2 * (y_of_zero + 1)) * (c_of_s + 1 / c_of_s) = -2 
+      change (y_of_zero - 1) / (2 * (y_of_zero + 1)) * r_of_s = -2 
+      have h2_1 : y_of_zero = (r_of_s - 4) / (r_of_s + 4) := by
       -- TODO how to show this without proofing all the η props proven before again.
       -- would have to use y_η_h1 
-      -- TODO paper theory ends in -4 = -2...
-      sorry
+        sorry
+      rw [h2_1]
+      have h2_2 : 1 = (r_of_s + 4) / (r_of_s + 4) := by 
+        rw [add_comm]
+        rw [div_self (four_add_r_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)]
+      nth_rw 1 [h2_2]
+      nth_rw 1 [h2_2]
+      rw [← sub_div, ← add_div, ← sub_sub, ← add_assoc]
+      ring_nf
+      rw [inv_inv, mul_comm r_of_s, mul_assoc _ r_of_s, mul_inv_cancel₀ (r_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3), mul_one]
+      rw [inv_mul_cancel₀ (four_add_r_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3), one_mul]
+      rw [← mul_neg_one, ← mul_right_inj' (FiniteFieldBasic.four_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)]
+      rw [← mul_assoc, ← mul_assoc, mul_inv_cancel₀ (FiniteFieldBasic.four_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)]
+      ring_nf
     rw [y_η_h1 ⟨0, h1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2]
     let x_of_t := ϕ_of_zero.1
     have h3 : x_of_t = 2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s := by
