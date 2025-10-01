@@ -1129,6 +1129,95 @@ theorem point_in_ϕ_over_F_with_prop3
         exact h1
       exact point_in_ϕ_over_F_with_prop3_base_case ⟨t, h1_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
+lemma zero_h1
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by
+    constructor
+    · symm
+      exact FiniteFieldBasic.one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+    · symm
+      exact FiniteFieldBasic.neg_one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+
+lemma u_of_zero
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  have h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by exact zero_h1 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let u_of_t := u ⟨(0 : F), h1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3;
+  u_of_t = 1 := by 
+    intro h1 u_of_t
+    unfold u_of_t u
+    simp
+
+lemma v_of_zero
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  have h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by exact zero_h1 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let v_of_t := v ⟨(0 : F), h1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  v_of_t = r_of_s^2 := by
+    intro h1 v_of_t r_of_s
+    unfold v_of_t v
+    rw [u_of_zero q field_cardinality q_prime_power q_mod_4_congruent_3]
+    unfold r_of_s
+    ring_nf
+
+lemma X_of_zero
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  have h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by exact zero_h1 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let X_of_t := X ⟨(0 : F), h1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  X_of_t = 1 := by
+    intro h1 X_of_t
+    unfold X_of_t X
+    let v_of_t := v ⟨(0 : F), h1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let χ_of_v_of_t := LegendreSymbol.χ v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
+    rw [u_of_zero q field_cardinality q_prime_power q_mod_4_congruent_3]
+    change χ_of_v_of_t * 1 = 1
+    unfold χ_of_v_of_t v_of_t
+    rw [v_of_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
+    change (LegendreSymbol.χ (r_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3) * 1 = 1
+    rw [LegendreSymbol.χ_of_a_pow_two_eq_one r_of_s (r_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) q field_cardinality q_prime_power q_mod_4_congruent_3]
+    simp
+
+lemma y_of_zero
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  have h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by exact zero_h1 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let y_of_t := y ⟨(0 : F), h1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  y_of_t = (r_of_s - 4) / (r_of_s + 4) := by
+    intro h1 y_of_t r_of_s
+    unfold y_of_t y
+    rw [X_of_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
+    change (r_of_s * 1 - (1 + 1) ^ 2) / (r_of_s * 1 + (1 + 1) ^ 2) = (r_of_s - 4) / (r_of_s + 4)
+    ring_nf
+
 -- Implicated by main case of Theorem 3 Proof part B
 lemma ϕ_of_zero
   (s : F)
@@ -1146,25 +1235,20 @@ lemma ϕ_of_zero
   ϕ_of_zero  = (2 * (c_of_s - 1) * s * χ_of_c_of_s / r_of_s, (r_of_s - 4) / (r_of_s + 4)) := by
     intro ϕ_of_zero c_of_s χ_of_c_of_s r_of_s 
     unfold ϕ_of_zero ϕ
-    have h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by
-      constructor
-      · symm
-        exact FiniteFieldBasic.one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
-      · symm
-        exact FiniteFieldBasic.neg_one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+    let h1 := zero_h1 q field_cardinality q_prime_power q_mod_4_congruent_3
     rw [dif_pos h1]
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 ϕ_of_zero 
     have h2 : η_of_point * r_of_s = -2 := by
       unfold η_of_point η ϕ_of_zero ϕ
       rw [dif_pos h1]
-      let y_of_zero := y ⟨(0 : F), h1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+      let y_of_t := y ⟨(0 : F), h1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
       let X_of_zero := X ⟨(0 : F), h1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
-      change (y_of_zero - 1) / (2 * (y_of_zero + 1)) * r_of_s = -2 
-      have h2_1 : y_of_zero = (r_of_s - 4) / (r_of_s + 4) := by
-      -- TODO how to show this without proofing all the η props proven before again.
-      -- would have to use y_η_h1 
-        sorry
-      rw [h2_1]
+      change (y_of_t - 1) / (2 * (y_of_t + 1)) * r_of_s = -2 
+      -- This has to be proven again here as in y_η_h1 and X_η_h1 since 
+      -- the lemmas itself do not help with concret t values
+      unfold y_of_t
+      rw [(y_of_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)]
+      change ((r_of_s - 4) / (r_of_s + 4) - 1) / (2 * ((r_of_s - 4) / (r_of_s + 4) + 1)) * r_of_s = -2 
       have h2_2 : 1 = (r_of_s + 4) / (r_of_s + 4) := by 
         rw [add_comm]
         rw [div_self (four_add_r_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)]
