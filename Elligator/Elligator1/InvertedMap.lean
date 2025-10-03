@@ -1554,6 +1554,82 @@ noncomputable def u2
   let z_of_point := z s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   z_of_point * X2_of_point
 
+lemma χ_IsSquare_h1
+  (t : { t : F // t ≠ 1 ∧ t ≠ -1})
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let χ_of_v := LegendreSymbol.χ v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
+  IsSquare ((χ_of_v * v_of_t)^((q + 1) / 4)) := by sorry
+
+lemma u2_h1
+  (t : F)
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (h2_1 : t ≠ 1 ∧ t ≠ -1)
+  (h2_2 : -t ≠ 1 ∧ -t ≠ -1)
+  :
+  let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let u_of_t := u ⟨t, h2_1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
+  let u'_of_t := u ⟨-t, h2_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
+  let u2_of_t := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  u2_of_t = u_of_t ∨ u2_of_t = u'_of_t := by
+    intro point u_of_t u'_of_t u2_of_t 
+    let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let X_of_t := X ⟨t, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let X'_of_t := X ⟨-t, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let X2_of_t := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let x_of_t := x ⟨t, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let Y_of_t := Y ⟨t, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let z_of_point := z s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let v_of_t := v ⟨t, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let χ_of_v := LegendreSymbol.χ v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
+    let χ_of_Y := LegendreSymbol.χ Y_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
+    rcases (X2_h4 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2) with h | h
+    · left
+      change X2_of_t = X_of_t at h
+      unfold u2_of_t u2
+      change z_of_point * X2_of_t = u_of_t
+      rw [h]
+      have h1 : (c_of_s - 1) * s * X2_of_t * (1 + X2_of_t) = x_of_t * Y_of_t := by sorry
+      have h2 : z_of_point = χ_of_Y * (LegendreSymbol.χ (X_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3) := by
+        calc
+          z_of_point = (LegendreSymbol.χ (x_of_t^2 * Y_of_t * (X_of_t^2 + 1 / c_of_s^2)) q field_cardinality q_prime_power q_mod_4_congruent_3) := by sorry
+          _ = χ_of_Y * (LegendreSymbol.χ (X_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3) := by sorry
+      have h3 : (LegendreSymbol.χ (u_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3) = (LegendreSymbol.χ (X_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3) := by sorry
+      have h4 : χ_of_Y = χ_of_v * (LegendreSymbol.χ (X_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3) := by
+        sorry
+      have h5 : z_of_point = χ_of_v := by sorry
+      rw [h5]
+      --rw [← mul_left_inj' (LegendreSymbol.χ_a_ne_zero v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩) q field_cardinality q_prime_power q_mod_4_congruent_3)]
+      unfold X_of_t X
+      change χ_of_v * (χ_of_v * u_of_t ) = u_of_t
+      rw [← mul_assoc, ← LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b v_of_t v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3, ← pow_two]
+      have h6 : IsSquare (v_of_t^2) := by exact IsSquare.sq v_of_t
+      have h7 : v_of_t^2 ≠ 0 := by
+        rw [pow_two]
+        apply mul_ne_zero
+        · exact (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩)
+        · exact (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩)
+      rw [LegendreSymbol.χ_a_eq_one (v_of_t^2) h7 h6 q field_cardinality q_prime_power q_mod_4_congruent_3]
+      simp
+    · right
+      change X2_of_t = X'_of_t at h
+      sorry 
+    --left
+
 noncomputable def t2
   (s : F)
   (s_h1 : s ≠ 0)
