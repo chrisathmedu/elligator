@@ -611,6 +611,21 @@ lemma v_h1_third_factor_ne_zero
       exact h1_2
     contradiction
 
+lemma X_pow_two_add_one_over_c_pow_two_ne_zero
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  :
+  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  X_of_t^2 + 1 / c_of_s^2 ≠ 0 := by
+    sorry
+
 lemma r_h1
   (s : F)
   (s_h1 : s ≠ 0)
@@ -1437,7 +1452,7 @@ noncomputable def ϕ
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  : (F) × (F) :=
+  : F × F :=
   open scoped Classical in if h : t ≠ 1 ∧ t ≠ -1
   then
   (
@@ -1747,4 +1762,23 @@ lemma y_h3
     ring_nf
     rw [mul_inv_cancel₀ (X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t)]
     ring_nf
+
+lemma χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero
+  (t : { t : F // t ≠ 1 ∧ t ≠ -1})
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let χ_of_v := LegendreSymbol.χ v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
+  (χ_of_v * v_of_t)^((q + 1) / 4) ≠ 0 := by
+    intro v_of_t χ_of_v
+    rw [mul_pow χ_of_v v_of_t ((q + 1) / 4)]
+    apply mul_ne_zero
+    · apply pow_ne_zero ((q + 1) / 4) (LegendreSymbol.χ_a_ne_zero v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t) q field_cardinality q_prime_power q_mod_4_congruent_3)
+    · apply pow_ne_zero ((q + 1) / 4) (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t)
 

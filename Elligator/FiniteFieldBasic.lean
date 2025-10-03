@@ -261,7 +261,7 @@ lemma neg_one_non_square
   ¬IsSquare (-1 : F) :=
     sorry
 
-theorem three_nonsquare
+lemma three_nonsquare
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
@@ -346,3 +346,13 @@ lemma q_sub_one_over_two_ne_zero
         intro hq
         simp_all
       · exact Nat.lt_of_lt_of_le p_gt_2 q_gte_q
+
+lemma pow_two_ne_zero
+  {a : F}
+  (a_ne_zero : a ≠ 0)
+  :
+  a^2 ≠ 0 := by 
+    rw [pow_two]
+    apply mul_ne_zero
+    · exact a_ne_zero
+    · exact a_ne_zero
