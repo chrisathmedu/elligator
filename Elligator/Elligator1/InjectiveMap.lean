@@ -176,7 +176,7 @@ lemma c_ne_zero
   · rw [pow_two]
     apply mul_ne_zero s_h1 s_h1
 
-theorem Y_defined
+lemma Y_defined
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -269,7 +269,7 @@ lemma c_ne_neg_one
   apply s_pow_two_ne_neg_two s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 at h1
   exact h1
 
-theorem c_add_one_ne_zero
+lemma c_add_one_ne_zero
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -300,7 +300,7 @@ theorem c_add_one_ne_zero
     apply s_pow_two_ne_neg_two s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 at h2
     exact h2
 
-theorem c_sub_one_ne_zero
+lemma c_sub_one_ne_zero
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -314,7 +314,7 @@ theorem c_sub_one_ne_zero
     apply sub_ne_zero.2
     exact c_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
-theorem c_h
+lemma c_h
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -332,7 +332,7 @@ theorem c_h
       · exact c_sub_one_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     · exact c_add_one_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
-theorem r_ne_zero
+lemma r_ne_zero
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -376,7 +376,7 @@ theorem r_ne_zero
       exact h3
     contradiction
 
-theorem four_add_r_ne_zero
+lemma four_add_r_ne_zero
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -411,7 +411,7 @@ theorem four_add_r_ne_zero
       exact FiniteFieldBasic.three_nonsquare q field_cardinality q_prime_power q_mod_4_congruent_3
     contradiction
 
-theorem d_nonsquare
+lemma d_nonsquare
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -743,7 +743,7 @@ lemma v_ne_zero
       · exact (v_h1_second_factor_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t) 
     · exact (v_h1_third_factor_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t)
 
-theorem u_defined :
+lemma u_defined :
   ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1}, (1 + t.val) ≠ 0 := by
     intro t h1
     have h1_1 : t.val = -1 := by
@@ -821,7 +821,7 @@ lemma X_mul_Y_ne_zero
     · apply X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
     · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
 
-theorem x_defined
+lemma x_defined
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -971,7 +971,7 @@ lemma x_ne_zero
     · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
 
 -- Chapter 3.2 Theorem 1
-theorem map_fulfills_specific_equation
+lemma map_fulfills_specific_equation
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -1155,7 +1155,7 @@ lemma y_divisor_ne_zero
       exact h4
     contradiction
 
-theorem y_defined
+lemma y_defined
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -1172,7 +1172,7 @@ theorem y_defined
     intro t
     exact y_divisor_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
 
-theorem y_add_one_ne_zero
+lemma y_add_one_ne_zero
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -1221,7 +1221,7 @@ theorem y_add_one_ne_zero
     contradiction
 
 -- Chapter 3.2 Theorem 1
-theorem u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero
+lemma u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -1251,7 +1251,7 @@ theorem u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero
     · apply y_add_one_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
 
 -- Chapter 3.2 Theorem 1
-theorem map_fulfills_curve_equation
+lemma map_fulfills_curve_equation
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -1597,13 +1597,13 @@ noncomputable def ι
   let σ_of_τ := σ q field_cardinality q_prime_power q_mod_4_congruent_3 τ
   ϕ σ_of_τ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
-theorem S_cardinality
+lemma S_cardinality
   (q : ℕ)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   : Set.ncard (S (b q q_prime_power q_mod_4_congruent_3)) = (q + 1) / 2 := by sorry
 
-theorem ι_injective_map
+lemma ι_injective_map
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -1632,7 +1632,7 @@ noncomputable def ι_S
       e = ι s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 τ
   }
 
-theorem ι_S_eq_ϕ_over_F
+lemma ι_S_eq_ϕ_over_F
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)

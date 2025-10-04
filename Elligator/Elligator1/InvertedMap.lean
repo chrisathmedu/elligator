@@ -681,7 +681,7 @@ lemma ϕ_inv_only_two_specific_preimages_mpr
     sorry
 
 -- Chapter 3.3 Theorem 3.1
-theorem ϕ_inv_only_two_specific_preimages
+lemma ϕ_inv_only_two_specific_preimages
   (t : F)
   (s : F)
   (s_h1 : s ≠ 0)
@@ -703,7 +703,7 @@ theorem ϕ_inv_only_two_specific_preimages
     --· exact ϕ_inv_only_two_specific_preimages_mpr t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     --· exact ϕ_inv_only_two_specific_preimages_mp t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
-theorem point_in_ϕ_over_F_with_prop1_base_case
+lemma point_in_ϕ_over_F_with_prop1_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -729,7 +729,7 @@ theorem point_in_ϕ_over_F_with_prop1_base_case
     ring_nf
     exact (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
 
-theorem point_in_ϕ_over_F_with_prop1_main_case
+lemma point_in_ϕ_over_F_with_prop1_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -749,7 +749,7 @@ theorem point_in_ϕ_over_F_with_prop1_main_case
     exact y_add_one_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
 
 -- Original: Theorem 3.3 Proof B prop 1 argumentation
-theorem point_in_ϕ_over_F_with_prop1
+lemma point_in_ϕ_over_F_with_prop1
   (t : F)
   (s : F)
   (s_h1 : s ≠ 0)
@@ -772,7 +772,7 @@ theorem point_in_ϕ_over_F_with_prop1
         exact h1
       exact point_in_ϕ_over_F_with_prop1_base_case ⟨t, h1_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
-theorem point_in_ϕ_over_F_with_prop2_base_case
+lemma point_in_ϕ_over_F_with_prop2_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -800,7 +800,7 @@ theorem point_in_ϕ_over_F_with_prop2_base_case
     use 0
     simp
 
-theorem point_in_ϕ_over_F_with_prop2_main_case
+lemma point_in_ϕ_over_F_with_prop2_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -839,7 +839,7 @@ theorem point_in_ϕ_over_F_with_prop2_main_case
     apply IsSquare.sq
 
 -- Original: Theorem 3.3 Proof B prop 2 argumentation
-theorem point_in_ϕ_over_F_with_prop2
+lemma point_in_ϕ_over_F_with_prop2
   (t : F)
   (s : F)
   (s_h1 : s ≠ 0)
@@ -862,7 +862,7 @@ theorem point_in_ϕ_over_F_with_prop2
         exact h1
       exact point_in_ϕ_over_F_with_prop2_base_case ⟨t, h1_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
-theorem point_in_ϕ_over_F_with_prop3_base_case
+lemma point_in_ϕ_over_F_with_prop3_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -891,7 +891,7 @@ theorem point_in_ϕ_over_F_with_prop3_base_case
     contradiction 
 
 -- Used in the main case of Theorem 3 Proof part B
-theorem X_η_h1
+lemma X_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -927,7 +927,7 @@ theorem X_η_h1
     exact h1_1
 
 -- Used in the main case of Theorem 3 Proof part B
-theorem X_η_h2
+lemma X_η_h2
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -955,7 +955,7 @@ theorem X_η_h2
     exact h1
 
 -- Used in the main case of Theorem 3 Proof part B
-theorem u_η_h1
+lemma u_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -986,7 +986,7 @@ theorem u_η_h1
     sorry
 
 -- Used in the main case of Theorem 3 Proof part B
-theorem t_η_h1
+lemma t_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -1017,7 +1017,7 @@ theorem t_η_h1
     exact h1
 
 -- Used in the main case of Theorem 3 Proof part B
-theorem v_η_h1
+lemma v_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -1043,7 +1043,7 @@ theorem v_η_h1
     rfl
 
 -- Used in the main case of Theorem 3 Proof part B
-theorem Y_η_h1
+lemma Y_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -1096,7 +1096,7 @@ theorem Y_η_h1
         -- TODO same square root argument as above (χ(r)r = r ?) ... understand
         sorry
 
-theorem point_in_ϕ_over_F_with_prop3_main_case
+lemma point_in_ϕ_over_F_with_prop3_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -1132,7 +1132,7 @@ theorem point_in_ϕ_over_F_with_prop3_main_case
     ring_nf
 
 -- Implicated by main case of Theorem 3 proof part B. Saved for later usage in TODO
-theorem y_η_h1
+lemma y_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -1160,7 +1160,7 @@ theorem y_η_h1
     ring_nf
 
 -- Original: Theorem 3.3 Proof B prop 3 argumentation
-theorem point_in_ϕ_over_F_with_prop3
+lemma point_in_ϕ_over_F_with_prop3
   (t : F)
   (s : F)
   (s_h1 : s ≠ 0)
@@ -1329,7 +1329,7 @@ lemma ϕ_of_zero
 
 
 -- Original: Theorem 3 Proof B
-theorem point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mp
+lemma point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mp
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -1347,7 +1347,7 @@ theorem point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mp
     sorry
 
 -- Original: Theorem 3 Proof B
-theorem point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mpr
+lemma point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mpr
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -1366,7 +1366,7 @@ theorem point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mpr
     sorry
 
 -- Original: Theorem 3 Proof B and C
-theorem point_in_E_over_F_with_props_iff_point_in_ϕ_over_F
+lemma point_in_E_over_F_with_props_iff_point_in_ϕ_over_F
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -1387,7 +1387,7 @@ theorem point_in_E_over_F_with_props_iff_point_in_ϕ_over_F
 
 -- Used to build definitions for arguments which sometimes require different
 -- assumptions regarding group membership.
-theorem E_over_F_subset_ϕ_over_F
+lemma E_over_F_subset_ϕ_over_F
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -1400,7 +1400,7 @@ theorem E_over_F_subset_ϕ_over_F
   let ϕ_over_F_q_of_s := ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   E_over_F_of_s ⊆ ϕ_over_F_q_of_s := by sorry
 
-theorem point_in_E_over_F
+lemma point_in_E_over_F
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -1683,7 +1683,82 @@ lemma u2_eq_u'
   let u'_of_t := u ⟨-t, h2_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
   let u2_of_t := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   u2_of_t = u'_of_t := by
-    sorry
+    intro point u'_of_t u2_of_t
+    let X_of_t := X ⟨t, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let X'_of_t := X ⟨-t, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let X2_of_t := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let x_of_t := x ⟨t, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let x'_of_t := x ⟨-t, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let Y_of_t := Y ⟨t, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let Y'_of_t := Y ⟨-t, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let z_of_point := z s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let v_of_t := v ⟨t, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let v'_of_t := v ⟨-t, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let χ_of_v := LegendreSymbol.χ v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
+    let χ_of_v' := LegendreSymbol.χ v'_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
+    let χ_of_Y := LegendreSymbol.χ Y_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
+    let χ_of_Y' := LegendreSymbol.χ Y'_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
+    unfold u2_of_t u2
+    rw [X_h]
+    change z_of_point * X'_of_t = u'_of_t
+    have h1 : (c_of_s - 1) * s * X2_of_t * (1 + X2_of_t) = x'_of_t * Y'_of_t := by
+      unfold X2_of_t
+      rw [X_h]
+      rw [← div_left_inj' (Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨-t, h2_2⟩)]
+      change x'_of_t = x'_of_t * Y'_of_t / Y'_of_t
+      rw [mul_div_assoc, div_self (Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨-t, h2_2⟩)]
+      ring_nf
+    have h2 : z_of_point = χ_of_Y' * (LegendreSymbol.χ (X'_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3) := by
+      calc
+        z_of_point = (LegendreSymbol.χ (x'_of_t^2 * Y'_of_t * (X'_of_t^2 + 1 / c_of_s^2)) q field_cardinality q_prime_power q_mod_4_congruent_3) := by
+          unfold z_of_point z
+          change LegendreSymbol.χ ((c_of_s - 1) * s * X2_of_t * (1 + X2_of_t) * point.1 * (X2_of_t ^ 2 + 1 / c_of_s ^ 2)) q field_cardinality q_prime_power q_mod_4_congruent_3 = LegendreSymbol.χ (x'_of_t ^ 2 * Y'_of_t * (X'_of_t ^ 2 + 1 / c_of_s ^ 2)) q field_cardinality q_prime_power q_mod_4_congruent_3
+          unfold point ϕ 
+          rw [dif_pos h2_1, h1]
+          change LegendreSymbol.χ (x'_of_t * Y'_of_t * x_of_t * (X2_of_t ^ 2 + 1 / c_of_s ^ 2)) q field_cardinality q_prime_power q_mod_4_congruent_3 = LegendreSymbol.χ (x'_of_t ^ 2 * Y'_of_t * (X'_of_t ^ 2 + 1 / c_of_s ^ 2)) q field_cardinality q_prime_power q_mod_4_congruent_3
+          unfold X2_of_t X'_of_t x'_of_t x_of_t
+          rw [x_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2]
+          rw [X_h]
+          ring_nf
+        _ = χ_of_Y' * (LegendreSymbol.χ (X'_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3) := by
+          rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b (x'_of_t^2 * Y'_of_t) (X'_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3]
+          rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b (x'_of_t^2) Y'_of_t q field_cardinality q_prime_power q_mod_4_congruent_3]
+          rw [LegendreSymbol.χ_a_eq_one (x'_of_t^2) (FiniteFieldBasic.pow_two_ne_zero (x_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨-t, h2_2⟩)) (IsSquare.sq x'_of_t) q field_cardinality q_prime_power q_mod_4_congruent_3]
+          unfold χ_of_Y' 
+          ring_nf
+    have h3 : (LegendreSymbol.χ (u'_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3) = (LegendreSymbol.χ (X'_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3) := by
+      unfold X'_of_t X
+      rw [mul_pow]
+      nth_rw 3 [pow_two]
+      rw [← LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b v'_of_t v'_of_t q field_cardinality q_prime_power q_mod_4_congruent_3]
+      rw [← pow_two, LegendreSymbol.χ_a_eq_one (v'_of_t^2) (FiniteFieldBasic.pow_two_ne_zero (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨-t, h2_2⟩)) (IsSquare.sq v'_of_t) q field_cardinality q_prime_power q_mod_4_congruent_3]
+      unfold u'_of_t
+      simp_all
+    have h4 : χ_of_Y' = χ_of_v' * (LegendreSymbol.χ (X'_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3) := by
+      rw [← h3]
+      unfold χ_of_Y' Y'_of_t Y
+      let χ_sum := LegendreSymbol.χ (u'_of_t ^ 2 + 1 / c_of_s ^ 2) q field_cardinality q_prime_power q_mod_4_congruent_3;
+      change (LegendreSymbol.χ ((χ_of_v' * v'_of_t)^((q + 1) / 4) * χ_of_v' * χ_sum) q field_cardinality q_prime_power q_mod_4_congruent_3) = χ_of_v' * χ_sum
+      rw [mul_assoc, LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b ((χ_of_v' * v'_of_t)^((q + 1) / 4)) (χ_of_v' * χ_sum) q field_cardinality q_prime_power q_mod_4_congruent_3]
+      rw [LegendreSymbol.χ_a_eq_one ((χ_of_v' * v'_of_t)^((q + 1) / 4)) (χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero ⟨-t, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) (χ_IsSquare_h1 ⟨-t, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) q field_cardinality q_prime_power q_mod_4_congruent_3]
+      rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b χ_of_v' χ_sum q field_cardinality q_prime_power q_mod_4_congruent_3]
+      rw [LegendreSymbol.χ_of_χ_of_a_eq_χ_of_a v'_of_t q field_cardinality q_prime_power q_mod_4_congruent_3]
+      rw [LegendreSymbol.χ_of_χ_of_a_eq_χ_of_a (u'_of_t ^ 2 + 1 / c_of_s ^ 2) q field_cardinality q_prime_power q_mod_4_congruent_3]
+      unfold χ_of_v' χ_sum
+      simp_all
+    have h5 : z_of_point = χ_of_v' := by
+      rw [h2, h4, mul_assoc]
+      rw [← LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b (X'_of_t^2 + 1 / c_of_s^2) (X'_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3, ← pow_two]
+      rw [LegendreSymbol.χ_a_eq_one ((X'_of_t^2 + 1 / c_of_s^2)^2) (FiniteFieldBasic.pow_two_ne_zero (X_pow_two_add_one_over_c_pow_two_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨-t, h2_2⟩)) (IsSquare.sq (X'_of_t^2 + 1 / c_of_s^2)) q field_cardinality q_prime_power q_mod_4_congruent_3]
+      simp
+    rw [h5]
+    unfold X'_of_t X
+    change χ_of_v' * (χ_of_v' * u'_of_t ) = u'_of_t
+    rw [← mul_assoc, ← LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b v'_of_t v'_of_t q field_cardinality q_prime_power q_mod_4_congruent_3, ← pow_two]
+    have h6 : IsSquare (v'_of_t^2) := by exact IsSquare.sq v'_of_t
+    rw [LegendreSymbol.χ_a_eq_one (v'_of_t^2) (FiniteFieldBasic.pow_two_ne_zero (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨-t, h2_2⟩)) h6 q field_cardinality q_prime_power q_mod_4_congruent_3]
+    simp
 
 lemma u2_h1
   (t : F)
@@ -1723,7 +1798,7 @@ noncomputable def t2
   let u2_of_point := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   (1 - u2_of_point) / (1 + u2_of_point)
 
-theorem X2_defined
+lemma X2_defined
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -1744,7 +1819,7 @@ theorem X2_defined
     · exact (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
     · exact h1
 
-theorem z_defined
+lemma z_defined
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -1758,7 +1833,7 @@ theorem z_defined
   := by
     exact (c_pow_two_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
 
-theorem t2_defined
+lemma t2_defined
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -1777,7 +1852,7 @@ theorem t2_defined
 
 Paper definition at chapter 3.3 Theorem 3.3.
 -/
-theorem invmap_representative_base_case
+lemma invmap_representative_base_case
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -1806,7 +1881,7 @@ theorem invmap_representative_base_case
 
 Paper definition at chapter 3.3 Theorem 3.3.
 -/
-theorem invmap_representative_main_case
+lemma invmap_representative_main_case
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
