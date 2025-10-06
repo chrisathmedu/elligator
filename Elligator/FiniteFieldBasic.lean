@@ -356,3 +356,51 @@ lemma pow_two_ne_zero
     apply mul_ne_zero
     · exact a_ne_zero
     · exact a_ne_zero
+
+lemma one_sub_t_ne_zero
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  :
+  (1 : F) - t.val ≠ 0 := by
+    intro h
+    have h1 : t.val = 1 := by
+      rw [← add_right_inj t.val] at h
+      rw [add_zero] at h
+      rw [add_comm] at h
+      have h' : t.val - t.val = 0 := by ring
+      rw [sub_add] at h
+      rw [h'] at h
+      rw [sub_zero] at h
+      symm at h
+      exact h
+    have h2 : t.val ≠ 1 := by
+      apply And.left
+      exact t.property
+    contradiction
+
+lemma one_add_t_ne_zero
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  :
+  (1 : F) + t.val ≠ 0 := by
+    intro h
+    have h1 : t.val = -1 := by
+      rw [← add_left_inj (-1 : F)] at h
+      ring_nf at h
+      exact h
+    have h2 : t.val ≠ -1 := by
+      apply And.right
+      exact t.property
+    contradiction
+
+lemma zero_h1
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by
+    constructor
+    · symm
+      exact FiniteFieldBasic.one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+    · symm
+      exact FiniteFieldBasic.neg_one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+

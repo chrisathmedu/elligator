@@ -2,6 +2,24 @@
 -- Import modules here that should be built as part of the library.
 import «Elligator».FiniteFieldBasic
 import «Elligator».LegendreSymbol
-import «Elligator».Elligator1.Common
-import «Elligator».Elligator1.InjectiveMap
+import «Elligator».Elligator1.DecodingFunction
 import «Elligator».Elligator1.InvertedMap
+import «Elligator».Elligator1.Map
+import «Elligator».Elligator1.StringEncoding
+import «Elligator».Elligator1.Variables
+import «Elligator».Elligator1.sProperties
+import «Elligator».Elligator1.cProperties
+import «Elligator».Elligator1.rProperties
+import «Elligator».Elligator1.dProperties
+import «Elligator».Elligator1.uProperties
+import «Elligator».Elligator1.vProperties
+import «Elligator».Elligator1.XProperties
+import «Elligator».Elligator1.YProperties
+import «Elligator».Elligator1.xProperties
+import «Elligator».Elligator1.yProperties
+import «Elligator».Elligator1.phiProperties
+import «Elligator».Elligator1.X2Properties
+import «Elligator».Elligator1.zProperties
+import «Elligator».Elligator1.u2Properties
+import «Elligator».Elligator1.t2Properties
+

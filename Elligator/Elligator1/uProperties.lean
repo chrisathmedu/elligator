@@ -1,0 +1,88 @@
+import Mathlib
+import Elligator.FiniteFieldBasic
+import Elligator.LegendreSymbol
+import Elligator.Elligator1.Variables
+
+import Elligator.Elligator1.sProperties
+import Elligator.Elligator1.cProperties
+import Elligator.Elligator1.rProperties
+
+namespace Elligator.Elligator1
+
+section uProperties
+
+variable {F : Type*} [Field F] [Fintype F]
+
+lemma u_ne_zero
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  :
+  u t q field_cardinality q_prime_power q_mod_4_congruent_3 ≠ (0 : F) := by
+    change (1 - t.val) / (1 + t.val) ≠ 0
+    apply div_ne_zero (FiniteFieldBasic.one_sub_t_ne_zero t) (FiniteFieldBasic.one_add_t_ne_zero t)
+
+lemma u_pow_two_ne_zero
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  :
+  let u_of_t := u t q field_cardinality q_prime_power q_mod_4_congruent_3
+  u_of_t^2 ≠ (0 : F) := by
+    intro u_of_t
+    rw [pow_two]
+    apply mul_ne_zero
+    · exact (u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t)
+    · exact (u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t)
+
+lemma u_comparison
+  (t : F)
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (h2_1 : t ≠ 1 ∧ t ≠ -1)
+  (h2_2 : -t ≠ 1 ∧ -t ≠ -1)
+  :
+  let t1 := t
+  let t2 := -t1
+  let u1 := u ⟨t1, h2_1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
+  let u2 := u ⟨t2, h2_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
+  u2 = 1 / u1 := by
+    intro t1 t2 u1 u2
+    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    calc
+      u2 = (1 - t2) / (1 + t2) := by
+        unfold u2 u
+        simp
+     _ = (1 + t) / (1 - t) := by
+       unfold t2 t1
+       simp
+       ring_nf
+     _ = 1 / u1 := by
+       unfold u1 u
+       simp
+       unfold t1
+       rfl
+
+lemma u_of_zero
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  have h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by exact FiniteFieldBasic.zero_h1 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let u_of_t := u ⟨(0 : F), h1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3;
+  u_of_t = 1 := by 
+    intro h1 u_of_t
+    unfold u_of_t u
+    simp
+
