@@ -2,7 +2,6 @@ import Mathlib
 import Elligator.FiniteFieldBasic
 import Elligator.LegendreSymbol
 import Elligator.Elligator1.Variables
-import Elligator.Elligator1.Properties
 import Elligator.Elligator1.Sets
 
 namespace Elligator.Elligator1
