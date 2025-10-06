@@ -179,7 +179,7 @@ lemma point_in_ϕ_over_F_with_prop1_main_case
     rw [dif_pos t.property]
     exact y_add_one_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
 
--- Original: Theorem 3.3 Proof B prop 1 argumentation
+-- Original: Theorem 3.2 Proof B prop 1 argumentation
 lemma point_in_ϕ_over_F_with_prop1
   (t : F)
   (s : F)
@@ -269,7 +269,7 @@ lemma point_in_ϕ_over_F_with_prop2_main_case
     rw [h1]
     apply IsSquare.sq
 
--- Original: Theorem 3.3 Proof B prop 2 argumentation
+-- Original: Theorem 3.2 Proof B prop 2 argumentation
 lemma point_in_ϕ_over_F_with_prop2
   (t : F)
   (s : F)
@@ -356,7 +356,7 @@ lemma point_in_ϕ_over_F_with_prop3_main_case
     change (c_of_s - 1) * s * (1 + 1) / (r_of_s * χ_of_c_of_s) = 2 * s * (c_of_s - 1) * (1 / χ_of_c_of_s / r_of_s)
     ring_nf
 
--- Original: Theorem 3.3 Proof B prop 3 argumentation
+-- Original: Theorem 3.2 Proof B prop 3 argumentation
 lemma point_in_ϕ_over_F_with_prop3
   (t : F)
   (s : F)
