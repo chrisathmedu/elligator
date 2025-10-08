@@ -98,24 +98,24 @@ lemma t2_defined
     sorry
 
 -- Chapter 3.3 Theorem 3.2
-lemma point_in_E_over_F_with_props_iff_point_in_ϕ_over_F
-  (s : F)
+lemma point_props_iff_point_in_ϕ_over_F_of_point
+  (t s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
   :
-  ((h : point.val ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) →
-    ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
-    ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
-    ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val)
-  ↔ point.val ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 := by
+  let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  (ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
+  ↔ point ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 := by
+    intro point
     constructor
-    · exact point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mp s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    · exact point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mpr s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    · exact point_in_ϕ_over_F_of_point_of_point_props t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    · exact point_props_of_point_in_ϕ_over_F_of_point  t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
 /-- `invmap_representative` is ...
 
