@@ -26,7 +26,7 @@ section InvertedMap
 variable {F : Type*} [Field F] [Fintype F]
 
 -- Chapter 3.3 Theorem 3.1
-lemma ϕ_inv_only_two_specific_preimages
+theorem ϕ_inv_only_two_specific_preimages
   (t : F)
   (s : F)
   (s_h1 : s ≠ 0)
@@ -39,15 +39,40 @@ lemma ϕ_inv_only_two_specific_preimages
   let ϕ_of_t := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let ϕ_of_neg_t := ϕ (-t) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   ϕ_of_t = ϕ_of_neg_t
-  ↔ ¬ (∃ (w : { n : F // n ≠ t ∧ n ≠ -t}), ϕ w.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ_of_t) := by
+  ↔ ¬ (∃ (p : { n : F // n ≠ t ∧ n ≠ -t}), ϕ p.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ_of_t) := by
     intro ϕ_of_t ϕ_of_neg_t
     constructor
-    · intro h
-      sorry
+    · intro h1 h2
+      cases h2
+      rename_i p h3
+      have h4 : p.val = t ∨ p.val = -t := by
+        have h4_1 : -p.val ≠ 1 ∧ -p.val ≠ -1 := by sorry
+        have h4_2 : p.val ≠ 1 ∧ p.val ≠ -1 := by sorry
+        have TODO1 : t ≠ 1 ∧ t ≠ -1 := by sorry
+        have TODO2 : -t ≠ 1 ∧ -t ≠ -1 := by sorry
+        let point := ϕ p.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        let t' := t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+        rcases (t2_h1 p.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h4_2 h4_1) with h | h
+        · change t' = p.val at h
+          rw [← h]
+          unfold ϕ at h3
+          -- TODO unsure about current API being able to handle this
+          --exact t2_h1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 TODO1 TODO2
+          --exact (t2_h1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 TODO1 TODO2)
+          sorry
+        · change t' = -p.val at h
+          rw [← mul_left_inj' (FiniteFieldBasic.neg_one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)] at h
+          simp at h
+          rw [← h]
+          sorry
+      have h5 : ¬(p.val = t ∨ p.val = -t) := by 
+        rw [not_or]
+        exact p.prop
+      contradiction
     · intro h
       exact ϕ_of_t_eq_ϕ_of_neg_t t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
-lemma X2_defined
+theorem X2_defined
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -68,7 +93,7 @@ lemma X2_defined
     · exact (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
     · exact h1
 
-lemma z_defined
+theorem z_defined
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -82,7 +107,7 @@ lemma z_defined
   := by
     exact (c_pow_two_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
 
-lemma t2_defined
+theorem t2_defined
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -98,7 +123,7 @@ lemma t2_defined
     sorry
 
 -- Chapter 3.3 Theorem 3.2
-lemma point_props_iff_point_in_ϕ_over_F_of_point
+theorem point_props_iff_point_in_ϕ_over_F_of_point
   (t s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -121,7 +146,7 @@ lemma point_props_iff_point_in_ϕ_over_F_of_point
 
 Paper definition at chapter 3.3 Theorem 3.3.
 -/
-lemma invmap_representatives
+theorem invmap_representatives
   (t s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -142,7 +167,6 @@ lemma invmap_representatives
   ϕ_of_t' = (x_of_t, y_of_t) := by
     intro point t' ϕ_of_t' x_of_t y_of_t
     unfold ϕ_of_t' ϕ
-    --rw [dif_pos t'.property]
     rcases (t2_h1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2) with h | h
     · change t' = t at h
       rw [h]
