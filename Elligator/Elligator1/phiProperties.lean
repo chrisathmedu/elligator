@@ -75,14 +75,6 @@ lemma ϕ_of_t_eq_ϕ_of_neg_t_main_case
           exact h2_2_2
         have h2_2_1_2 : t.val ≠ 1 := by exact t.property.left
         contradiction
-    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let u1 := u t q field_cardinality q_prime_power q_mod_4_congruent_3
-    let v1 := v t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let v2 := v ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let x1 := x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let x2 := x ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let y1 := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let y2 := y ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let x1 := x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let x2 := x ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let y1 := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
@@ -117,22 +109,6 @@ lemma ϕ_of_t_eq_ϕ_of_neg_t
         rw [← not_or]
         exact h2
       exact ϕ_of_t_eq_ϕ_of_neg_t_main_case ⟨t, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-
--- Original: Theorem 3 Proof B latter part
-lemma ϕ_inv_only_two_specific_preimages_mpr
-  (t : F)
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  let ϕ_of_t := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ¬ ∃ (w : { n : F // n ≠ t ∧ n ≠ -t}), ϕ w.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ_of_t := by
-    intro ϕ_of_t h1
-    sorry
 
 lemma point_in_ϕ_over_F_with_prop1_base_case
   (t : {n : F // n = 1 ∨ n = -1})
@@ -472,26 +448,6 @@ lemma point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mpr
   := by
     sorry
 
--- Original: Theorem 3 Proof B and C
-lemma point_in_E_over_F_with_props_iff_point_in_ϕ_over_F
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : (F) × (F) // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
-  :
-  ((h : point.val ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) →
-    ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
-    ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
-    ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val)
-  ↔ point.val ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 := by
-    constructor
-    · exact point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mp s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    · exact point_in_E_over_F_with_props_iff_point_in_ϕ_over_F_mpr s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-
 -- Used to build definitions for arguments which sometimes require different
 -- assumptions regarding group membership.
 lemma E_over_F_subset_ϕ_over_F
@@ -521,11 +477,7 @@ lemma point_in_E_over_F
   point.val ∈ E_over_F_of_s
   := by sorry
 
-/-- `invmap_representative` is ...
-
-Paper definition at chapter 3.3 Theorem 3.3.
--/
-lemma invmap_representative_base_case
+lemma ϕ_eq_zero_one
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -533,16 +485,14 @@ lemma invmap_representative_base_case
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : (F) × (F) // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
-  (t' : { n : F // n = 1 ∨ n = -1})
-  (representative : t'.val = t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
+  (t : { n : F // n = 1 ∨ n = -1})
   :
-  let ϕ_of_t' := ϕ t'.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ϕ_of_t' = (0, 1) := by
-    intro ϕ_of_t'
-    unfold ϕ_of_t'
-    --rw [t'.property.left]
-    rcases t'.property with h1_1 | h1_1
+  let ϕ_of_t := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ_of_t = (0, 1) := by
+    intro ϕ_of_t
+    unfold ϕ_of_t
+    --rw [t.property.left]
+    rcases t.property with h1_1 | h1_1
     · rw [h1_1]
       unfold ϕ 
       simp
@@ -550,11 +500,7 @@ lemma invmap_representative_base_case
       unfold ϕ 
       simp
 
-/-- `invmap_representative` is ...
-
-Paper definition at chapter 3.3 Theorem 3.3.
--/
-lemma invmap_representative_main_case
+lemma ϕ_eq_x_y
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -573,8 +519,4 @@ lemma invmap_representative_main_case
     intro ϕ_of_t' x_of_t' y_of_t'
     unfold ϕ_of_t' ϕ
     rw [dif_pos t'.property]
-
--- TODO how to get invmap_representative* theorems into one theorem handling both
--- cases? This currently fails since the rhs is not settable to (0,1) and (x,y)
--- by case or rather derivable as such depending on the t case.
 
