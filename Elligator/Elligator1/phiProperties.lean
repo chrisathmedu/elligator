@@ -57,30 +57,13 @@ lemma ϕ_of_t_eq_ϕ_of_neg_t_main_case
   ϕ_of_t = ϕ_of_neg_t := by
     let t1 := t.val
     let t2 := -t.val
-    have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by
-      unfold t2
-      rw [ne_eq, ne_eq]
-      constructor
-      · intro h2_2_1
-        have h2_2_1_1 : t1 = -1 := by
-          rw [← neg_one_mul]
-          nth_rw 2 [← h2_2_1]
-          unfold t1
-          simp
-        have h2_2_1_2 : t.val ≠ -1 := by exact t.property.right
-        contradiction
-      · intro h2_2_2
-        have h2_2_1_1 : t.val = 1 := by
-          simp at h2_2_2
-          exact h2_2_2
-        have h2_2_1_2 : t.val ≠ 1 := by exact t.property.left
-        contradiction
+    have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
     let x1 := x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let x2 := x ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let y1 := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let y2 := y ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    have h2_10 : y2 = y1 := by exact y_comparison t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t.property h2_2
-    have h2_12 : x2 = x1 := by exact x_comparison t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t.property h2_2
+    have h2_10 : y2 = y1 := by exact y_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    have h2_12 : x2 = x1 := by exact x_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     change ϕ t1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     unfold ϕ
     rw [dif_pos h2_2, dif_pos t.property]

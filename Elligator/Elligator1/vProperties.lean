@@ -160,7 +160,7 @@ lemma χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero
     · apply pow_ne_zero ((q + 1) / 4) (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t)
 
 lemma v_comparison
-  (t : F)
+  (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -168,16 +168,15 @@ lemma v_comparison
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (h2_1 : t ≠ 1 ∧ t ≠ -1)
-  (h2_2 : -t ≠ 1 ∧ -t ≠ -1)
   :
-  let t1 := t
+  let t1 := t.val
   let t2 := -t1
-  let u1 := u ⟨t1, h2_1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
+  have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
+  let u1 := u t q field_cardinality q_prime_power q_mod_4_congruent_3
   let v2 := v ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   v2 = 1 / u1^5 + (r_of_s^2 - 2) * 1 / u1^3 + 1 / u1 := by
-    intro t1 t2 u1 v2 r_of_s
+    intro t1 t2 h2_2 u1 v2 r_of_s
     let u2 := u ⟨t2, h2_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
     calc
       v2 = u2^5 + (r_of_s^2 - 2) * u2^3 + u2 := by
@@ -185,11 +184,11 @@ lemma v_comparison
         rfl
       _ = 1 / u1^5 + (r_of_s^2 - 2) * 1/ u1^3 + 1 / u1 := by
         unfold u2 u1 t2 t1
-        rw [u_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2]
+        rw [u_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
         ring_nf
 
 lemma v_comparison_implication1
-  (t : F)
+  (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -197,27 +196,26 @@ lemma v_comparison_implication1
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (h2_1 : t ≠ 1 ∧ t ≠ -1)
-  (h2_2 : -t ≠ 1 ∧ -t ≠ -1)
   :
-  let t1 := t
+  let t1 := t.val
   let t2 := -t1
-  let u1 := u ⟨t1, h2_1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
-  let v1 := v ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
+  let u1 := u t q field_cardinality q_prime_power q_mod_4_congruent_3
+  let v1 := v t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let v2 := v ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   v2 * u1^6 = v1 := by
-    intro t1 t2 u1 v1 v2
+    intro t1 t2 h2_2 u1 v1 v2
     let u2 := u ⟨t2, h2_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     calc
       v2 * u1^6 = u1 + (r_of_s^2 - 2) * u1^3 + u1^5 := by
         unfold v2
-        rw [v_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2]
+        rw [v_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
         rw [add_mul _ _ (u1^6)]
         rw [add_mul _ _ (u1^6)]
         have u1_ne_zero : u1 ≠ 0 := by
           unfold u1
-          exact u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩
+          exact u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t
         have h2_5_1 : 1 / u1 ^ 5 * u1 ^ 6 = u1 := by
           rw [mul_comm, ← mul_div_assoc, mul_one]
           have h2_5_1_1 : 5 ≤ 6 := by norm_num
@@ -234,13 +232,13 @@ lemma v_comparison_implication1
           rw [div_eq_mul_inv, ← pow_sub₀ u1 u1_ne_zero h2_5_3_1]
         rw [h2_5_1, mul_div_assoc, mul_assoc, h2_5_2, h2_5_3]
       _ = v1 := by
-        unfold v1 v u1 t1
+        unfold v1 v u1
         rw [add_assoc]
         nth_rw 2 [add_comm]
         rw [add_comm]
 
 lemma v_comparison_implication2
-  (t : F)
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -248,61 +246,53 @@ lemma v_comparison_implication2
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (h2_1 : t ≠ 1 ∧ t ≠ -1)
-  (h2_2 : -t ≠ 1 ∧ -t ≠ -1)
   :
-  let t1 := t
+  let t1 := t.val
   let t2 := -t1
-  let u1 := u ⟨t1, h2_1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
-  let v1 := v ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
+  let u1 := u t q field_cardinality q_prime_power q_mod_4_congruent_3
+  let v1 := v t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let v2 := v ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   v2 = v1 / u1^6 := by
-    intro t1 t2 u1 v1 v2
+    intro t1 t2 h2_2 u1 v1 v2
     let u2 := u ⟨t2, h2_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    have h2_6_1 : u1^6 ≠ 0 := by apply pow_ne_zero 6 (u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩)
+    have h2_6_1 : u1^6 ≠ 0 := by apply pow_ne_zero 6 (u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t)
     rw [← mul_right_inj' h2_6_1]
     unfold v1
-    rw [← v_comparison_implication1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2]
+    rw [← v_comparison_implication1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
     change u1 ^ 6 * v2 = u1 ^ 6 * (v2 * u1 ^ 6 / u1 ^ 6)
     ring_nf
     have h2_6_2 : 6 ≤ 12 := by norm_num
     have u1_ne_zero : u1 ≠ 0 := by
       unfold u1
-      exact u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩
+      exact u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t
     rw [mul_comm (u1^12) v2, inv_pow, mul_assoc, ← pow_sub₀ u1 u1_ne_zero h2_6_2]
     simp
     rw [mul_comm]
 
 lemma v_comparison_implication3
-  (t : F)
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (h2_1 : t ≠ 1 ∧ t ≠ -1)
-  (h2_2 : -t ≠ 1 ∧ -t ≠ -1)
   :
-  let t1 := t
-  let t2 := -t1
-  let u1 := u ⟨t1, h2_1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
+  let u1 := u t q field_cardinality q_prime_power q_mod_4_congruent_3
   let χ_of_u1_pow_6 := LegendreSymbol.χ (u1^6) q field_cardinality q_prime_power q_mod_4_congruent_3
   χ_of_u1_pow_6 = 1 := by
-    intro t1 t2 u1 χ_of_u1_pow_6
+    intro u1 χ_of_u1_pow_6
     have h2_7_1 : u1^6 = u1^2 * u1^2 * u1^2 := by ring_nf
     unfold χ_of_u1_pow_6
     rw [h2_7_1]
     rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b (u1^2 * u1^2) (u1^2) q field_cardinality q_prime_power q_mod_4_congruent_3]
     rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b (u1^2) (u1^2) q field_cardinality q_prime_power q_mod_4_congruent_3]
-    have h2_7_2 : u1 ≠ 0 := by exact u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩
-    rw [LegendreSymbol.χ_of_a_pow_two_eq_one u1 (u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩) q field_cardinality q_prime_power q_mod_4_congruent_3]
+    have h2_7_2 : u1 ≠ 0 := by exact u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t
+    rw [LegendreSymbol.χ_of_a_pow_two_eq_one u1 (u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t) q field_cardinality q_prime_power q_mod_4_congruent_3]
     simp
 
 lemma v_comparison_implication4
-  (t : F)
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -310,24 +300,23 @@ lemma v_comparison_implication4
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (h2_1 : t ≠ 1 ∧ t ≠ -1)
-  (h2_2 : -t ≠ 1 ∧ -t ≠ -1)
   :
-  let t1 := t
+  let t1 := t.val
   let t2 := -t1
-  let u1 := u ⟨t1, h2_1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
-  let v1 := v ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
+  let u1 := u t q field_cardinality q_prime_power q_mod_4_congruent_3
+  let v1 := v t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let v2 := v ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let χ_of_v1 := LegendreSymbol.χ v1 q field_cardinality q_prime_power q_mod_4_congruent_3
   let χ_of_v2 := LegendreSymbol.χ v2 q field_cardinality q_prime_power q_mod_4_congruent_3
   χ_of_v2 = χ_of_v1 := by
-    intro t1 t2 u1 v1 v2 χ_of_v1 χ_of_v2
+    intro t1 t2 h2_2 u1 v1 v2 χ_of_v1 χ_of_v2
     unfold χ_of_v2 χ_of_v1 v1
-    rw [← v_comparison_implication1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2]
+    rw [← v_comparison_implication1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
     change LegendreSymbol.χ v2 q field_cardinality q_prime_power q_mod_4_congruent_3 = LegendreSymbol.χ (v2 * u1^6) q field_cardinality q_prime_power q_mod_4_congruent_3
     rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b v2 (u1^6) q field_cardinality q_prime_power q_mod_4_congruent_3]
     let χ_of_u1_pow_6 := LegendreSymbol.χ (u1^6) q field_cardinality q_prime_power q_mod_4_congruent_3
-    rw [v_comparison_implication3 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2]
+    rw [v_comparison_implication3 t q field_cardinality q_prime_power q_mod_4_congruent_3]
     simp
 
 lemma v_of_zero

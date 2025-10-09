@@ -55,7 +55,7 @@ lemma x_ne_zero
     · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
 
 lemma x_comparison
-  (t : F)
+  (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -63,32 +63,31 @@ lemma x_comparison
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (h2_1 : t ≠ 1 ∧ t ≠ -1)
-  (h2_2 : -t ≠ 1 ∧ -t ≠ -1)
   :
-  let t1 := t
+  let t1 := t.val
   let t2 := -t1
-  let x1 := x ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
+  let x1 := x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let x2 := x ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   x2 = x1 := by
-    intro t1 t2 x1 x2
+    intro t1 t2 h2_2 x1 x2
     let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let X1 := X ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let X1 := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let X2 := X ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let Y1 := Y ⟨t1, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let Y1 := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let Y2 := Y ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     have X_pow_three_ne_zero : X1^3 ≠ 0 := by
-      apply pow_ne_zero 3 (X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩)
+      apply pow_ne_zero 3 (X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t)
     calc
       x2 = (c_of_s - 1) * s * X2 * (1 + X2) / Y2 := by
         change (c_of_s - 1) * s * X2 * (1 + X2) / Y2 = (c_of_s - 1) * s * X2 * (1 + X2) / Y2
         rfl
       _ = (c_of_s - 1) * s * 1 / X1 * (1 + 1 / X1) / (Y1 / X1^3) := by
         unfold X2
-        rw [X_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2]
+        rw [X_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
         unfold Y2
-        rw [Y_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2]
+        rw [Y_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
         change (c_of_s - 1) * s * (1 / X1) * (1 + 1 / X1) / (Y1 / X1^3) = (c_of_s - 1) * s * 1 / X1 * (1 + 1 / X1) / (Y1 / X1 ^ 3)
         ring_nf
       _ = (c_of_s - 1) * s * X1 * (1 + X1) / Y1 := by
@@ -108,13 +107,13 @@ lemma x_comparison
             _ = (c_of_s - 1) * s * X1^2 * (1 + 1 / X1) := by
               have h2_12_2_1 : X1^3 = X1^2 * X1 := by ring_nf
               rw [h2_12_2_1, mul_div_assoc, mul_div_assoc]
-              rw [div_self (X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩)]
+              rw [div_self (X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t)]
               rw [mul_one]
             _ = (c_of_s - 1) * s * X1 * (1 + X1) := by
               have h2_12_2_1 : X1^2 * (1 + 1 / X1) = X1 * (1 + X1) := by
                 rw [pow_two, mul_assoc, mul_add, ← mul_div_assoc]
                 rw [mul_one]
-                rw [div_self (X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h2_1⟩)]
+                rw [div_self (X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t)]
                 nth_rw 1 [add_comm]
               rw [mul_assoc ((c_of_s - 1) * s), h2_12_2_1]
               repeat rw [← mul_assoc]
@@ -124,7 +123,7 @@ lemma x_comparison
           simp
         rw [h2_12_2, h2_12_3]
       _ = x1 := by
-        unfold x1
+        unfold x1 x
         simp
         rfl
 

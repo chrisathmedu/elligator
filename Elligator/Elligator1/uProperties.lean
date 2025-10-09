@@ -40,7 +40,7 @@ lemma u_pow_two_ne_zero
     · exact (u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t)
 
 lemma u_comparison
-  (t : F)
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -48,15 +48,14 @@ lemma u_comparison
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (h2_1 : t ≠ 1 ∧ t ≠ -1)
-  (h2_2 : -t ≠ 1 ∧ -t ≠ -1)
   :
-  let t1 := t
+  let t1 := t.val
   let t2 := -t1
-  let u1 := u ⟨t1, h2_1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
+  have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
+  let u1 := u t q field_cardinality q_prime_power q_mod_4_congruent_3
   let u2 := u ⟨t2, h2_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
   u2 = 1 / u1 := by
-    intro t1 t2 u1 u2
+    intro t1 t2 h2_2 u1 u2
     let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     calc
@@ -70,8 +69,6 @@ lemma u_comparison
      _ = 1 / u1 := by
        unfold u1 u
        simp
-       unfold t1
-       rfl
 
 lemma u_of_zero
   (q : ℕ)

@@ -22,7 +22,7 @@ section t2Properties
 variable {F : Type*} [Field F] [Fintype F]
 
 lemma t2_eq_t
-  (t : F)
+  (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -30,41 +30,39 @@ lemma t2_eq_t
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (h2_1 : t ≠ 1 ∧ t ≠ -1)
-  (h2_2 : -t ≠ 1 ∧ -t ≠ -1)
   (X_h :
-    let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let X_of_t := X ⟨t, h2_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let X2_of_t := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
     X2_of_t = X_of_t
   )
   :
-  let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let t2_of_point := t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   t2_of_point = t := by
     intro point t2_of_point
-    let u_of_t := u ⟨t, h2_1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
+    let u_of_t := u t q field_cardinality q_prime_power q_mod_4_congruent_3
     let u2_of_t := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    have h1 : u2_of_t = u_of_t := by exact u2_eq_u t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2 X_h
+    have h1 : u2_of_t = u_of_t := by exact u2_eq_u t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 X_h
     unfold u_of_t u at h1
     unfold t2_of_point t2
-    change (1 - u2_of_t) / (1 + u2_of_t) = t
-    change u2_of_t = (1 - t) / (1 + t) at h1
+    change (1 - u2_of_t) / (1 + u2_of_t) = t.val
+    change u2_of_t = (1 - t.val) / (1 + t.val) at h1
     rw [h1]
-    rw [sub_div' (FiniteFieldBasic.one_add_t_ne_zero ⟨t, h2_1⟩)]
-    rw [add_div' (1 - t) 1 (1 + t) (FiniteFieldBasic.one_add_t_ne_zero ⟨t, h2_1⟩)]
+    rw [sub_div' (FiniteFieldBasic.one_add_t_ne_zero t)]
+    rw [add_div' (1 - t.val) 1 (1 + t.val) (FiniteFieldBasic.one_add_t_ne_zero t)]
     simp
     rw [div_div_div_eq]
     norm_num 
-    have h2 : ((1 + t) * 2) ≠ 0 := by
+    have h2 : ((1 + t.val) * 2) ≠ 0 := by
       apply mul_ne_zero 
-      · exact FiniteFieldBasic.one_add_t_ne_zero ⟨t, h2_1⟩
+      · exact FiniteFieldBasic.one_add_t_ne_zero t 
       · exact FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
-    rw [← two_mul t, mul_comm 2 t, mul_assoc, mul_comm 2, mul_div_assoc, div_self h2]
+    rw [← two_mul t.val, mul_comm 2 t.val, mul_assoc, mul_comm 2, mul_div_assoc, div_self h2]
     simp
 
 lemma t2_eq_t'
-  (t : F)
+  (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -72,23 +70,23 @@ lemma t2_eq_t'
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (h2_1 : t ≠ 1 ∧ t ≠ -1)
-  (h2_2 : -t ≠ 1 ∧ -t ≠ -1)
   (X_h :
-    let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let X'_of_t := X ⟨-t, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
+    let X'_of_t := X ⟨-t.val, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let X2_of_t := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
     X2_of_t = X'_of_t
   )
   :
-  let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let t2_of_point := t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let t' := -t
+  let t' := -t.val
   t2_of_point = t' := by
     intro point t2_of_point t'
+    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
     let u'_of_t := u ⟨t', h2_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
     let u2_of_t := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    have h1 : u2_of_t = u'_of_t := by exact u2_eq_u' t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2 X_h
+    have h1 : u2_of_t = u'_of_t := by exact u2_eq_u' t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 X_h
     unfold u'_of_t u at h1
     unfold t2_of_point t2
     change (1 - u2_of_t) / (1 + u2_of_t) = t'
@@ -107,7 +105,7 @@ lemma t2_eq_t'
     simp
 
 lemma t2_h1
-  (t : F)
+  (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -115,17 +113,15 @@ lemma t2_h1
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (h2_1 : t ≠ 1 ∧ t ≠ -1)
-  (h2_2 : -t ≠ 1 ∧ -t ≠ -1)
   :
-  let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let t' := -t
+  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let t' := -t.val
   let t2_of_point := t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  t2_of_point = t ∨ t2_of_point = t' := by
+  t2_of_point = t.val ∨ t2_of_point = t' := by
     intro point t' t2_of_point
-    rcases (X2_h4 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2) with h | h
+    rcases (X2_h4 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) with h | h
     · left
-      exact t2_eq_t t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2 h
+      exact t2_eq_t t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h
     · right
-      exact t2_eq_t' t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2 h
+      exact t2_eq_t' t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h
 

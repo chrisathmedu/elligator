@@ -404,3 +404,32 @@ lemma zero_h1
     · symm
       exact FiniteFieldBasic.neg_one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
 
+lemma neg_t_ne_one_and_neg_t_ne_neg_one 
+  (t : { t : F // t ≠ 1 ∧ t ≠ -1})
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let t1 := t.val
+  let t2 := -t1
+  t2 ≠ 1 ∧ t2 ≠ -1 := by
+    intro t1 t2
+    rw [ne_eq, ne_eq]
+    constructor
+    · intro h2_2_1
+      have h2_2_1_1 : t1 = -1 := by
+        rw [← neg_one_mul]
+        nth_rw 2 [← h2_2_1]
+        unfold t2
+        simp
+      have h2_2_1_2 : t1 ≠ -1 := by exact t.property.right
+      contradiction
+    · intro h2_2_2
+      have h2_2_1_1 : t1 = 1 := by
+        unfold t2 at h2_2_2
+        simp at h2_2_2
+        exact h2_2_2
+      have h2_2_1_2 : t1 ≠ 1 := by exact t.property.left
+      contradiction
+
