@@ -81,7 +81,7 @@ noncomputable def ϕ_over_F
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  Set ((F) × (F)) :=
+  Set (F × F) :=
   let E_over_F_of_s := E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   {
     p |

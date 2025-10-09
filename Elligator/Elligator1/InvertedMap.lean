@@ -122,8 +122,9 @@ theorem t2_defined
     intro u2_of_point
     sorry
 
--- Chapter 3.3 Theorem 3.2
-theorem point_props_iff_point_in_ϕ_over_F_of_point
+-- TODO get 3.2 bundled into one?
+-- Original: Theorem 3.2 Proof B (3.2 forward statement)
+theorem point_props_of_point_in_ϕ_over_F
   (t s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -133,14 +134,74 @@ theorem point_props_iff_point_in_ϕ_over_F_of_point
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  (ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
-  ↔ point ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 := by
-    intro point
+  point ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 
+  → (ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
+  := by
+    intro point h1
     constructor
-    · exact point_in_ϕ_over_F_of_point_of_point_props t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    · exact point_props_of_point_in_ϕ_over_F_of_point  t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    · exact point_in_ϕ_over_F_with_prop1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    · constructor
+      · exact point_in_ϕ_over_F_with_prop2 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+      · exact point_in_ϕ_over_F_with_prop3 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+
+-- Original: Theorem 3.2 Proof C (3.2 reverse statement)
+theorem point_in_ϕ_over_F_of_point_props
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  :
+  (ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+  ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+  ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val)
+  → point.val ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 
+  := by
+    intro h1 h2
+    -- TODO why is this enough instead of the proof C? Statement error?
+    -- Will solve this as soon as part c is formalized
+    exact h1
+    --sorry
+
+-- TODO combinable with above theorems?
+-- Chapter 3.3 Theorem 3.2
+theorem point_props_iff_point_in_ϕ_over_F_of_point
+  (t s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (pointE : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  :
+  -- This theorem has to distinguish between two different kinds of points.
+  -- pointE : a point which is just assumed to fulfill the curve equation of E_over_F
+  -- pointϕ : a point which is generated through ϕ using a custom t without further restrictions
+  let pointϕ := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  (ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 pointE
+  ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 pointE
+  ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 pointE)
+  ↔ pointϕ ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 := by
+    intro pointϕ 
+    constructor
+    · --intro h1
+      --intro h2
+      -- TODO could just paste part B proof in here and solve... API too liberal?
+      --constructor
+      --· exact point_in_ϕ_over_F_with_prop1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+      --· constructor
+      --  · exact point_in_ϕ_over_F_with_prop2 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+      --  · exact point_in_ϕ_over_F_with_prop3 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+      --exact point_in_ϕ_over_F_of_point_of_point_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point, h2⟩
+      sorry
+    · sorry
+      --exact point_props_of_point_in_ϕ_over_F_of_point t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
 /-- `invmap_representative` is ...
 
