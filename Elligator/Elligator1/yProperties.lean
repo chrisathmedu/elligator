@@ -905,9 +905,7 @@ lemma t_η_h1
     let u_of_t := u t q field_cardinality q_prime_power q_mod_4_congruent_3
     have h1 : u_of_t = 1 := by exact (u_η_h1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 η_h1)
     unfold u_of_t u at h1
-    --have h4_1 : 1 + t.val ≠ 0 := by exact u_defined t
-    -- TODO alt statement without cycle
-    have h4_1 : 1 + t.val ≠ 0 := by sorry
+    have h4_1 : 1 + t.val ≠ 0 := by exact FiniteFieldBasic.one_add_t_ne_zero t
     rw [← mul_right_inj' h4_1, ← mul_div_assoc, mul_comm, mul_div_assoc, div_self h4_1] at h1
     rw [← add_left_inj (t.val - 1)] at h1
     ring_nf at h1
@@ -1043,4 +1041,44 @@ lemma y_of_zero
     rw [X_of_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
     change (r_of_s * 1 - (1 + 1) ^ 2) / (r_of_s * 1 + (1 + 1) ^ 2) = (r_of_s - 4) / (r_of_s + 4)
     ring_nf
+
+lemma ϕ_of_t_eq_zero_one
+  (t : { n : F // n = 1 ∨ n = -1})
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let ϕ_of_t := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ_of_t = (0, 1) := by
+    intro ϕ_of_t 
+    unfold ϕ_of_t ϕ
+    rcases t.prop with h | h
+    · rw [h]
+      simp
+    · rw [h]
+      simp
+
+lemma y_add_one_eq_two
+  (t : { t : F // t = 1 ∨ t = -1})
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let y_of_t := point.2
+  y_of_t + 1 = 2 := by
+    intro point y_of_t
+    unfold y_of_t point
+    rw [ϕ_of_t_eq_zero_one t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
+    simp
+    norm_num
+
 

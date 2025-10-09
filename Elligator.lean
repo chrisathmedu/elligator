@@ -17,9 +17,9 @@ import «Elligator».Elligator1.XProperties
 import «Elligator».Elligator1.YProperties
 import «Elligator».Elligator1.xProperties
 import «Elligator».Elligator1.yProperties
-import «Elligator».Elligator1.phiProperties
+import «Elligator».Elligator1.etaProperties
 import «Elligator».Elligator1.X2Properties
 import «Elligator».Elligator1.zProperties
 import «Elligator».Elligator1.u2Properties
 import «Elligator».Elligator1.t2Properties
-
+import «Elligator».Elligator1.phiProperties

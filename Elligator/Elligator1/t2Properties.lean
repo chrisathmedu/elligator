@@ -12,14 +12,37 @@ import Elligator.Elligator1.XProperties
 import Elligator.Elligator1.YProperties
 import Elligator.Elligator1.xProperties
 import Elligator.Elligator1.yProperties
+import Elligator.Elligator1.etaProperties
+import Elligator.Elligator1.X2Properties
+import Elligator.Elligator1.zProperties
 import Elligator.Elligator1.u2Properties
-import Elligator.Elligator1.phiProperties
 
 namespace Elligator.Elligator1
 
 section t2Properties
 
 variable {F : Type*} [Field F] [Fintype F]
+
+lemma t2_eq_one
+  (t : { t : F // t = 1 ∨ t = -1})
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let t2_of_point := t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  t2_of_point = 1 := by
+    intro point t2_of_point
+    unfold t2_of_point t2
+    let u2_of_point := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    change (1 - u2_of_point) / (1 + u2_of_point) = 1
+    unfold u2_of_point
+    rw [u2_eq_zero t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
+    simp
 
 lemma t2_eq_t
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})

@@ -17,6 +17,7 @@ import Elligator.Elligator1.X2Properties
 import Elligator.Elligator1.u2Properties
 import Elligator.Elligator1.zProperties
 import Elligator.Elligator1.t2Properties
+import Elligator.Elligator1.phiProperties
 
 namespace Elligator.Elligator1
 
@@ -71,56 +72,6 @@ theorem ϕ_inv_only_two_specific_preimages
       contradiction
     · intro h
       exact ϕ_of_t_eq_ϕ_of_neg_t t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-
-theorem X2_defined
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : (F) × (F) // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
-  :
-  let y := point.val.snd
-  2 * (y + 1) ≠ 0 := by
-    intro y
-    have h1 : y + 1 ≠ 0 := by 
-    -- TODO how to use property as implication
-      --exact point.property.left
-      sorry
-    apply mul_ne_zero
-    · exact (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
-    · exact h1
-
-theorem z_defined
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  c_of_s^2 ≠ 0
-  := by
-    exact (c_pow_two_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
-
-theorem t2_defined
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : (F) × (F) // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
-  :
-  let u2_of_point := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  (1 + u2_of_point) ≠ 0 := by
-    intro u2_of_point
-    sorry
 
 -- TODO get 3.2 bundled into one?
 -- Original: Theorem 3.2 Proof B (3.2 forward statement)
@@ -203,9 +154,7 @@ theorem point_props_iff_point_in_ϕ_over_F_of_point
     · sorry
       --exact point_props_of_point_in_ϕ_over_F_of_point t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
--- Paper definition at chapter 3.3 Theorem 3.3.
-theorem ϕ_of_t2_eq_x_y
-  (t : { t : F // t ≠ 1 ∧ t ≠ -1})
+theorem X2_defined
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -213,26 +162,73 @@ theorem ϕ_of_t2_eq_x_y
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  -- TODO not relevant? Perhaps already implicitly given by usage of helper theorems? => API minimal?
-  --(point : {p : F × F // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : (F) × (F) // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
   :
-  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let y := point.val.snd
+  2 * (y + 1) ≠ 0 := by
+    intro y
+    have h1 : y + 1 ≠ 0 := by 
+    -- TODO how to use property as implication
+      --exact point.property.left
+      sorry
+    apply mul_ne_zero
+    · exact (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
+    · exact h1
+
+theorem z_defined
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  c_of_s^2 ≠ 0
+  := by
+    exact (c_pow_two_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
+
+theorem t2_defined
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {p : (F) × (F) // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  :
+  let u2_of_point := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  (1 + u2_of_point) ≠ 0 := by
+    intro u2_of_point
+    sorry
+
+-- Paper definition at chapter 3.3 Theorem 3.3.
+theorem ϕ_of_t2_eq_x_y
+  (t s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let t' := t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   let ϕ_of_t' := ϕ t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let x_of_t := x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let x_of_t := point.1
+  let y_of_t := point.2
   ϕ_of_t' = (x_of_t, y_of_t) := by
     intro point t' ϕ_of_t' x_of_t y_of_t
-    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
-    unfold ϕ_of_t' ϕ
-    rcases (t2_h1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) with h | h
-    · change t' = t at h
-      rw [h]
-      rw [dif_pos t.prop]
-    · change t' = -t at h
-      rw [h]
-      rw [dif_pos h2_2]
-      unfold x_of_t y_of_t
-      symm
-      exact point_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    unfold x_of_t y_of_t point ϕ 
+    split
+    · rename_i h
+      exact ϕ_of_t2_eq_x_y_main_case ⟨t, h⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    · rename_i h
+      have h1_1 : t = 1 ∨ t = -1 := by
+        rw [← not_ne_iff, ← not_ne_iff, ← Lean.Grind.not_and]
+        exact h
+      simp
+      exact ϕ_of_t2_eq_x_y_base_case ⟨t, h1_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 
 

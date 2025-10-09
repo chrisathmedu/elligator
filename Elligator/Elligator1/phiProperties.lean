@@ -12,6 +12,7 @@ import Elligator.Elligator1.XProperties
 import Elligator.Elligator1.YProperties
 import Elligator.Elligator1.xProperties
 import Elligator.Elligator1.yProperties
+import Elligator.Elligator1.t2Properties
 
 namespace Elligator.Elligator1
 
@@ -393,6 +394,59 @@ lemma ϕ_of_zero
     change (2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s, (r_of_s - 4) / (r_of_s + 4)) = (2 * (c_of_s - 1) * s * χ_of_c_of_s / r_of_s, (r_of_s - 4) / (r_of_s + 4))
     ring_nf
 
+lemma ϕ_of_t2_eq_x_y_base_case
+  (t : { n : F // n = 1 ∨ n = -1})
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let t' := t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let ϕ_of_t' := ϕ t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ_of_t' = (0, 1) := by
+    intro point t' ϕ_of_t'
+    unfold ϕ_of_t' ϕ
+    have h1 : ¬ (t' ≠ 1 ∧ t' ≠ -1) := by
+      unfold t'
+      rw [t2_eq_one t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
+      simp
+    rw [dif_neg h1]
+
+theorem ϕ_of_t2_eq_x_y_main_case
+  (t : { t : F // t ≠ 1 ∧ t ≠ -1})
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let t' := t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let ϕ_of_t' := ϕ t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let x_of_t := x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ_of_t' = (x_of_t, y_of_t) := by
+    intro point t' ϕ_of_t' x_of_t y_of_t
+    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
+    unfold ϕ_of_t' ϕ
+    rcases (t2_h1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) with h | h
+    · change t' = t at h
+      rw [h]
+      rw [dif_pos t.prop]
+    · change t' = -t at h
+      rw [h]
+      rw [dif_pos h2_2]
+      unfold x_of_t y_of_t
+      symm
+      exact point_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+
+-- TODOs from here
 -- Used to build definitions for arguments which sometimes require different
 -- assumptions regarding group membership.
 lemma E_over_F_subset_ϕ_over_F
@@ -421,47 +475,4 @@ lemma point_in_E_over_F
   let E_over_F_of_s := E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   point.val ∈ E_over_F_of_s
   := by sorry
-
-lemma ϕ_eq_zero_one
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (t : { n : F // n = 1 ∨ n = -1})
-  :
-  let ϕ_of_t := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ϕ_of_t = (0, 1) := by
-    intro ϕ_of_t
-    unfold ϕ_of_t
-    --rw [t.property.left]
-    rcases t.property with h1_1 | h1_1
-    · rw [h1_1]
-      unfold ϕ 
-      simp
-    · rw [h1_1]
-      unfold ϕ 
-      simp
-
-lemma ϕ_eq_x_y
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : (F) × (F) // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
-  (t' : { n : F // n ≠ 1 ∧ n ≠ -1})
-  (representative : t'.val = t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
-  :
-  let ϕ_of_t' := ϕ t'.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let x_of_t' := x t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
-  let y_of_t' := y t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
-  ϕ_of_t' = (x_of_t', y_of_t') := by
-    intro ϕ_of_t' x_of_t' y_of_t'
-    unfold ϕ_of_t' ϕ
-    rw [dif_pos t'.property]
 
