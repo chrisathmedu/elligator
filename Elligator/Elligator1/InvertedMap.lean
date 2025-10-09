@@ -207,7 +207,7 @@ theorem point_props_iff_point_in_ϕ_over_F_of_point
 
 Paper definition at chapter 3.3 Theorem 3.3.
 -/
-theorem invmap_representatives
+theorem ϕ_of_t2_eq_x_y
   (t s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -238,3 +238,4 @@ theorem invmap_representatives
       unfold x_of_t y_of_t
       symm
       exact point_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h2_1 h2_2
+
