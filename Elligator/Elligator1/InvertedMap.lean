@@ -47,25 +47,45 @@ theorem ϕ_inv_only_two_specific_preimages
       cases h2
       rename_i p h3
       have h4 : p.val = t ∨ p.val = -t := by
-        have h4_1 : -p.val ≠ 1 ∧ -p.val ≠ -1 := by sorry
-        have h4_2 : p.val ≠ 1 ∧ p.val ≠ -1 := by sorry
-        have TODO1 : t ≠ 1 ∧ t ≠ -1 := by sorry
-        have TODO2 : -t ≠ 1 ∧ -t ≠ -1 := by sorry
         let point := ϕ p.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
         let t' := t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-        rcases (t2_h1 p.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h4_2 h4_1) with h | h
-        · change t' = p.val at h
-          rw [← h]
-          unfold ϕ at h3
-          -- TODO unsure about current API being able to handle this
-          --exact t2_h1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 TODO1 TODO2
-          --exact (t2_h1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 TODO1 TODO2)
-          sorry
-        · change t' = -p.val at h
-          rw [← mul_left_inj' (FiniteFieldBasic.neg_one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)] at h
-          simp at h
-          rw [← h]
-          sorry
+        by_cases p.val = 1 ∨ p.val = -1
+        · rename_i h4_1 
+          have h4_1_1 : t = 1 := by
+             
+            sorry
+          rw [← h4_1_1] at h4_1
+          exact h4_1
+        · rename_i h4_1 
+          rw [not_or, ← ne_eq, ← ne_eq] at h4_1
+          have h4_1_1 : t' = p.val ∨ t' = -p.val := by
+            exact (t2_h1 ⟨p.val, h4_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
+          have h4_1_2 : p.val = t' ∨ p.val = -t' := by
+            rcases h4_1_1 with h4_1_3 | h4_1_3 
+            · rw [h4_1_3]
+              left
+              rfl
+            · rw [h4_1_3]
+              right
+              simp
+          -- TODO unsure if theorem statement is properly provable like this
+          -- - there is no connection from p to t to be established
+          -- - building the statement in another way without altering 3.1 is non trivial if at all possible
+          have h4_1_3 : t' = t := by
+            unfold t' point
+            rw [h3]
+            by_cases t = 1 ∨ t = -1
+            · rename_i h4_1_3_1
+              rw [t2_eq_one ⟨t, h4_1_3_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
+               
+              sorry
+            · rename_i h4_1_3_1
+              rw [not_or, ← ne_eq, ← ne_eq] at h4_1_3_1 
+              --rw [t2_eq_t ⟨t, h4_1_3_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 (X_comparison)]
+               
+              sorry
+          rw [h4_1_3] at h4_1_2
+          exact h4_1_2
       have h5 : ¬(p.val = t ∨ p.val = -t) := by 
         rw [not_or]
         exact p.prop
@@ -204,8 +224,9 @@ theorem t2_defined
     intro u2_of_point
     sorry
 
--- Paper definition at chapter 3.3 Theorem 3.3.
+-- Original: Theorem 3.3 Proof B
 theorem ϕ_of_t2_eq_x_y
+  -- Fix t ∈ F_q
   (t s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -214,14 +235,16 @@ theorem ϕ_of_t2_eq_x_y
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
+  -- Define (x, y) = ϕ(t)
   let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let t' := t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let ϕ_of_t' := ϕ t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let x_of_t := point.1
   let y_of_t := point.2
+  -- t2 defined (and used to build ϕ(t2))
+  let t' := t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let ϕ_of_t' := ϕ t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   ϕ_of_t' = (x_of_t, y_of_t) := by
-    intro point t' ϕ_of_t' x_of_t y_of_t
-    unfold x_of_t y_of_t point ϕ 
+    intro point x_of_point y_of_point t' ϕ_of_t'
+    unfold x_of_point y_of_point point ϕ 
     split
     · rename_i h
       exact ϕ_of_t2_eq_x_y_main_case ⟨t, h⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
