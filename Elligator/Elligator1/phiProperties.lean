@@ -446,6 +446,52 @@ theorem ϕ_of_t2_eq_x_y_main_case
       symm
       exact point_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
+lemma ϕ_of_one_eq_zero_one
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let ϕ_of_one := ϕ (1 : F) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ_of_one = (0, 1) := by
+    intro ϕ_of_one
+    unfold ϕ_of_one ϕ
+    simp
+
+lemma ϕ_of_neg_one_eq_zero_one
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let ϕ_of_neg_one := ϕ (-1 : F) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ_of_neg_one = (0, 1) := by
+    intro ϕ_of_neg_one 
+    unfold ϕ_of_neg_one ϕ
+    simp
+
+lemma ϕ_of_one_in_ϕ_of_F
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let ϕ_of_one := ϕ (1 : F) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ_of_one ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 := by
+    intro ϕ_of_one
+    -- TODO 
+    --intro test
+    sorry
+
 -- TODOs from here
 -- Used to build definitions for arguments which sometimes require different
 -- assumptions regarding group membership.

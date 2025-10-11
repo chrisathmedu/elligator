@@ -142,7 +142,6 @@ theorem x_y_eq_zero_sign_one
     let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let x := point.val.1
     let y := point.val.2
-    --rw [← x_eq_zero]
     unfold E_over_F at point
     change (x, y) = (0, 1) ∨ (x, y) = (0, -1)
     change x = 0 at x_eq_zero
