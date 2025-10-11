@@ -71,6 +71,21 @@ def ϕ_over_F_prop3
   let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
   η_of_point * r_of_s = -2 → x = 2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s
 
+def ϕ_over_F_props
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : F × F)
+  : Prop
+  :=
+    ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+
 -- Chapter 3.3 Theorem 3.2
 noncomputable def ϕ_over_F
   (s : F)
@@ -83,15 +98,7 @@ noncomputable def ϕ_over_F
   :
   Set (F × F) :=
   let E_over_F_of_s := E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  {
-    p |
-    (h : p ∈ E_over_F_of_s) →
-    (
-        ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 p
-      ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 p
-      ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 p
-    )
-  }
+  { p | (h : p ∈ E_over_F_of_s) → (ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 p) }
 
 def S (b : ℕ) : Set (List Binary) := {n | n.length = b}
 

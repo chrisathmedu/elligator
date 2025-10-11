@@ -106,9 +106,7 @@ theorem point_props_of_point_in_ϕ_over_F
   :
   let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   point ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 
-  → (ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
+  → ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   := by
     intro point h1
     constructor
@@ -128,9 +126,7 @@ theorem point_in_ϕ_over_F_of_point_props
   (q_mod_4_congruent_3 : q % 4 = 3)
   (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
   :
-  (ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
-  ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
-  ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val)
+  ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
   → point.val ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 
   := by
     intro h1 h2
@@ -155,9 +151,7 @@ theorem point_props_iff_point_in_ϕ_over_F_of_point
   -- pointE : a point which is just assumed to fulfill the curve equation of E_over_F
   -- pointϕ : a point which is generated through ϕ using a custom t without further restrictions
   let pointϕ := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  (ϕ_over_F_prop1 q field_cardinality q_prime_power q_mod_4_congruent_3 pointE
-  ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 pointE
-  ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 pointE)
+  ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 pointE
   ↔ pointϕ ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 := by
     intro pointϕ 
     constructor
