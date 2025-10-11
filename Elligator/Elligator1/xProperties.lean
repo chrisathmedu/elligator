@@ -127,7 +127,7 @@ lemma x_comparison
         simp
         rfl
 
-theorem x_y_eq_zero_sign_one
+lemma x_y_eq_zero_sign_one
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -158,7 +158,7 @@ theorem x_y_eq_zero_sign_one
       right
       rfl
 
-theorem x_y_eq_zero_one
+lemma x_y_eq_zero_one
   (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)

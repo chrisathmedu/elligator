@@ -140,7 +140,8 @@ theorem point_in_ϕ_over_F_of_point_props
       rw [x_y_eq_zero_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point h1 h2]
       rw [← ϕ_of_one_eq_zero_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
       exact ϕ_of_one_in_ϕ_of_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    · sorry
+    · rename_i h2
+      sorry
 
 -- TODO combinable with above theorems?
 -- Chapter 3.3 Theorem 3.2

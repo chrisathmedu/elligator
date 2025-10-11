@@ -416,7 +416,7 @@ lemma ϕ_of_t2_eq_x_y_base_case
       simp
     rw [dif_neg h1]
 
-theorem ϕ_of_t2_eq_x_y_main_case
+lemma ϕ_of_t2_eq_x_y_main_case
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)

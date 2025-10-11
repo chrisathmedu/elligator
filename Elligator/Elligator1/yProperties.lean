@@ -19,7 +19,7 @@ section yProperties
 variable {F : Type*} [Field F] [Fintype F]
 
 -- Chapter 3.2 Theorem 1
-theorem Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X
+lemma Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -252,7 +252,7 @@ lemma y_add_one_ne_zero
     contradiction
 
 -- Chapter 3.2 Theorem 1
-theorem u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero
+lemma u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -282,7 +282,7 @@ theorem u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero
     · apply y_add_one_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
 
 -- Chapter 3.2 Theorem 1
-theorem x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two
+lemma x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s : F)
   (s_h1 : s ≠ 0)
@@ -1081,4 +1081,39 @@ lemma y_add_one_eq_two
     simp
     norm_num
 
+lemma y_ne_one
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point_props : ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
+  (x_ne_zero : point.val.1 ≠ 0)
+  :
+  let y := point.val.2
+  y ≠ 1 := by
+    intro y h1
+    let x := point.val.1
+    let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    have h2 : x = 0 := by 
+      have h2_1 : x^2 + y^2 = 1 + d_of_s * x^2 * y^2 := by exact point.prop
+      rw [h1] at h2_1
+      simp at h2_1
+      rw [← add_left_inj (-1), ← add_left_inj (-x^2)] at h2_1
+      simp at h2_1
+      rw [← neg_one_mul (x^2), ← add_mul, pow_two, ← mul_assoc] at h2_1
+      rw [← div_left_inj' (x_ne_zero), ← div_left_inj' (x_ne_zero)] at h2_1
+      rw [mul_div_assoc, div_self (x_ne_zero), mul_one] at h2_1
+      rw [mul_div_assoc, div_self (x_ne_zero), mul_one] at h2_1
+      rw [← add_left_inj 1] at h2_1
+      simp at h2_1
+      have h2_2 : IsSquare d_of_s := by
+        rw [← h2_1, ← one_mul 1, ← pow_two]
+        apply IsSquare.sq 1
+      have h2_2 : ¬ IsSquare d_of_s := by exact d_nonsquare s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+      contradiction
+    contradiction
 
