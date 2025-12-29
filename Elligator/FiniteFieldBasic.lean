@@ -363,7 +363,7 @@ lemma pow_two_ne_zero
   {a : F}
   (a_ne_zero : a ≠ 0)
   :
-  a^2 ≠ 0 := by 
+  a^2 ≠ 0 := by
     rw [pow_two]
     apply mul_ne_zero
     · exact a_ne_zero
@@ -416,7 +416,7 @@ lemma zero_h1
     · symm
       exact FiniteFieldBasic.neg_one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
 
-lemma neg_t_ne_one_and_neg_t_ne_neg_one 
+lemma neg_t_ne_one_and_neg_t_ne_neg_one
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
@@ -445,3 +445,33 @@ lemma neg_t_ne_one_and_neg_t_ne_neg_one
       have h2_2_1_2 : t1 ≠ 1 := by exact t.property.left
       contradiction
 
+lemma one_add_card_mod_four_eq_zero
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  (1 + Fintype.card F) % 4 = 0 := by
+    omega
+
+lemma four_dvd_one_add_card
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  4 ∣ (1 + Fintype.card F) := by
+    exact Nat.dvd_of_mod_eq_zero (one_add_card_mod_four_eq_zero q field_cardinality q_mod_4_congruent_3)
+
+lemma one_add_card_over_four_mul_two_eq_one_add_card_over_two
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let card := Fintype.card F
+  ((1 + card) / 4 * 2) = (1 + card) / 2 := by
+    intro card
+    obtain ⟨k, hk⟩ := four_dvd_one_add_card q field_cardinality q_mod_4_congruent_3
+    rw [hk]
+    nth_rw 3 [mul_comm]
+    simp_all
+    rw [Nat.mul_div_assoc]
+    simp_all

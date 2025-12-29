@@ -11,7 +11,7 @@ This function was added, since Mathlib.NumberTheory.LegendreSymbol.Basic is rest
 
 Paper definition at chapter 3.1.
 -/
-noncomputable def χ 
+noncomputable def χ
   (a : F)
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
@@ -91,11 +91,34 @@ lemma χ_a_eq_one
     have h2 : (Fintype.card F - 1) / 2 * 2 = Fintype.card F - 1 := by
       apply Nat.div_two_mul_two_of_even (FiniteFieldBasic.q_sub_one_even q field_cardinality q_prime_power q_mod_4_congruent_3)
     rw [h2]
-    have h3 : r ≠ 0 := by 
+    have h3 : r ≠ 0 := by
       intro h3_1
       rw [h3_1, mul_zero] at h1_1
       contradiction
     apply FiniteField.pow_card_sub_one_eq_one r h3
+
+lemma χ_a_eq_one_iff_a_square
+  (a : F)
+  (a_nonzero : a ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
+  χ_of_a = 1 ↔ IsSquare a := by
+    constructor
+    · intro χ_a_eq_one
+      unfold χ at χ_a_eq_one
+      unfold IsSquare
+      let b := a^((Fintype.card F + 1) / 4 )
+      use b
+      unfold b
+      -- TODO fix Nat div
+      -- = a^((q-1)/2) * a = χ(a) * a = a
+      sorry
+    · intro a_square
+      exact χ_a_eq_one a a_nonzero a_square q field_cardinality q_prime_power q_mod_4_congruent_3
 
 lemma χ_of_a_pow_n_eq_χ_a
   (a : F)
@@ -106,7 +129,7 @@ lemma χ_of_a_pow_n_eq_χ_a
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
-  χ_of_a^(n.val) = χ_of_a := by 
+  χ_of_a^(n.val) = χ_of_a := by
     sorry
 
 lemma χ_of_a_even_pow_n_eq_one
@@ -119,7 +142,7 @@ lemma χ_of_a_even_pow_n_eq_one
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
-  χ_of_a^(n.val) = 1 := by 
+  χ_of_a^(n.val) = 1 := by
     sorry
 
 lemma χ_of_a_pow_two_eq_one
@@ -131,7 +154,11 @@ lemma χ_of_a_pow_two_eq_one
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let χ_of_a := χ (a^2) q field_cardinality q_prime_power q_mod_4_congruent_3
-  χ_of_a = 1 := by 
+  χ_of_a = 1 := by
+    intro χ_of_a
+    unfold χ_of_a χ
+    rw [← pow_mul]
+    -- TODO issues with Nat and div
     sorry
 
 lemma χ_of_a_eq_neg_one
@@ -146,13 +173,13 @@ lemma χ_of_a_eq_neg_one
   let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
   χ_of_a = -1 := by sorry
 
-lemma χ_of_neg_one_eq_neg_one 
+lemma χ_of_neg_one_eq_neg_one
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let χ_of_neg_one := χ (-1 : F) q field_cardinality q_prime_power q_mod_4_congruent_3 
+  let χ_of_neg_one := χ (-1 : F) q field_cardinality q_prime_power q_mod_4_congruent_3
   χ_of_neg_one = -1 := by
     apply χ_of_a_eq_neg_one
     · apply FiniteFieldBasic.neg_one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
@@ -213,7 +240,7 @@ lemma one_over_χ_of_a_eq_χ_a
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
-  1 / χ_of_a  = χ_of_a := by 
+  1 / χ_of_a  = χ_of_a := by
     sorry
 
 lemma square_of_a
@@ -223,7 +250,7 @@ lemma square_of_a
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  a.val^((q + 1) / 2) = a.val := by 
+  a.val^((q + 1) / 2) = a.val := by
     sorry
 
 lemma χ_of_a_eq_χ_a_mul_b_pow_two
@@ -237,7 +264,7 @@ lemma χ_of_a_eq_χ_a_mul_b_pow_two
   :
   let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
   let χ_of_a_mul_b_pow_two := χ (a * b^2) q field_cardinality q_prime_power q_mod_4_congruent_3
-  χ_of_a = χ_of_a_mul_b_pow_two := by 
+  χ_of_a = χ_of_a_mul_b_pow_two := by
   -- Introduced in paper theory theorem 3.A proof
     sorry
 
@@ -251,5 +278,26 @@ lemma b_eq_χ_of_b_mul_principal_sqrt_a
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let χ_of_b := χ b q field_cardinality q_prime_power q_mod_4_congruent_3
-  b = χ_of_b * a.val^((q + 1) / 4) := by 
+  b = χ_of_b * a.val^((q + 1) / 4) := by
     sorry
+
+lemma χ_a_mul_a_IsSquare
+  (a : F)
+  (a_nonzero : a ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
+  IsSquare (χ_of_a * a) := by
+    intro χ_of_a
+    have h1 : χ_of_a * a ≠ 0 := by
+      apply mul_ne_zero
+      · exact χ_a_ne_zero a a_nonzero q field_cardinality q_prime_power q_mod_4_congruent_3
+      · exact a_nonzero
+    apply (χ_a_eq_one_iff_a_square (χ_of_a * a) h1 q field_cardinality q_prime_power q_mod_4_congruent_3).mp
+    rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b χ_of_a a q field_cardinality q_prime_power q_mod_4_congruent_3]
+    rw [χ_of_χ_of_a_eq_χ_of_a a q field_cardinality q_prime_power q_mod_4_congruent_3]
+    rw [← pow_two]
+    rw [χ_of_a_even_pow_n_eq_one a a_nonzero ⟨2, even_two⟩ ]

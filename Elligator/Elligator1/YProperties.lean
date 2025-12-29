@@ -204,7 +204,9 @@ lemma Y_comparison
         change χ_of_v1 * (v1 / u1^6) = χ_of_v1 * v1 / u1 ^ 6
         rw [← mul_div_assoc]
       -- TODO square argumentation to be understood
-      have h1_2 : IsSquare (χ_of_u1 * u1^3) := by sorry
+      -- TODO probably needs more Legendre lemmas... doing later
+      have h1_2 : IsSquare (χ_of_u1 * u1^3) := by
+        sorry
       have h1_3 : (u1^6)^((q + 1) / 4) = χ_of_u1 * u1^3  := by
         -- TODO understand
         sorry
@@ -218,14 +220,14 @@ lemma Y_comparison
           unfold χ_of_u1
           nth_rw 2 [← LegendreSymbol.one_over_χ_of_a_eq_χ_a u1 q field_cardinality q_prime_power q_mod_4_congruent_3]
           ring_nf
-    have second_factor : χ_of_v2 = χ_of_v1 := by exact v_comparison_implication4 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 
+    have second_factor : χ_of_v2 = χ_of_v1 := by exact v_comparison_implication4 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     have third_factor : LegendreSymbol.χ (u2^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3 = LegendreSymbol.χ (u1 * v1 * (u1^2 + 1 / c_of_s^2)) q field_cardinality q_prime_power q_mod_4_congruent_3 := by
       calc
         LegendreSymbol.χ (u2^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3 = LegendreSymbol.χ ((c_of_s^2 * u1^4 * (u2^2 + 1 / c_of_s^2)) * (u1^2 + 1 / c_of_s^2)^2) q field_cardinality q_prime_power q_mod_4_congruent_3 := by
           rw [LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two (u2^2 + 1 / c_of_s^2) (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) q field_cardinality q_prime_power q_mod_4_congruent_3]
-          rw [mul_comm] 
+          rw [mul_comm]
           rw [LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two _ (u_pow_two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t) q field_cardinality q_prime_power q_mod_4_congruent_3]
-          rw [mul_comm] 
+          rw [mul_comm]
           rw [LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two _ (v_h1_third_factor_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t) q field_cardinality q_prime_power q_mod_4_congruent_3]
           change LegendreSymbol.χ ((u1^2)^2 * (c_of_s^2 * (u2^2 + 1 / c_of_s^2)) * (u1^2 + 1 / c_of_s^2)^2) q field_cardinality q_prime_power q_mod_4_congruent_3 = LegendreSymbol.χ (c_of_s ^ 2 * u1 ^ 4 * (u2 ^ 2 + 1 / c_of_s ^ 2) * (u1 ^ 2 + 1 / c_of_s ^ 2) ^ 2) q field_cardinality q_prime_power q_mod_4_congruent_3
           ring_nf
@@ -284,4 +286,3 @@ lemma Y_comparison
       _ = Y1 / X1^3 := by
         change Y1 / X1^3 = Y1 / X1^3
         rfl
-

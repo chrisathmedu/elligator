@@ -57,10 +57,7 @@ lemma Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X
       _ = χ_of_v_of_t * v_of_t := by
         change χ_of_v_of_t * v_of_t = χ_of_v_of_t * v_of_t
         rfl
-    have h2 : IsSquare (χ_of_v_of_t * v_of_t) := by
-      -- TODO unsure why this implies a square given the paper information
-      -- v itself does not appear to be a square
-      sorry
+    have h2 := LegendreSymbol.χ_a_mul_a_IsSquare v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t) q field_cardinality q_prime_power q_mod_4_congruent_3
     have h3 : (χ_of_v_of_t * v_of_t)^((q + 1) / 2) = χ_of_v_of_t * v_of_t := by
       apply LegendreSymbol.square_of_a ⟨(χ_of_v_of_t * v_of_t), h2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
     let χ_of_sum := LegendreSymbol.χ (u_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3
@@ -69,10 +66,8 @@ lemma Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X
         Y_of_t^2 = (χ_of_v_of_t * v_of_t)^((q + 1) / 2) * χ_of_v_of_t^2 * χ_of_sum^2 := by
           change ((χ_of_v_of_t * v_of_t)^((q + 1) / 4) * χ_of_v_of_t * χ_of_sum)^2 = (χ_of_v_of_t * v_of_t)^((q + 1) / 2) * χ_of_v_of_t^2 * χ_of_sum^2
           ring_nf
-          have h4_1 : ((1 + q) / 4 * 2) = (1 + q) / 2 := by
-            -- TODO problems with Nat div
-            sorry
-          rw [h4_1]
+          rw [← field_cardinality]
+          rw [FiniteFieldBasic.one_add_card_over_four_mul_two_eq_one_add_card_over_two q field_cardinality q_mod_4_congruent_3]
         _ = (χ_of_v_of_t * v_of_t)^((q + 1) / 2) * 1 := by
           rw [LegendreSymbol.χ_of_a_even_pow_n_eq_one v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t) ⟨2, even_two⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
           rw [LegendreSymbol.χ_of_a_even_pow_n_eq_one (u_of_t^2 + 1 / c_of_s^2) (v_h1_third_factor_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t) ⟨2, even_two⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
@@ -491,7 +486,7 @@ lemma y_h1
     repeat rw [add_mul]
     rw [zero_mul]
     have h1 : (2 * X_of_t * (y_of_t + 1) + r_of_s * (y_of_t - 1) / (y_of_t + 1) * X_of_t * (y_of_t + 1)) = (2 * (y_of_t + 1) + r_of_s * (y_of_t - 1)) * X_of_t := by
-      rw [add_mul _ _ X_of_t] 
+      rw [add_mul _ _ X_of_t]
       rw [← div_left_inj' (y_add_one_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t)]
       change (2 * X_of_t * (y_of_t + 1) + r_of_s * (y_of_t - 1) / (y_of_t + 1) * X_of_t * (y_of_t + 1)) / (y_of_t + 1) = (2 * (y_of_t + 1) * X_of_t + r_of_s * (y_of_t - 1) * X_of_t) / (y_of_t + 1)
       repeat rw [add_div]
@@ -518,8 +513,8 @@ lemma y_h1
     rw [h4, h3]
     rw [← mul_assoc, mul_comm, ← mul_add]
     rw [← div_left_inj' (y_divisor_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t)]
-    change (y_of_t * (r_of_s * X_of_t + (1 + X_of_t) ^ 2)) / (r_of_s * X_of_t + (1 + X_of_t) ^ 2) = y_of_t 
-    rw [mul_div_assoc, div_self (y_divisor_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t)] 
+    change (y_of_t * (r_of_s * X_of_t + (1 + X_of_t) ^ 2)) / (r_of_s * X_of_t + (1 + X_of_t) ^ 2) = y_of_t
+    rw [mul_div_assoc, div_self (y_divisor_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t)]
     simp
 
 -- Implicated by y_h1. Saved for further proof arguments in Theorem 3 Proof B
@@ -538,17 +533,17 @@ lemma y_h2
   let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
   X_of_t^2 + 2 * (1 + η_of_point * r_of_s) * X_of_t + 1 = 0 := by
-    intro r_of_s X_of_t point η_of_point 
+    intro r_of_s X_of_t point η_of_point
     let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
     calc
       X_of_t^2 + 2 * (1 + η_of_point * r_of_s) * X_of_t + 1 = X_of_t^2 + 2 * (1 + 1 / 2 * ((y_of_t - 1) / (y_of_t + 1)) * r_of_s) * X_of_t + 1 := by
         -- Unfold until reaching the y which is equivalent to y_of_t for comparison
-        unfold η_of_point η point ϕ 
+        unfold η_of_point η point ϕ
         simp only [Subtype.coe_eta, dite_eq_ite, one_div]
         rw [if_pos t.prop]
-        change X_of_t ^ 2 + 2 * (1 + (y_of_t - 1) / (2 * (y_of_t + 1)) * r_of_s) * X_of_t + 1 = X_of_t ^ 2 + 2 * (1 + 2⁻¹ * ((y_of_t - 1) / (y_of_t + 1)) * r_of_s) * X_of_t + 1 
+        change X_of_t ^ 2 + 2 * (1 + (y_of_t - 1) / (2 * (y_of_t + 1)) * r_of_s) * X_of_t + 1 = X_of_t ^ 2 + 2 * (1 + 2⁻¹ * ((y_of_t - 1) / (y_of_t + 1)) * r_of_s) * X_of_t + 1
         rw [inv_eq_one_div]
-        rw [← mul_div_mul_comm] 
+        rw [← mul_div_mul_comm]
         ring_nf
       _ = X_of_t^2 + (2 + r_of_s * (y_of_t - 1) / (y_of_t + 1)) * X_of_t + 1 := by
         rw [mul_add 2]
@@ -556,7 +551,7 @@ lemma y_h2
         rw [mul_inv_cancel₀]
         ring_nf
         exact (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
-      _ = 0 := by 
+      _ = 0 := by
         rw [y_h1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
 
 -- Implicated by y_h2. Saved for further proof arguments in TODO
@@ -575,7 +570,7 @@ lemma y_h3
   let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
   X_of_t + 1 / X_of_t = -2 * (1 + η_of_point * r_of_s) := by
-    intro r_of_s X_of_t point η_of_point 
+    intro r_of_s X_of_t point η_of_point
     rw [← add_right_inj (2 * (1 + η_of_point * r_of_s))]
     rw [← mul_left_inj' (X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t)]
     change (2 * (1 + η_of_point * r_of_s) + (X_of_t + 1 / X_of_t)) * X_of_t = (2 * (1 + η_of_point * r_of_s) + -2 * (1 + η_of_point * r_of_s)) * X_of_t
@@ -656,7 +651,7 @@ lemma X2_h3
   let X'_of_t := X ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let X2_of_t := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   (X2_of_t - X_of_t) * (X2_of_t - X'_of_t) = 0 := by
-    intro t1 t2 h2_2 point X_of_t X'_of_t X2_of_t 
+    intro t1 t2 h2_2 point X_of_t X'_of_t X2_of_t
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
     let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     calc
@@ -687,7 +682,7 @@ lemma X2_h4
   let X'_of_t := X ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let X2_of_t := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   X2_of_t = X_of_t ∨ X2_of_t = X'_of_t := by
-    intro t1 t2 h2_2 point X_of_t X'_of_t X2_of_t 
+    intro t1 t2 h2_2 point X_of_t X'_of_t X2_of_t
     have h1 : (X2_of_t - X_of_t) * (X2_of_t - X'_of_t) = 0 := by exact X2_h3 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     rw [mul_eq_zero] at h1
     nth_rw 1 [← add_left_inj (-X_of_t)]
@@ -799,7 +794,7 @@ lemma X_η_h1
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (η_h1 : 
+  (η_h1 :
     let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
@@ -835,7 +830,7 @@ lemma X_η_h2
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (η_h1 : 
+  (η_h1 :
     let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
@@ -863,7 +858,7 @@ lemma u_η_h1
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (η_h1 : 
+  (η_h1 :
     let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
@@ -894,7 +889,7 @@ lemma t_η_h1
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (η_h1 : 
+  (η_h1 :
     let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
@@ -925,7 +920,7 @@ lemma v_η_h1
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (η_h1 : 
+  (η_h1 :
     let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
@@ -951,7 +946,7 @@ lemma Y_η_h1
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (η_h1 : 
+  (η_h1 :
     let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
@@ -984,9 +979,9 @@ lemma Y_η_h1
           · exact r_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
           · exact r_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
         have h2 : IsSquare (r_of_s^2) := by apply IsSquare.sq
-        unfold χ_of_r_of_s_pow_two 
+        unfold χ_of_r_of_s_pow_two
         rw [LegendreSymbol.χ_a_eq_one (r_of_s^2) h1 h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
-        nth_rw 2 [pow_two] 
+        nth_rw 2 [pow_two]
         rw [mul_one, one_mul, mul_one]
       _ = χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s := by
         -- TODO understand
@@ -1005,7 +1000,7 @@ lemma y_η_h1
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (η_h1 : 
+  (η_h1 :
     let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
@@ -1054,7 +1049,7 @@ lemma ϕ_of_t_eq_zero_one
   :
   let ϕ_of_t := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   ϕ_of_t = (0, 1) := by
-    intro ϕ_of_t 
+    intro ϕ_of_t
     unfold ϕ_of_t ϕ
     rcases t.prop with h | h
     · rw [h]
@@ -1098,7 +1093,7 @@ lemma y_ne_one
     intro y h1
     let x := point.val.1
     let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    have h2 : x = 0 := by 
+    have h2 : x = 0 := by
       have h2_1 : x^2 + y^2 = 1 + d_of_s * x^2 * y^2 := by exact point.prop
       rw [h1] at h2_1
       simp at h2_1
@@ -1116,4 +1111,3 @@ lemma y_ne_one
       have h2_2 : ¬ IsSquare d_of_s := by exact d_nonsquare s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
       contradiction
     contradiction
-
