@@ -27,7 +27,19 @@ lemma X_pow_two_add_one_over_c_pow_two_ne_zero
   let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   X_of_t^2 + 1 / c_of_s^2 ≠ 0 := by
-    sorry
+    intro X_of_t c_of_s h
+    rw [← mul_left_inj' (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)] at h
+    rw [← mul_left_inj' (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)] at h
+    ring_nf at h
+    change X_of_t^2 * c_of_s^2 + c_of_s⁻¹^2 * c_of_s^2 = 0 at h
+    rw [inv_pow c_of_s 2, inv_mul_cancel₀ (FiniteFieldBasic.pow_two_ne_zero (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)), ← add_left_inj (-1 : F), ← mul_pow] at h
+    simp at h
+
+    have h' : ¬IsSquare (-1 : F) := by exact FiniteFieldBasic.neg_one_non_square q field_cardinality q_prime_power q_mod_4_congruent_3
+    have h' : IsSquare (-1 : F) := by
+      rw [← h, pow_two]
+      apply IsSquare.mul_self
+    contradiction
 
 lemma X_ne_zero
   (s : F)
@@ -148,4 +160,3 @@ lemma X2_h2
   let X2_of_t := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   X2_of_t^2 + 2 * (1 + η_of_point *r_of_s) * X2_of_t + 1 = 0 := by
     sorry
-
