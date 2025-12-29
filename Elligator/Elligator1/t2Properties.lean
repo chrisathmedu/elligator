@@ -76,10 +76,10 @@ lemma t2_eq_t
     rw [add_div' (1 - t.val) 1 (1 + t.val) (FiniteFieldBasic.one_add_t_ne_zero t)]
     simp
     rw [div_div_div_eq]
-    norm_num 
+    norm_num
     have h2 : ((1 + t.val) * 2) ≠ 0 := by
-      apply mul_ne_zero 
-      · exact FiniteFieldBasic.one_add_t_ne_zero t 
+      apply mul_ne_zero
+      · exact FiniteFieldBasic.one_add_t_ne_zero t
       · exact FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
     rw [← two_mul t.val, mul_comm 2 t.val, mul_assoc, mul_comm 2, mul_div_assoc, div_self h2]
     simp
@@ -119,17 +119,16 @@ lemma t2_eq_t'
     rw [add_div' (1 - t') 1 (1 + t') (FiniteFieldBasic.one_add_t_ne_zero ⟨t', h2_2⟩)]
     simp
     rw [div_div_div_eq]
-    norm_num 
+    norm_num
     have h2 : ((1 + t') * 2) ≠ 0 := by
-      apply mul_ne_zero 
+      apply mul_ne_zero
       · exact FiniteFieldBasic.one_add_t_ne_zero ⟨t', h2_2⟩
       · exact FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
     rw [← two_mul t', mul_comm 2 t', mul_assoc, mul_comm 2, mul_div_assoc, div_self h2]
     simp
 
-lemma t2_h1
-  (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-  (s : F)
+lemma t2_in_t_or_neg_t
+  (t s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (q : ℕ)
@@ -137,14 +136,26 @@ lemma t2_h1
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let t' := -t.val
+  let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let t' := -t
   let t2_of_point := t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  t2_of_point = t.val ∨ t2_of_point = t' := by
+  t2_of_point = t ∨ t2_of_point = t' := by
     intro point t' t2_of_point
-    rcases (X2_h4 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) with h | h
-    · left
-      exact t2_eq_t t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h
-    · right
-      exact t2_eq_t' t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h
-
+    by_cases h : t ≠ 1 ∧ t ≠ -1
+    · rcases (X2_h4 ⟨t, h⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) with h1 | h1
+      · left
+        exact t2_eq_t ⟨t, h⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h1
+      · right
+        exact t2_eq_t' ⟨t, h⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h1
+    · have h' : t = 1 ∨ t = -1 := by
+        rw [← not_ne_iff, ← not_ne_iff, ← Lean.Grind.not_and]
+        exact h
+      unfold t2_of_point t'
+      rw [t2_eq_one ⟨t, h'⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
+      have h'' : 1 = t ∨ 1 = -t := by
+        nth_rw 2 [← mul_left_inj' (FiniteFieldBasic.neg_one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)]
+        simp
+        nth_rw 1 [eq_comm]
+        nth_rw 2 [eq_comm]
+        exact h'
+      exact h''
