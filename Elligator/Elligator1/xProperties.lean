@@ -146,7 +146,7 @@ lemma x_y_eq_zero_sign_one
     change (x, y) = (0, 1) ∨ (x, y) = (0, -1)
     change x = 0 at x_eq_zero
     rw [← x_eq_zero]
-    have h1 : x^2 + y^2 = 1 + d_of_s * x^2 * y^2 := by 
+    have h1 : x^2 + y^2 = 1 + d_of_s * x^2 * y^2 := by
       exact point.prop
     rw [x_eq_zero] at h1
     simp at h1
@@ -173,7 +173,7 @@ lemma x_y_eq_zero_one
   point.val = ((0 : F), (1 : F)) := by
     let x := point.val.1
     let y := point.val.2
-    have h1 : y + 1 ≠ 0 := by 
+    have h1 : y + 1 ≠ 0 := by
       unfold ϕ_over_F_props ϕ_over_F_prop1 at point_props
       exact point_props.1
     have h2 : point.val = ((0 : F), (1 : F)) ∨ point.val = ((0 : F), (-1 : F)) := by
@@ -182,13 +182,9 @@ lemma x_y_eq_zero_one
     rcases h2 with h3 | h3
     · exact h3
     · change (x, y) = (0, -1) at h3
-      have h4 : y = -1 := by 
-        -- TODO how to extract that info from a tuple
-        --apply PProd.ext_iff at h3
-        sorry
+      have h4 := Prod.mk.inj h3
       have h5 : y + 1 = 0 := by
         rw [← add_left_inj (-1)]
         simp
-        exact h4
+        exact h4.right
       contradiction
-
