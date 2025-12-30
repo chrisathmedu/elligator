@@ -143,6 +143,24 @@ lemma χ_a_eq_one_iff_a_square
     · intro a_square
       exact χ_a_eq_one a a_nonzero a_square q field_cardinality q_prime_power q_mod_4_congruent_3
 
+lemma a_pow_q_add_one_over_two_eq_χ_of_a_mul_a
+  (a : F)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
+  a ^ ((q + 1) / 2) = χ_of_a * a := by
+    intro χ_of_a
+    unfold χ_of_a χ
+    rw [field_cardinality]
+    rw [FiniteFieldBasic.card_sub_one_over_four_mul_two_eq_one_add_card_over_two]
+    nth_rw 3 [← pow_one a]
+    rw [← pow_add]
+    have h'' : (q + 1) / 2 - 1 + 1 = (q + 1) / 2 := by omega
+    rw [h'']
+
 lemma χ_a_mul_a_eq_a
   (a : F)
   (a_nonzero : a ≠ 0)
@@ -159,6 +177,19 @@ lemma χ_a_mul_a_eq_a
     intro χ_of_a
     unfold χ_of_a
     simp
+
+lemma a_pow_q_add_one_over_two_eq_a
+  (a : F)
+  (a_nonzero : a ≠ 0)
+  (a_square : IsSquare a)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  a ^ ((q + 1) / 2) = a := by
+    rw [a_pow_q_add_one_over_two_eq_χ_of_a_mul_a a q field_cardinality q_prime_power q_mod_4_congruent_3]
+    rw [χ_a_mul_a_eq_a a a_nonzero a_square q field_cardinality q_prime_power q_mod_4_congruent_3]
 
 lemma χ_of_a_pow_n_eq_χ_a
   (a : F)
@@ -308,6 +339,7 @@ lemma χ_of_a_eq_χ_a_mul_b_pow_two
   -- Introduced in paper theory theorem 3.A proof
     sorry
 
+-- TODO used so?
 lemma b_eq_χ_of_b_mul_principal_sqrt_a
   (a : {a : F // IsSquare a})
   {b : F}

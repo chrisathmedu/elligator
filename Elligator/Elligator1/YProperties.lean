@@ -203,14 +203,36 @@ lemma Y_comparison
         rw [v_comparison_implication2 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
         change χ_of_v1 * (v1 / u1^6) = χ_of_v1 * v1 / u1 ^ 6
         rw [← mul_div_assoc]
-      -- TODO square argumentation to be understood
-      -- TODO probably needs more Legendre lemmas... doing later
       have h1_2 : IsSquare (χ_of_u1 * u1^3) := by
-        sorry
+        have u_ne_zero := u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t
+        have h1_2_1 : χ_of_u1 * u1^3 ≠ 0 := by
+          apply mul_ne_zero
+          · apply LegendreSymbol.χ_a_ne_zero u1 u_ne_zero
+          · apply pow_ne_zero 3 u_ne_zero
+        apply (LegendreSymbol.χ_a_eq_one_iff_a_square (χ_of_u1 * u1^3) h1_2_1 q field_cardinality q_prime_power q_mod_4_congruent_3).mp
+        have h : (3 : ℕ) = 1 + 2 := by norm_num
+        rw [h, pow_add u1 1 2, ← mul_assoc, pow_one]
+        rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b (χ_of_u1 * u1) (u1^2) q field_cardinality q_prime_power q_mod_4_congruent_3]
+        rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b χ_of_u1 u1 q field_cardinality q_prime_power q_mod_4_congruent_3]
+        rw [LegendreSymbol.χ_of_χ_of_a_eq_χ_of_a u1 q field_cardinality q_prime_power q_mod_4_congruent_3]
+        rw [← LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b u1 u1 q field_cardinality q_prime_power q_mod_4_congruent_3, ← pow_two]
+        have h' : IsSquare (u1^2) := by
+          rw [pow_two]
+          apply IsSquare.mul_self u1
+        have h'' : LegendreSymbol.χ (u1 ^ 2) q field_cardinality q_prime_power q_mod_4_congruent_3 = 1 := by
+          apply (LegendreSymbol.χ_a_eq_one_iff_a_square (u1^2) (FiniteFieldBasic.pow_two_ne_zero u_ne_zero) q field_cardinality q_prime_power q_mod_4_congruent_3).mpr
+          exact h'
+        rw [h'']
+        simp
       have h1_3 : (u1^6)^((q + 1) / 4) = χ_of_u1 * u1^3  := by
-        -- TODO understand
-        sorry
-      --apply LegendreSymbol.square_of_a ⟨(χ_of_v_of_t * v_of_t), h2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
+        have h1_3_1 : 6 = 3 * 2 := by norm_num
+        rw [h1_3_1, ← pow_mul, mul_assoc, mul_comm, pow_mul, mul_comm]
+        rw [← field_cardinality, add_comm]
+        rw [FiniteFieldBasic.one_add_card_over_four_mul_two_eq_one_add_card_over_two q field_cardinality q_mod_4_congruent_3]
+        rw [field_cardinality, add_comm, LegendreSymbol.a_pow_q_add_one_over_two_eq_χ_of_a_mul_a u1 q field_cardinality q_prime_power q_mod_4_congruent_3]
+        change (χ_of_u1 * u1)^3 = χ_of_u1 * u1^3
+        have h1_3_2 : Odd 3 := by trivial
+        rw [mul_pow, LegendreSymbol.χ_of_a_pow_n_eq_χ_a u1 ⟨3, h1_3_2 ⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
       calc
         (χ_of_v2 * v2)^((q + 1) / 4) = (χ_of_v1 * v1 / u1^6)^((q + 1) / 4) := by
           rw [h1_1]

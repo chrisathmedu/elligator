@@ -483,3 +483,9 @@ lemma one_add_card_over_four_mul_two_eq_one_add_card_over_two
     simp_all
     rw [Nat.mul_div_assoc]
     simp_all
+
+lemma card_sub_one_over_four_mul_two_eq_one_add_card_over_two
+  {q : ℕ}
+  :
+  (q - 1) / 2 = (q + 1) / 2 - 1 := by
+    omega
