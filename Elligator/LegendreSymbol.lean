@@ -97,6 +97,35 @@ lemma χ_a_eq_one
       contradiction
     apply FiniteField.pow_card_sub_one_eq_one r h3
 
+lemma a_IsSquare
+  (a : F)
+  (a_nonzero : a ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (χ_a_eq_one : χ a q field_cardinality q_prime_power q_mod_4_congruent_3 = 1)
+  :
+  IsSquare a := by
+    let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
+    unfold χ at χ_a_eq_one
+    unfold IsSquare
+    let b := a^((Fintype.card F + 1) / 4 )
+    use b
+    unfold b
+    rw [← pow_two, ← pow_mul, add_comm]
+    rw [FiniteFieldBasic.one_add_card_over_four_mul_two_eq_one_add_card_over_two q field_cardinality q_mod_4_congruent_3]
+    have h : (1 + Fintype.card F) / 2 = (Fintype.card F - 1 + 2) / 2 := by
+      omega
+    rw [h]
+    rw [Nat.add_div_of_dvd_right (FiniteFieldBasic.q_sub_one_dvd_two q field_cardinality q_prime_power q_mod_4_congruent_3) , pow_add]
+    simp
+    change a = χ_of_a * a
+    rw [← mul_left_inj' a_nonzero] at χ_a_eq_one
+    simp at χ_a_eq_one
+    symm
+    trivial
+
 lemma χ_a_eq_one_iff_a_square
   (a : F)
   (a_nonzero : a ≠ 0)
@@ -107,18 +136,29 @@ lemma χ_a_eq_one_iff_a_square
   :
   let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
   χ_of_a = 1 ↔ IsSquare a := by
+    intro χ_of_a
     constructor
     · intro χ_a_eq_one
-      unfold χ at χ_a_eq_one
-      unfold IsSquare
-      let b := a^((Fintype.card F + 1) / 4 )
-      use b
-      unfold b
-      -- TODO fix Nat div
-      -- = a^((q-1)/2) * a = χ(a) * a = a
-      sorry
+      exact a_IsSquare a a_nonzero q field_cardinality q_prime_power q_mod_4_congruent_3 χ_a_eq_one
     · intro a_square
       exact χ_a_eq_one a a_nonzero a_square q field_cardinality q_prime_power q_mod_4_congruent_3
+
+lemma χ_a_mul_a_eq_a
+  (a : F)
+  (a_nonzero : a ≠ 0)
+  (a_square : IsSquare a)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
+  χ_of_a * a = a := by
+    have h := (χ_a_eq_one_iff_a_square a a_nonzero q field_cardinality q_prime_power q_mod_4_congruent_3).mpr
+    rw [h a_square]
+    intro χ_of_a
+    unfold χ_of_a
+    simp
 
 lemma χ_of_a_pow_n_eq_χ_a
   (a : F)

@@ -75,6 +75,14 @@ lemma q_sub_one_even
     simp_all
     linarith
 
+lemma q_sub_one_dvd_two
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  : 2 ∣ Fintype.card F - 1 := by
+    apply Even.two_dvd (q_sub_one_even q field_cardinality q_prime_power q_mod_4_congruent_3)
+
 lemma q_not_dvd_two
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
