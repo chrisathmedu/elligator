@@ -702,7 +702,14 @@ lemma χ_IsSquare_h1
   :
   let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let χ_of_v := LegendreSymbol.χ v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
-  IsSquare ((χ_of_v * v_of_t)^((q + 1) / 4)) := by sorry
+  IsSquare ((χ_of_v * v_of_t)^((q + 1) / 4)) := by
+    intro v_of_t χ_of_v
+    have v_ne_zero := v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
+    have h1 := LegendreSymbol.χ_a_mul_a_IsSquare v_of_t v_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+    unfold IsSquare at h1
+    rcases h1 with ⟨r, hr⟩
+    rw [hr, ← pow_two, ← pow_mul, mul_comm, pow_mul]
+    apply IsSquare.sq
 
 lemma y_comparison
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})

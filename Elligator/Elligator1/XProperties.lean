@@ -145,8 +145,6 @@ lemma X2_h1
     ring_nf
     sorry
 
--- TODO usage? best possible statement?
--- only proving if used. Not sure where this actually came up at all
 lemma X2_h2
   (s : F)
   (s_h1 : s ≠ 0)
