@@ -390,3 +390,25 @@ lemma χ_a_mul_a_IsSquare
     rw [χ_of_χ_of_a_eq_χ_of_a a q field_cardinality q_prime_power q_mod_4_congruent_3]
     rw [← pow_two]
     rw [χ_of_a_even_pow_n_eq_one a a_nonzero ⟨2, even_two⟩ ]
+
+lemma χ_values
+  (a : F)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
+  χ_of_a = 0 ∨ χ_of_a = -1 ∨ χ_of_a = 1 := by
+    intro χ_of_a
+    by_cases h : a = 0
+    · left
+      exact χ_a_zero_eq_zero a h q field_cardinality q_prime_power q_mod_4_congruent_3
+    · rw [← ne_eq] at h
+      by_cases h' : IsSquare a
+      · right
+        right
+        apply χ_a_eq_one a h h' q field_cardinality q_prime_power q_mod_4_congruent_3
+      · right
+        left
+        apply χ_of_a_eq_neg_one a h h' q field_cardinality q_prime_power q_mod_4_congruent_3
