@@ -191,31 +191,6 @@ lemma a_pow_q_add_one_over_two_eq_a
     rw [a_pow_q_add_one_over_two_eq_χ_of_a_mul_a a q field_cardinality q_prime_power q_mod_4_congruent_3]
     rw [χ_a_mul_a_eq_a a a_nonzero a_square q field_cardinality q_prime_power q_mod_4_congruent_3]
 
-lemma χ_of_a_pow_n_eq_χ_a
-  (a : F)
-  (n : {n : ℕ | Odd n})
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
-  χ_of_a^(n.val) = χ_of_a := by
-    sorry
-
-lemma χ_of_a_even_pow_n_eq_one
-  (a : F)
-  (a_nonzero : a ≠ 0)
-  (n : {n : ℕ | Even n})
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
-  χ_of_a^(n.val) = 1 := by
-    sorry
-
 lemma χ_of_a_pow_two_eq_one
   (a : F)
   (a_nonzero : a ≠ 0)
@@ -244,7 +219,11 @@ lemma χ_of_a_eq_neg_one
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
-  χ_of_a = -1 := by sorry
+  χ_of_a = -1 := by
+    intro χ_of_a
+    unfold χ_of_a χ
+    -- TODO needs argument of cyclic group... perhaps there is yet another more general χ in mathlib that solves this?
+    sorry
 
 lemma χ_of_neg_one_eq_neg_one
   (q : ℕ)
@@ -281,6 +260,47 @@ lemma χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b
   let χ_of_a_mul_b := χ (a * b) q field_cardinality q_prime_power q_mod_4_congruent_3
   χ_of_a_mul_b = χ_of_a * χ_of_b := sorry
 
+lemma χ_of_a_even_pow_n_eq_one
+  (a : F)
+  (a_nonzero : a ≠ 0)
+  (n : {n : ℕ | Even n})
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
+  χ_of_a^(n.val) = 1 := by
+    intro χ_of_a
+    have n_even := n.prop
+    unfold Even at n_even
+    rcases n_even with ⟨k, kh⟩
+    rw [← mul_two] at kh
+    rw [kh, mul_comm, pow_mul, pow_two]
+    rw [← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b a a q field_cardinality q_prime_power q_mod_4_congruent_3, ← pow_two]
+    rw [χ_of_a_pow_two_eq_one a a_nonzero q field_cardinality q_prime_power q_mod_4_congruent_3]
+    rw [one_pow]
+
+lemma χ_of_a_pow_n_eq_χ_a
+  (a : F)
+  (a_nonzero : a ≠ 0)
+  (n : {n : ℕ | Odd n})
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
+  χ_of_a^(n.val) = χ_of_a := by
+    intro χ_of_a
+    have n_odd := n.prop
+    unfold Odd at n_odd
+    rcases n_odd with ⟨k, kh⟩
+    rw [kh, pow_add, pow_mul]
+    rw [χ_of_a_even_pow_n_eq_one a a_nonzero ⟨2, even_two⟩, one_pow]
+    simp
+
+
 lemma χ_of_one_over_a_eq_χ_a
   (a : F)
   (a_non_zero : a ≠ 0)
@@ -305,6 +325,7 @@ lemma χ_of_one_over_a_eq_one_over_χ_a
   let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
   χ_of_1_over_a = 1 / χ_of_a := sorry
 
+-- TODO this probably needs a ≠ 0
 lemma one_over_χ_of_a_eq_χ_a
   (a : F)
   (q : ℕ)
