@@ -484,6 +484,14 @@ lemma one_add_card_over_four_mul_two_eq_one_add_card_over_two
     rw [Nat.mul_div_assoc]
     simp_all
 
+lemma one_add_one_a_pow_two_eq_a_add_one_over_a_over_a
+  (a : F)
+  (a_ne_zero : a ≠ 0)
+  :
+  1 + 1 / a^2 = (a + 1 / a) / a := by
+    ring_nf
+    rw [mul_inv_cancel₀ a_ne_zero]
+
 lemma card_sub_one_over_four_mul_two_eq_one_add_card_over_two
   {q : ℕ}
   :

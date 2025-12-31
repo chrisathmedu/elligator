@@ -229,7 +229,9 @@ lemma χ_of_a_pow_two_eq_one
     intro χ_of_a
     unfold χ_of_a χ
     rw [← pow_mul]
-    -- TODO issues with Nat and div
+    have h : 2 * ((Fintype.card F - 1) / 2) =  Fintype.card F - 1 := by omega
+    rw [h]
+    -- TODO search proof
     sorry
 
 lemma χ_of_a_eq_neg_one
@@ -352,6 +354,21 @@ lemma b_eq_χ_of_b_mul_principal_sqrt_a
   let χ_of_b := χ b q field_cardinality q_prime_power q_mod_4_congruent_3
   b = χ_of_b * a.val^((q + 1) / 4) := by
     sorry
+
+lemma b_pow_q_add_one_over_four_eq_χ_of_a_mul_a
+  (a : F)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
+  (a^2)^((q + 1) / 4) = χ_of_a * a := by
+    intro χ_of_a
+    rw [← pow_mul, mul_comm, ← field_cardinality, add_comm]
+    rw [FiniteFieldBasic.one_add_card_over_four_mul_two_eq_one_add_card_over_two q field_cardinality q_mod_4_congruent_3]
+    rw [← a_pow_q_add_one_over_two_eq_χ_of_a_mul_a a q field_cardinality q_prime_power q_mod_4_congruent_3]
+    rw [← field_cardinality, add_comm]
 
 lemma χ_a_mul_a_IsSquare
   (a : F)

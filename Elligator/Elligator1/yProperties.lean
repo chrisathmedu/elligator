@@ -974,6 +974,7 @@ lemma Y_η_h1
     let χ_of_r_of_s_div_c_of_s := (LegendreSymbol.χ (r_of_s / c_of_s) q field_cardinality q_prime_power q_mod_4_congruent_3)
     let χ_of_r_of_s_pow_two := (LegendreSymbol.χ (r_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3)
     let χ_of_sum := LegendreSymbol.χ (u_of_t ^ 2 + 1 / c_of_s ^ 2) q field_cardinality q_prime_power q_mod_4_congruent_3
+    have c_ne_zero := c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     calc
       Y_of_t = (r_of_s^2)^((q + 1) / 4) * χ_of_one_add_one_div_c_of_s_pow_two := by
         unfold Y_of_t Y
@@ -991,11 +992,29 @@ lemma Y_η_h1
         nth_rw 2 [pow_two]
         rw [mul_one, one_mul, mul_one]
       _ = χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s := by
-        -- TODO understand
-        sorry
+        unfold χ_of_one_add_one_div_c_of_s_pow_two
+        rw [FiniteFieldBasic.one_add_one_a_pow_two_eq_a_add_one_over_a_over_a c_of_s c_ne_zero]
+        change (r_of_s ^ 2) ^ ((q + 1) / 4) * LegendreSymbol.χ (r_of_s / c_of_s) q field_cardinality q_prime_power q_mod_4_congruent_3 = χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s
+        rw [LegendreSymbol.b_pow_q_add_one_over_four_eq_χ_of_a_mul_a r_of_s q field_cardinality q_prime_power q_mod_4_congruent_3]
       _ = r_of_s * χ_of_c_of_s := by
-        -- TODO same square root argument as above (χ(r)r = r ?) ... understand
-        sorry
+        have r_ne_zero := r_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        let χ_of_one_over_c_of_s  := (LegendreSymbol.χ (1 / c_of_s) q field_cardinality q_prime_power q_mod_4_congruent_3)
+        calc
+          χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s = r_of_s * χ_of_r_of_s * χ_of_r_of_s *  χ_of_one_over_c_of_s := by
+            have h : r_of_s / c_of_s = r_of_s * (1 / c_of_s) := by ring_nf
+            unfold χ_of_r_of_s_div_c_of_s
+            rw [h]
+            rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b r_of_s (1 / c_of_s) q field_cardinality q_prime_power q_mod_4_congruent_3]
+            change χ_of_r_of_s * r_of_s * (χ_of_r_of_s * χ_of_one_over_c_of_s) = r_of_s * χ_of_r_of_s * χ_of_r_of_s *  χ_of_one_over_c_of_s
+            ring_nf
+          _ = r_of_s * 1 * χ_of_one_over_c_of_s := by
+            rw [mul_assoc r_of_s, ← LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b r_of_s r_of_s q field_cardinality q_prime_power q_mod_4_congruent_3]
+            rw [← pow_two]
+            rw [LegendreSymbol.χ_of_a_pow_two_eq_one r_of_s r_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3]
+          _ = r_of_s * χ_of_c_of_s := by
+            unfold χ_of_one_over_c_of_s
+            rw [LegendreSymbol.χ_of_one_over_a_eq_χ_a c_of_s c_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3]
+            rw [mul_one]
 
 -- Implicated by main case of Theorem 3 proof part B. Saved for later usage in TODO
 lemma y_η_h1
