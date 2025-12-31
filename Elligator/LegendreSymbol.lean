@@ -412,3 +412,17 @@ lemma χ_values
       · right
         left
         apply χ_of_a_eq_neg_one a h h' q field_cardinality q_prime_power q_mod_4_congruent_3
+
+lemma a_eq_zero_of_χ_of_a_eq_zero
+  (a : F)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
+  χ_of_a = 0 → a = 0 := by
+    intro χ_of_a h
+    unfold χ_of_a χ at h
+    apply pow_eq_zero at h
+    exact h

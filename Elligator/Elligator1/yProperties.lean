@@ -878,13 +878,50 @@ lemma u_η_h1
     let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
     let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
     let χ_of_v_of_t := LegendreSymbol.χ v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
-    have h3_1 : X_of_t = χ_of_v_of_t * u_of_t := by
+    have v_ne_zero := v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
+    have h1 : X_of_t = χ_of_v_of_t * u_of_t := by
       unfold X_of_t X
       rfl
-    unfold X_of_t at h3_1
-    rw [X_η_h2 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 η_h1] at h3_1
-    -- TODO have to make case comparison of chi(v) to conclude that u can only be 1
-    sorry
+    unfold X_of_t at h1
+    rw [X_η_h2 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 η_h1] at h1
+    rcases LegendreSymbol.χ_values v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
+    · rename_i h2
+      change χ_of_v_of_t = 0 at h2
+      have h3 := LegendreSymbol.a_eq_zero_of_χ_of_a_eq_zero v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
+      have h4 : v_of_t = 0 := by
+        apply h3 h2
+      contradiction
+    · rename_i h2
+      rcases h2
+      · rename_i h2
+        change χ_of_v_of_t = -1 at h2
+        rw [h2] at h1
+        unfold u_of_t u at h1
+        have two_ne_zero := FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+        have h3 : (2 : F) = 0 := by
+          have h3' : 1 + t.val ≠ 0 := by
+            intro h3''
+            rw [← add_left_inj (-1)]  at h3''
+            ring_nf at h3''
+            have t_ne_neg_one := t.prop.right
+            contradiction
+          rw [← mul_left_inj' h3'] at h1
+          have h3'' : (1 - t.val) / (1 + t.val) = (1 - t.val) * (1 + t.val)⁻¹ := by ring_nf
+          rw [h3''] at h1
+          rw [← mul_assoc, mul_assoc (-1 * (1 - t.val)), inv_mul_cancel₀ h3', mul_add] at h1
+          rw [mul_one, mul_one, one_mul, mul_sub] at h1
+          ring_nf at h1
+          rw [add_left_inj t.val] at h1
+          rw [← add_left_inj 1] at h1
+          simp at h1
+          rw [← h1]
+          ring_nf
+        contradiction
+      · rename_i h2
+        change χ_of_v_of_t = 1 at h2
+        rw [h2, one_mul] at h1
+        symm
+        trivial
 
 -- Used in the main case of Theorem 3 Proof part B
 lemma t_η_h1
