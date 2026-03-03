@@ -194,7 +194,7 @@ lemma q_add_one_over_four_ne_zero
     apply Nat.div_ne_zero_iff.2
     constructor
     · norm_num
-    · sorry
+    · grind
 
 lemma two_ne_zero
   (q : ℕ)
