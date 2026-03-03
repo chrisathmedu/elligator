@@ -282,8 +282,7 @@ lemma χ_of_a_even_pow_n_eq_one
     rw [one_pow]
 
 lemma χ_of_a_pow_n_eq_χ_a
-  (a : F)
-  (a_nonzero : a ≠ 0)
+  (a_nonzero : (a : F) ≠ 0)
   (n : {n : ℕ | Odd n})
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)

@@ -85,8 +85,10 @@ lemma four_add_r_ne_zero
       rw [← mul_left_inj' (FiniteFieldBasic.neg_one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)] at h
       simp at h
       norm_num at h
-      rw [h, pow_two]
-      apply IsSquare.mul_self
+      unfold IsSquare
+      rw [pow_two] at h
+      use (c_of_s + 2)
+      exact h
     have h2 : ¬IsSquare (3 : F) := by
       exact FiniteFieldBasic.three_nonsquare q field_cardinality q_prime_power q_mod_4_congruent_3
     contradiction
@@ -117,4 +119,3 @@ lemma r_h1
         ring
       _ = c_of_s^2 + 1 / c_of_s^2 := by
         ring_nf
-
