@@ -92,3 +92,42 @@ lemma d_nonsquare
       exact h2
     contradiction
 
+lemma d_ne_zero
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  d_of_s ≠ 0 := by
+    intro d_of_s
+    let d_nonsquare := d_nonsquare s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    intro h
+    have h1 : IsSquare d_of_s := by
+      unfold IsSquare
+      use 0
+      grind
+    contradiction
+
+lemma d_ne_one
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  d_of_s ≠ 1 := by
+    intro d_of_s
+    let d_nonsquare := d_nonsquare s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    intro h
+    have h1 : IsSquare d_of_s := by
+      unfold IsSquare
+      use 0
+      grind
+    contradiction
