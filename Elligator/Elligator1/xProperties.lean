@@ -1,8 +1,8 @@
 import Mathlib
 import Elligator.FiniteFieldBasic
 import Elligator.LegendreSymbol
+import Elligator.EdwardsCurve
 import Elligator.Elligator1.Variables
-import Elligator.Elligator1.Sets
 import Elligator.Elligator1.sProperties
 import Elligator.Elligator1.cProperties
 import Elligator.Elligator1.uProperties
@@ -157,34 +157,3 @@ lemma x_y_eq_zero_sign_one
     · rw [← h]
       right
       rfl
-
-lemma x_y_eq_zero_one
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
-  (point_props : ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
-  (x_eq_zero : point.val.1 = 0)
-  :
-  point.val = ((0 : F), (1 : F)) := by
-    let x := point.val.1
-    let y := point.val.2
-    have h1 : y + 1 ≠ 0 := by
-      unfold ϕ_over_F_props ϕ_over_F_prop1 at point_props
-      exact point_props.1
-    have h2 : point.val = ((0 : F), (1 : F)) ∨ point.val = ((0 : F), (-1 : F)) := by
-      exact x_y_eq_zero_sign_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point x_eq_zero
-    change (x, y) = (0, 1)
-    rcases h2 with h3 | h3
-    · exact h3
-    · change (x, y) = (0, -1) at h3
-      have h4 := Prod.mk.inj h3
-      have h5 : y + 1 = 0 := by
-        rw [← add_left_inj (-1)]
-        simp
-        exact h4.right
-      contradiction

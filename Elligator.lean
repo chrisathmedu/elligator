@@ -2,7 +2,6 @@ import Elligator.Elligator1.Comparison
 import Elligator.Elligator1.DecodingFunction
 import Elligator.Elligator1.InvertedMap
 import Elligator.Elligator1.Map
-import Elligator.Elligator1.Sets
 import Elligator.Elligator1.StringEncoding
 import Elligator.Elligator1.Variables
 import Elligator.Elligator1.X2Properties
@@ -23,3 +22,4 @@ import Elligator.Elligator1.yProperties
 import Elligator.Elligator1.zProperties
 import Elligator.FiniteFieldBasic
 import Elligator.LegendreSymbol
+import Elligator.EdwardsCurve

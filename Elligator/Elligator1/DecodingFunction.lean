@@ -1,7 +1,8 @@
 import Mathlib
 import Elligator.FiniteFieldBasic
 import Elligator.LegendreSymbol
-import Elligator.Elligator1.Variables
+--import Elligator.Elligator1.Variables
+import Elligator.Elligator1.Map
 
 namespace Elligator.Elligator1
 

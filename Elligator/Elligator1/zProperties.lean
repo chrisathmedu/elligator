@@ -2,7 +2,6 @@ import Mathlib
 import Elligator.FiniteFieldBasic
 import Elligator.LegendreSymbol
 import Elligator.Elligator1.Variables
-import Elligator.Elligator1.Sets
 import Elligator.Elligator1.sProperties
 import Elligator.Elligator1.cProperties
 import Elligator.Elligator1.dProperties
@@ -31,14 +30,13 @@ lemma z_eq_zero
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let point := (ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
   let z_of_point := z s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   z_of_point = 0 := by
-    intro point z_of_point 
+    intro point z_of_point
     unfold z_of_point z
     let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     repeat rw [X2_eq_neg_one t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
     change LegendreSymbol.χ ((c_of_s - 1) * s * (-1) * (1 + (-1)) * point.1 * ((-1) ^ 2 + 1 / c_of_s ^ 2)) q field_cardinality q_prime_power q_mod_4_congruent_3 = 0
-    simp 
+    simp
     exact LegendreSymbol.χ_a_zero_eq_zero (0 : F) (rfl) q field_cardinality q_prime_power q_mod_4_congruent_3
-

@@ -2,7 +2,6 @@ import Mathlib
 import Elligator.FiniteFieldBasic
 import Elligator.LegendreSymbol
 import Elligator.Elligator1.Variables
-import Elligator.Elligator1.Sets
 import Elligator.Elligator1.sProperties
 import Elligator.Elligator1.cProperties
 import Elligator.Elligator1.dProperties
@@ -32,10 +31,10 @@ lemma u2_eq_zero
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let point := (ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
   let u2_of_point := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   u2_of_point = 0 := by
-    intro point u2_of_point 
+    intro point u2_of_point
     unfold u2_of_point u2
     rw [z_eq_zero t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
     simp
@@ -50,13 +49,13 @@ lemma u2_eq_u
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   (X_h :
-    let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let point := (ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
     let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let X2_of_t := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
     X2_of_t = X_of_t
   )
   :
-  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let point := (ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
   let u_of_t := u t q field_cardinality q_prime_power q_mod_4_congruent_3
   let u2_of_t := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   u2_of_t = u_of_t := by
@@ -87,8 +86,9 @@ lemma u2_eq_u
         z_of_point = (LegendreSymbol.χ (x_of_t^2 * Y_of_t * (X_of_t^2 + 1 / c_of_s^2)) q field_cardinality q_prime_power q_mod_4_congruent_3) := by
           unfold z_of_point z
           change LegendreSymbol.χ ((c_of_s - 1) * s * X2_of_t * (1 + X2_of_t) * point.1 * (X2_of_t ^ 2 + 1 / c_of_s ^ 2)) q field_cardinality q_prime_power q_mod_4_congruent_3 = LegendreSymbol.χ (x_of_t ^ 2 * Y_of_t * (X_of_t ^ 2 + 1 / c_of_s ^ 2)) q field_cardinality q_prime_power q_mod_4_congruent_3
-          unfold point ϕ 
-          rw [dif_pos t.prop, h1]
+          unfold point ϕ
+          simp only [h1]
+          rw [dif_pos t.prop]
           change LegendreSymbol.χ (x_of_t * Y_of_t * x_of_t * (X2_of_t ^ 2 + 1 / c_of_s ^ 2)) q field_cardinality q_prime_power q_mod_4_congruent_3 = LegendreSymbol.χ (x_of_t ^ 2 * Y_of_t * (X_of_t ^ 2 + 1 / c_of_s ^ 2)) q field_cardinality q_prime_power q_mod_4_congruent_3
           unfold X2_of_t X_of_t
           rw [X_h]
@@ -97,7 +97,7 @@ lemma u2_eq_u
           rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b (x_of_t^2 * Y_of_t) (X_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3]
           rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b (x_of_t^2)  Y_of_t q field_cardinality q_prime_power q_mod_4_congruent_3]
           rw [LegendreSymbol.χ_a_eq_one (x_of_t^2) (FiniteFieldBasic.pow_two_ne_zero (x_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t)) (IsSquare.sq x_of_t) q field_cardinality q_prime_power q_mod_4_congruent_3]
-          unfold χ_of_Y 
+          unfold χ_of_Y
           ring_nf
     have h3 : (LegendreSymbol.χ (u_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3) = (LegendreSymbol.χ (X_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3) := by
       unfold X_of_t X
@@ -142,7 +142,7 @@ lemma u2_eq_u'
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   (X_h :
-    let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let point := (ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
     have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
     let X'_of_t := X ⟨-t.val, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let X2_of_t := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
@@ -150,7 +150,7 @@ lemma u2_eq_u'
   )
   :
   have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
-  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let point := (ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
   let u'_of_t := u ⟨-t.val, h2_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
   let u2_of_t := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   u2_of_t = u'_of_t := by
@@ -185,8 +185,9 @@ lemma u2_eq_u'
         z_of_point = (LegendreSymbol.χ (x'_of_t^2 * Y'_of_t * (X'_of_t^2 + 1 / c_of_s^2)) q field_cardinality q_prime_power q_mod_4_congruent_3) := by
           unfold z_of_point z
           change LegendreSymbol.χ ((c_of_s - 1) * s * X2_of_t * (1 + X2_of_t) * point.1 * (X2_of_t ^ 2 + 1 / c_of_s ^ 2)) q field_cardinality q_prime_power q_mod_4_congruent_3 = LegendreSymbol.χ (x'_of_t ^ 2 * Y'_of_t * (X'_of_t ^ 2 + 1 / c_of_s ^ 2)) q field_cardinality q_prime_power q_mod_4_congruent_3
-          unfold point ϕ 
-          rw [dif_pos t.prop, h1]
+          unfold point ϕ
+          simp only [h1]
+          rw [dif_pos t.prop]
           change LegendreSymbol.χ (x'_of_t * Y'_of_t * x_of_t * (X2_of_t ^ 2 + 1 / c_of_s ^ 2)) q field_cardinality q_prime_power q_mod_4_congruent_3 = LegendreSymbol.χ (x'_of_t ^ 2 * Y'_of_t * (X'_of_t ^ 2 + 1 / c_of_s ^ 2)) q field_cardinality q_prime_power q_mod_4_congruent_3
           unfold X2_of_t X'_of_t x'_of_t x_of_t
           rw [x_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
@@ -196,7 +197,7 @@ lemma u2_eq_u'
           rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b (x'_of_t^2 * Y'_of_t) (X'_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3]
           rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b (x'_of_t^2) Y'_of_t q field_cardinality q_prime_power q_mod_4_congruent_3]
           rw [LegendreSymbol.χ_a_eq_one (x'_of_t^2) (FiniteFieldBasic.pow_two_ne_zero (x_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨-t, h2_2⟩)) (IsSquare.sq x'_of_t) q field_cardinality q_prime_power q_mod_4_congruent_3]
-          unfold χ_of_Y' 
+          unfold χ_of_Y'
           ring_nf
     have h3 : (LegendreSymbol.χ (u'_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3) = (LegendreSymbol.χ (X'_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3) := by
       unfold X'_of_t X
@@ -247,10 +248,9 @@ lemma u2_h1
   let u'_of_t := u ⟨-t.val, h2_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
   let u2_of_t := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   u2_of_t = u_of_t ∨ u2_of_t = u'_of_t := by
-    intro point u_of_t h2_2 u'_of_t u2_of_t 
+    intro point u_of_t h2_2 u'_of_t u2_of_t
     rcases (X2_h4 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) with h | h
     · left
       exact u2_eq_u t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h
     · right
       exact u2_eq_u' t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h
-

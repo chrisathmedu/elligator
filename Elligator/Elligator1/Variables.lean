@@ -162,29 +162,6 @@ noncomputable def y
   let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   (r_of_s * X_of_t - (1 + X_of_t)^2) / (r_of_s * X_of_t + (1 + X_of_t)^2)
 
-/-- ϕ(t, s) is a function defined in the paper. It maps a numer `t` in F s to a point on the curve.
-
-Paper definition at chapter 3.2 definition 2.
--/
--- Chapter 3.2 Definition 2
-noncomputable def ϕ
-  (t : F)
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  : F × F :=
-  open scoped Classical in if h : t ≠ 1 ∧ t ≠ -1
-  then
-  (
-    x ⟨t, h⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3,
-    y ⟨t, h⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  )
-  else (0, 1)
-
 /-- η(s, q, point) is a function defined in the paper.
 
 Paper definition at chapter 3.3 theorem 3.
@@ -270,4 +247,3 @@ noncomputable def b
   : ℕ := Int.toNat ⌊ Real.logb 2 q ⌋
 
 abbrev Binary := Fin 2
-

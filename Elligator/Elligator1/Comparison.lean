@@ -2,7 +2,6 @@ import Mathlib
 import Elligator.FiniteFieldBasic
 import Elligator.LegendreSymbol
 import Elligator.Elligator1.Variables
-import Elligator.Elligator1.Sets
 import Elligator.Elligator1.sProperties
 import Elligator.Elligator1.cProperties
 import Elligator.Elligator1.dProperties
@@ -18,5 +17,3 @@ namespace Elligator.Elligator1
 section Comparison
 
 variable {F : Type*} [Field F] [Fintype F]
-
-

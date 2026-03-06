@@ -2,7 +2,8 @@ import Mathlib
 import Elligator.FiniteFieldBasic
 import Elligator.LegendreSymbol
 import Elligator.Elligator1.Variables
-import Elligator.Elligator1.Sets
+import Elligator.Elligator1.Map
+import Elligator.Elligator1.phiProperties
 
 namespace Elligator.Elligator1
 
@@ -10,6 +11,17 @@ namespace Elligator.Elligator1
 section StringEncoding
 
 variable {F : Type*} [Field F] [Fintype F]
+
+def S (b : ℕ) : Set (List Binary) := {n | n.length = b}
+
+noncomputable def σ
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (τ : {n : List Binary // n ∈ S (b q q_prime_power q_mod_4_congruent_3)})
+  : F :=
+  ∑ i ∈ (Finset.range (b q q_prime_power q_mod_4_congruent_3 - 1)), τ.val[i]! * 2^i
 
 /-- \`ι` is the injective map that maps a binary string `τ` to a point on the curve `E(F_q)`.
 

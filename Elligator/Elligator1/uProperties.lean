@@ -2,7 +2,6 @@ import Mathlib
 import Elligator.FiniteFieldBasic
 import Elligator.LegendreSymbol
 import Elligator.Elligator1.Variables
-
 import Elligator.Elligator1.sProperties
 import Elligator.Elligator1.cProperties
 import Elligator.Elligator1.rProperties
@@ -78,8 +77,7 @@ lemma u_of_zero
   :
   have h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by exact FiniteFieldBasic.zero_h1 q field_cardinality q_prime_power q_mod_4_congruent_3;
   let u_of_t := u ⟨(0 : F), h1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3;
-  u_of_t = 1 := by 
+  u_of_t = 1 := by
     intro h1 u_of_t
     unfold u_of_t u
     simp
-
