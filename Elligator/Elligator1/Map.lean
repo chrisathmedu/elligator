@@ -155,7 +155,7 @@ noncomputable def ϕ
       ring_nf
   ⟨P, P_in_E_over_F⟩
 
--- TODO MapProperties.lean
+-- TODO MapProperties.lean all here below
 
 -- Used in Theorem 3 Proof B part as implication for point_in_ϕ_over_F_with_prop2_main_case
 -- argument.
