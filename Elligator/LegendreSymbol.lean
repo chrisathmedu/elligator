@@ -179,8 +179,7 @@ lemma χ_a_mul_a_eq_a
     simp
 
 lemma a_pow_q_add_one_over_two_eq_a
-  (a : F)
-  (a_nonzero : a ≠ 0)
+  {a : F}
   (a_square : IsSquare a)
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
@@ -188,8 +187,11 @@ lemma a_pow_q_add_one_over_two_eq_a
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   a ^ ((q + 1) / 2) = a := by
-    rw [a_pow_q_add_one_over_two_eq_χ_of_a_mul_a a q field_cardinality q_prime_power q_mod_4_congruent_3]
-    rw [χ_a_mul_a_eq_a a a_nonzero a_square q field_cardinality q_prime_power q_mod_4_congruent_3]
+    by_cases h : a = 0
+    · rw [h, add_comm, zero_pow,]
+      exact FiniteFieldBasic.q_add_one_over_two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+    · rw [a_pow_q_add_one_over_two_eq_χ_of_a_mul_a a q field_cardinality q_prime_power q_mod_4_congruent_3]
+      rw [χ_a_mul_a_eq_a a h a_square q field_cardinality q_prime_power q_mod_4_congruent_3]
 
 lemma χ_of_a_pow_two_eq_one
   (a : F)

@@ -196,6 +196,18 @@ lemma q_add_one_over_four_ne_zero
     · norm_num
     · grind
 
+lemma q_add_one_over_two_ne_zero
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  (1 + q) / 2 ≠ 0 := by
+    apply Nat.div_ne_zero_iff.2
+    constructor
+    · norm_num
+    · grind
+
 lemma two_ne_zero
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
