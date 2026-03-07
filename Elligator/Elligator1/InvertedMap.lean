@@ -120,15 +120,32 @@ theorem X2_defined
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : (F) × (F) // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
   :
   let y := point.val.snd
   2 * (y + 1) ≠ 0 := by
     intro y
     have h1 : y + 1 ≠ 0 := by
-    -- TODO how to use property as implication
-      --exact point.property.left
-      sorry
+      unfold y
+      let h1_1 := point.prop
+      unfold ϕ_over_F at h1_1
+      rw [Set.mem_setOf_eq] at h1_1
+      rcases h1_1 with ⟨t, h1_2⟩
+      unfold ϕ at h1_2
+      by_cases h1_3 : t ≠ 1 ∧ t ≠ -1
+      · simp only [] at h1_2
+        rw [dif_pos h1_3] at h1_2
+        let h1_4 := congrArg Prod.snd h1_2
+        simp at h1_4
+        rw [← h1_4]
+        exact y_add_one_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h1_3⟩
+      · simp only [] at h1_2
+        rw [dif_neg h1_3] at h1_2
+        let h1_4 := congrArg Prod.snd h1_2
+        simp at h1_4
+        rw [← h1_4]
+        ring_nf
+        exact (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
     apply mul_ne_zero
     · exact (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
     · exact h1
@@ -155,9 +172,10 @@ theorem t2_defined
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : (F) × (F) // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
   :
   let u2_of_point := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   (1 + u2_of_point) ≠ 0 := by
     intro u2_of_point
+    unfold u2_of_point u2 X2
     sorry
