@@ -398,7 +398,6 @@ lemma ϕ_of_one_in_ϕ_of_F
     rw [Set.mem_setOf_eq]
     use (1 : F)
 
-
 lemma point_in_ϕ_over_F_base_case
   (s : F)
   (s_h1 : s ≠ 0)
