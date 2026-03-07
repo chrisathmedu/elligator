@@ -12,6 +12,7 @@ import Elligator.Elligator1.YProperties
 import Elligator.Elligator1.xProperties
 import Elligator.Elligator1.yProperties
 import Elligator.Elligator1.Map
+import Elligator.Elligator1.MapProperties
 import Elligator.Elligator1.etaProperties
 
 namespace Elligator.Elligator1
@@ -44,7 +45,6 @@ lemma X2_eq_neg_one
     rw [zero_pow, add_zero]
     exact FiniteFieldBasic.q_add_one_over_four_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
 
----START-- TODO
 lemma X2_h1
   (s : F)
   (s_h1 : s ≠ 0)
@@ -90,40 +90,6 @@ lemma X2_h2
     intro η_of_point r_of_s X2_of_t
     have h : (1 + η_of_point * r_of_s + X2_of_t)^2 = (1 + η_of_point * r_of_s)^2 - 1 := by exact X2_h1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
     grind
-
--- TODO move next two lemmata somewhere else if possible
-lemma point_of_ϕ_in_ϕ_over_F
-  (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let ϕ_over_F := ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  point.val ∈ ϕ_over_F := by
-      unfold ϕ_over_F
-      rw [Set.mem_setOf_eq]
-      use t.val
-
-lemma point_of_ϕ_fulfills_ϕ_over_F_props
-  (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val := by
-      intro point
-      let h1 := point_of_ϕ_in_ϕ_over_F t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-      apply point_props_of_point_in_ϕ_over_F t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h1
 
 lemma X2_h3
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
@@ -181,5 +147,3 @@ lemma X2_h4
     nth_rw 2 [← add_left_inj (-X'_of_t)]
     ring_nf
     exact h1
-
----END-- TODO

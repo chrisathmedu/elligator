@@ -12,6 +12,7 @@ import Elligator.Elligator1.YProperties
 import Elligator.Elligator1.xProperties
 import Elligator.Elligator1.yProperties
 import Elligator.Elligator1.Map
+import Elligator.Elligator1.MapProperties
 
 namespace Elligator.Elligator1
 

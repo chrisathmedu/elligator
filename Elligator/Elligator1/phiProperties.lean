@@ -12,10 +12,12 @@ import Elligator.Elligator1.YProperties
 import Elligator.Elligator1.xProperties
 import Elligator.Elligator1.yProperties
 import Elligator.Elligator1.Map
+import Elligator.Elligator1.MapProperties
 import Elligator.Elligator1.t2Properties
 
 namespace Elligator.Elligator1
 
+-- TODO some defs/lemma are probably better placed in MapProperties.lean
 section phiProperties
 
 variable {F : Type*} [Field F] [Fintype F]
@@ -86,6 +88,38 @@ lemma y_ne_one
       have h2_2 : ¬ IsSquare d_of_s := by exact d_nonsquare s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
       contradiction
     contradiction
+
+lemma η_ne_zero
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point_props : ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
+  (x_ne_zero : point.val.1 ≠ 0)
+  :
+  let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+  η_of_point ≠ 0 := by
+    intro η_of_point
+    let x := point.val.1
+    let y := point.val.2
+    unfold η_of_point η
+    change (y - 1) / (2 * (y + 1)) ≠ 0
+    apply div_ne_zero
+    · intro h1
+      have h2 : y ≠ 1 := by exact y_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero
+      have h3: y = 1 := by
+        rw [← add_left_inj 1] at h1
+        simp at h1
+        exact h1
+      contradiction
+    · unfold ϕ_over_F_props at point_props
+      apply mul_ne_zero
+      · exact FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+      · exact point_props.1
 
 lemma ϕ_of_t_eq_ϕ_of_neg_t_base_case
   (t : { t : F // t = 1 ∨ t = -1})
@@ -383,41 +417,6 @@ lemma point_in_ϕ_over_F_base_case
     rw [← ϕ_of_one_eq_zero_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
     exact ϕ_of_one_in_ϕ_of_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
----START--- TODO
-lemma η_ne_zero
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
-  (point_props : ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
-  (x_ne_zero : point.val.1 ≠ 0)
-  :
-  let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
-  η_of_point ≠ 0 := by
-    intro η_of_point
-    let x := point.val.1
-    let y := point.val.2
-    unfold η_of_point η
-    change (y - 1) / (2 * (y + 1)) ≠ 0
-    apply div_ne_zero
-    · intro h1
-      have h2 : y ≠ 1 := by exact y_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero
-      have h3: y = 1 := by
-        rw [← add_left_inj 1] at h1
-        simp at h1
-        exact h1
-      contradiction
-    · unfold ϕ_over_F_props at point_props
-      apply mul_ne_zero
-      · exact FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
-      · exact point_props.1
-
----END--- TODO
-
 lemma point_in_ϕ_over_F_main_case_with_y_eq_one
   (s : F)
   (s_h1 : s ≠ 0)
@@ -521,36 +520,3 @@ theorem point_in_ϕ_over_F_of_point_props
     · exact point_in_ϕ_over_F_base_case s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point h1 h2
     · rw [← not_ne_iff, not_not] at h2
       exact point_in_ϕ_over_F_main_case s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point h1 h2
-
-
--- TODOs from here
--- Used to build definitions for arguments which sometimes require different
--- assumptions regarding group membership.
-lemma E_over_F_subset_ϕ_over_F
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  let E_over_F_of_s := E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let ϕ_over_F_q_of_s := ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  E_over_F_of_s ⊆ ϕ_over_F_q_of_s := by sorry
-
-lemma point_in_E_over_F
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {P : F × F // P ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
-  :
-  let E_over_F := E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  point.val ∈ E_over_F
-  := by
-    unfold E_over_F
-    sorry
