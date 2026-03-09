@@ -147,3 +147,224 @@ lemma X2_h4
     nth_rw 2 [← add_left_inj (-X'_of_t)]
     ring_nf
     exact h1
+
+lemma X2_ne_zero
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {P : F × F // ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 P})
+  :
+  let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+  X2_of_point ≠ 0 := by
+    intro X2_of_point
+    let X2_equation := X2_h2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let point_prop := point.prop
+    simp at X2_equation
+    change X2_of_point^2 + 2 * (1 + η_of_point * r_of_s) * X2_of_point + 1 = 0 at X2_equation
+    intro h
+    rw [h] at X2_equation
+    simp at X2_equation
+
+lemma y_divisor_ne_zero_with_X2_for_X
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {P : F × F // ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 P})
+  :
+  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+  r_of_s * X2_of_point + (1 + X2_of_point)^2 ≠ 0 := by
+    intro r_of_s X2_of_point h1
+    let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+    let X2_equation := X2_h2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let point_prop := point.prop
+    simp at X2_equation
+    change X2_of_point^2 + 2 * (1 + η_of_point * r_of_s) * X2_of_point + 1 = 0 at X2_equation
+    let y := point.val.2
+    have h2 : (1 - 2 * η_of_point ) * r_of_s * X2_of_point = 0 := by
+      rw [← h1]
+      grind
+    have h3 : 2 * η_of_point = 1 := by
+      have h3_1 : r_of_s * X2_of_point ≠ 0 := by
+        apply mul_ne_zero
+        · exact (r_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
+        · exact (X2_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
+      rw [← div_left_inj' h3_1]
+      grind
+    have h4 : y - 1 = y + 1 := by
+      unfold η_of_point η at h3
+      grind
+    have h5 : y - 1 ≠ y + 1 := by grind
+    contradiction
+
+lemma X2_ne_one
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {P : F × F // ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 P})
+  (y_eq_one : point.val.2 ≠ 1)
+  :
+  let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+  X2_of_point ≠ -1 := by
+    intro X2_of_point h1
+    let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+    let X2_equation := X2_h2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let point_prop := point.prop
+    let y := point.val.2
+    simp at X2_equation
+    change X2_of_point^2 + 2 * (1 + η_of_point * r_of_s) * X2_of_point + 1 = 0 at X2_equation
+    rw [h1] at X2_equation
+    simp at X2_equation
+    have h2 : η_of_point = 0 := by
+      ring_nf at X2_equation
+      let r_ne_zero := r_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+      rw [← div_left_inj' (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)] at X2_equation
+      rw [← div_left_inj' r_ne_zero] at X2_equation
+      ring_nf at X2_equation
+      change -(η_of_point * r_of_s * 2⁻¹ * r_of_s⁻¹ * 2) = 0 at X2_equation
+      have h2_1 : -(η_of_point * r_of_s * 2⁻¹ * r_of_s⁻¹ * 2) = -(η_of_point * (r_of_s * r_of_s⁻¹) * (2 * 2⁻¹)) := by grind
+      rw [h2_1] at X2_equation
+      rw [mul_inv_cancel₀ r_ne_zero, mul_inv_cancel₀ (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)] at X2_equation
+      grind
+    have h3 : η_of_point ≠ 0 := by
+      unfold η_of_point η
+      have h3_1 : y - 1 ≠ 0 := by
+        intro h3_1_1
+        grind
+      have h3_2 : 2 * (y + 1) ≠ 0 := by
+        intro h3_2_1
+        let y_add_one_ne_zero := point_prop.1
+        unfold ϕ_over_F_prop1 at y_add_one_ne_zero
+        rw [← div_left_inj' (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)] at h3_2_1
+        ring_nf at h3_2_1
+        rw [inv_mul_cancel₀ (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)] at h3_2_1
+        grind
+      apply div_ne_zero h3_1 h3_2
+    contradiction
+
+lemma y_with_X2
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {P : F × F // ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 P})
+  (y_eq_one : point.val.2 ≠ 1)
+  :
+  let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let y := point.val.2
+  y = (r_of_s * X2_of_point - (1 + X2_of_point)^2) / (r_of_s * X2_of_point + (1 + X2_of_point)^2) := by
+    intro X2_of_point r_of_s y
+    let X2_equation := X2_h2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let point_prop := point.prop
+    let y_add_one_ne_zero := point_prop.1
+    let X2_ne_zero := X2_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let two_ne_zero := FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+    let r_ne_zero := r_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    simp at X2_equation
+    change X2_of_point^2 + 2 * (1 + η_of_point * r_of_s) * X2_of_point + 1 = 0 at X2_equation
+    have h1 : y = (1 + 2 * η_of_point) / (1 - 2 * η_of_point) := by
+      have h1_1 : η_of_point = (y - 1) / (2 * (y + 1)) := by
+        unfold η_of_point η y
+        simp
+      have h1_2 : (2 * (y + 1)) ≠ 0 := by
+        apply mul_ne_zero
+        · exact two_ne_zero
+        · exact y_add_one_ne_zero
+      grind
+    have h2 : 2 * η_of_point = - ((1 + X2_of_point)^2) / (r_of_s * X2_of_point) := by
+      have h2_1 : 1 + η_of_point * r_of_s = - (X2_of_point^2 + 1) / (2 * X2_of_point) := by
+        have h2_1_1 : 2 * X2_of_point ≠ 0 := by
+          apply mul_ne_zero
+          · exact two_ne_zero
+          · exact X2_ne_zero
+        rw [← add_left_inj (-X2_of_point^2), ← add_left_inj (-1)] at X2_equation
+        rw [← div_left_inj' h2_1_1] at X2_equation
+        ring_nf at X2_equation
+        grind
+      have h2_2 : 2 * η_of_point = -((1 + X2_of_point)^2) / (r_of_s * X2_of_point) := by
+        have h2_2_1 : η_of_point = (-(X2_of_point^2 + 1) / (2 * X2_of_point) -1) / r_of_s := by grind
+        have h2_2_2 : η_of_point = -(X2_of_point + 1)^2 / (2 * r_of_s * X2_of_point) := by
+          have h2_2_2_1 : (2 * X2_of_point) / (2 * X2_of_point) = 1 := by grind
+          rw [← h2_2_2_1] at h2_2_1
+          grind
+        rw [← mul_left_inj' two_ne_zero] at h2_2_2
+        simp_all
+        ring_nf
+        grind
+      grind
+    have h3 : (1 + 2 * η_of_point) / (1 - 2 * η_of_point) = ((r_of_s * X2_of_point - (1 + X2_of_point)^2)) / ((r_of_s * X2_of_point + (1 + X2_of_point)^2)) := by
+      have h3_1 : 1 = (r_of_s * X2_of_point) / (r_of_s * X2_of_point) := by grind
+      rw [h2]
+      nth_rw 1 [h3_1]
+      nth_rw 2 [h3_1]
+      rw [← add_div, ← sub_div, div_div]
+      grind
+    rw [← h3]
+    exact h1
+
+lemma y_with_X2_of_X2_eq_one
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {P : F × F // ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 P})
+  (y_eq_one : point.val.2 ≠ 1)
+  :
+  let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let y := point.val.2
+  X2_of_point = 1 → y = (r_of_s - 4) / (r_of_s + 4) := by
+    intro X2_of_point r_of_s y X2_h
+    let y_with_X2 := y_with_X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point y_eq_one
+    grind
+
+lemma η_mul_r_eq_neg_two_of_X2_eq_one
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {P : F × F // ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 P})
+  (y_eq_one : point.val.2 ≠ 1)
+  :
+  let x := point.val.1
+  let y := point.val.2
+  let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let ϕ_of_zero  := ϕ 0 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  X2_of_point = 1 → η_of_point * r_of_s = -2 := by
+    intro x y η_of_point  X2_of_point r_of_s ϕ_of_zero X2_h
+    unfold η_of_point η
+    have h1 : y = (r_of_s - 4) / (r_of_s + 4) := by exact y_with_X2_of_X2_eq_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point y_eq_one X2_h
+    change (y - 1) / (2 * (y + 1)) * r_of_s = -2
+    rw [h1]
+
+    ring_nf
+    simp_all
+    sorry
