@@ -118,3 +118,26 @@ lemma r_h1
         ring
       _ = c_of_s^2 + 1 / c_of_s^2 := by
         ring_nf
+
+lemma r_sub_two_ne_zero
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  r_of_s - 2 ≠ 0 := by
+    intro r_of_s
+    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let c_ne_zero := c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let c_ne_one := c_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    unfold r_of_s r
+    change (c_of_s + 1 / c_of_s) - 2 ≠ 0
+    have h1 : (c_of_s + 1 / c_of_s) - 2 = (c_of_s - 1)^2 / c_of_s := by grind
+    rw [h1]
+    apply div_ne_zero
+    · grind
+    · exact c_ne_zero

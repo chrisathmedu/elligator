@@ -307,24 +307,22 @@ lemma x_y_eq_ϕ_of_zero_of_X2_eq_one
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   (point : {P : F × F // ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 P})
-  (x_ne_zero : point.val.1 ≠ 0)
   (y_eq_one : point.val.2 ≠ 1)
   :
   let x := point.val.1
   let y := point.val.2
   let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let ϕ_of_zero  := ϕ 0 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   X2_of_point = 1 → ϕ_of_zero = (x, y) := by
-    intro x y X2_of_point r_of_s ϕ_of_zero' X2_h
+    intro x y X2_of_point ϕ_of_zero' X2_h
     let y_with_X2 := y_with_X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point y_eq_one
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    have h1 : η_of_point * r_of_s = -2 := by exact η_mul_r_eq_neg_two_of_X2_eq_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point y_eq_one X2_h
+    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let h2 := point.prop.2.2
     let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let χ_of_c_of_s := LegendreSymbol.χ c_of_s q field_cardinality q_prime_power q_mod_4_congruent_3
-    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    have h1 : η_of_point * r_of_s = -2 := by exact η_mul_r_eq_neg_two_of_X2_eq_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point y_eq_one X2_h
     have h2 : x = 2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s := by exact point.prop.2.2 h1
     have h3 : y = (r_of_s - 4) / (r_of_s + 4) := by exact y_with_X2_of_X2_eq_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point y_eq_one X2_h
     simp at h3
@@ -486,7 +484,6 @@ lemma point_in_ϕ_over_F_main_case_with_y_eq_one
     symm at h4_1
     contradiction
 
-
 lemma point_in_ϕ_over_F_main_case_with_y_ne_one
   (s : F)
   (s_h1 : s ≠ 0)
@@ -505,14 +502,14 @@ lemma point_in_ϕ_over_F_main_case_with_y_ne_one
     intro ϕ_over_F
     let x := point.val.1
     let y := point.val.2
-    -- Showing that we can come back to the t def of theorem 1 with such point = (x, y)
-    -- i.e. (x, y) = phi(t) => ... implies that is elem of phi_of_F???
     let η_ne_zero := η_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero
     unfold ϕ_over_F Elligator1.ϕ_over_F
-
-    -- HERE do all the 'Define' somehow elegant
-    -- If this proof goes through, we have to organzie the big picture of Theorem 3.2 => done with Theorem 3 then
-    sorry
+    rw [Set.mem_setOf_eq]
+    let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+    by_cases X2_h : X2_of_point = (1 : F)
+    · use 0
+      exact x_y_eq_ϕ_of_zero_of_X2_eq_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, point_props⟩ y_eq_one X2_h
+    · sorry
 
 lemma point_in_ϕ_over_F_main_case
   (s : F)

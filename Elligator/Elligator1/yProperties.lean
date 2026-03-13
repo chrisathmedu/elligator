@@ -338,36 +338,7 @@ lemma x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two
           rw [h1, Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X  t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
        _ = X_of_t * (r_of_s * X_of_t - (1 + X_of_t)^2)^2 := by
           ring_nf
-    have h3 : -d_of_s = (r_of_s + 2) / (r_of_s - 2) := by
-      calc
-        -d_of_s = (c_of_s + 2 + 1 / c_of_s) / (c_of_s - 2 + 1 / c_of_s) := by
-          change -(-(c_of_s + 1)^2 / (c_of_s - 1)^2) = (c_of_s + 2 + 1 / c_of_s) / (c_of_s - 2 + 1 / c_of_s)
-          rw [← neg_one_mul]
-          nth_rw 2 [← neg_one_mul]
-          rw [mul_div_assoc, ← mul_assoc]
-          rw [add_pow_two, sub_pow_two]
-          have h3_1 : 1 / c_of_s ≠ 0 := by
-            rw [← inv_eq_one_div]
-            apply inv_ne_zero
-            apply c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-          have h3_2 : (1 / c_of_s) / (1 / c_of_s) = 1 := by
-            rw [div_self h3_1]
-          have h3_3 : (-1 : F) * (-1) = 1 := by ring
-          rw [h3_3]
-          nth_rw 1 [← h3_2]
-          rw [← mul_div_mul_comm]
-          rw [mul_add, mul_add, mul_add, mul_sub, pow_two, ← mul_assoc]
-          rw [← inv_eq_one_div, inv_mul_cancel₀ (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3), one_mul]
-          rw [mul_one, ← mul_assoc, mul_comm, ← mul_assoc]
-          rw [mul_inv_cancel₀ (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3), one_mul]
-          ring_nf
-        _ = (r_of_s + 2) / (r_of_s - 2) := by
-          rw [add_assoc, add_comm 2 (1 / c_of_s), ← add_assoc]
-          nth_rw 3 [add_comm]
-          rw [← add_sub_assoc]
-          nth_rw 3 [add_comm]
-          change (r_of_s + 2) / (r_of_s - 2) = (r_of_s + 2) / (r_of_s - 2)
-          rfl
+    let h3 := neg_d_eq_r_add_two_over_r_sub_two s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     have h4 : -d_of_s * (c_of_s - 1)^2 * s^2 = 2 * (r_of_s + 2) := by
       rw [h3, mul_assoc, h1]
       rw [mul_comm, ← mul_div_assoc, mul_assoc, mul_comm (r_of_s - 2) (r_of_s + 2), ← mul_assoc]

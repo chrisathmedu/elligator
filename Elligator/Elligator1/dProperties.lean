@@ -111,6 +111,39 @@ lemma d_ne_zero
       grind
     contradiction
 
+lemma one_over_d_nonsquare
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  ¬IsSquare (1 / d_of_s) := by
+      intro d_of_s h3_1
+      unfold IsSquare at h3_1
+      let d_nonsquare := d_nonsquare s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+      let d_ne_zero := d_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+      rcases h3_1 with ⟨a, ah⟩
+      rw [← pow_two, ← mul_left_inj' d_ne_zero] at ah
+      ring_nf at ah
+      rw [inv_mul_cancel₀ d_ne_zero] at ah
+      change 1 = d_of_s * a^2 at ah
+      by_cases h3_2 : a = 0
+      · rw [h3_2] at ah
+        ring_nf at ah
+        let one_ne_zero := FiniteFieldBasic.one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+        contradiction
+      · have h3_3 : a^2 ≠ 0 := by grind
+        rw [← div_left_inj' h3_3, mul_div_assoc, div_self h3_3, mul_one] at ah
+        rw [← one_pow 2, ← div_pow] at ah
+        have d_square : IsSquare d_of_s := by
+          use 1 / a
+          grind
+        contradiction
+
 lemma d_ne_one
   (s : F)
   (s_h1 : s ≠ 0)
@@ -146,3 +179,47 @@ lemma d_ne_zero_and_d_ne_one
     split_ands
     · exact d_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     · exact d_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+
+lemma neg_d_eq_r_add_two_over_r_sub_two
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  -d_of_s = (r_of_s + 2) / (r_of_s - 2) := by
+    intro r_of_s d_of_s
+    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    calc
+      -d_of_s = (c_of_s + 2 + 1 / c_of_s) / (c_of_s - 2 + 1 / c_of_s) := by
+        change -(-(c_of_s + 1)^2 / (c_of_s - 1)^2) = (c_of_s + 2 + 1 / c_of_s) / (c_of_s - 2 + 1 / c_of_s)
+        rw [← neg_one_mul]
+        nth_rw 2 [← neg_one_mul]
+        rw [mul_div_assoc, ← mul_assoc]
+        rw [add_pow_two, sub_pow_two]
+        have h3_1 : 1 / c_of_s ≠ 0 := by
+          rw [← inv_eq_one_div]
+          apply inv_ne_zero
+          apply c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        have h3_2 : (1 / c_of_s) / (1 / c_of_s) = 1 := by
+          rw [div_self h3_1]
+        have h3_3 : (-1 : F) * (-1) = 1 := by ring
+        rw [h3_3]
+        nth_rw 1 [← h3_2]
+        rw [← mul_div_mul_comm]
+        rw [mul_add, mul_add, mul_add, mul_sub, pow_two, ← mul_assoc]
+        rw [← inv_eq_one_div, inv_mul_cancel₀ (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3), one_mul]
+        rw [mul_one, ← mul_assoc, mul_comm, ← mul_assoc]
+        rw [mul_inv_cancel₀ (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3), one_mul]
+        ring_nf
+      _ = (r_of_s + 2) / (r_of_s - 2) := by
+        rw [add_assoc, add_comm 2 (1 / c_of_s), ← add_assoc]
+        nth_rw 3 [add_comm]
+        rw [← add_sub_assoc]
+        nth_rw 3 [add_comm]
+        change (r_of_s + 2) / (r_of_s - 2) = (r_of_s + 2) / (r_of_s - 2)
+        rfl
