@@ -49,6 +49,7 @@ lemma χ_a_ne_zero
     apply pow_ne_zero ((q - 1) / 2) at a_nonzero
     exact a_nonzero
 
+-- TODO make a implicit
 lemma neg_χ_a_ne_χ_a
   (a : F)
   (a_nonzero : a ≠ 0)

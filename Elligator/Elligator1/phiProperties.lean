@@ -322,7 +322,7 @@ lemma x_y_eq_ϕ_of_zero_of_X2_eq_one
     let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let χ_of_c_of_s := LegendreSymbol.χ c_of_s q field_cardinality q_prime_power q_mod_4_congruent_3
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    have h1 : η_of_point * r_of_s = -2 := by exact η_mul_r_eq_neg_two_of_X2_eq_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point y_eq_one X2_h
+    have h1 : η_of_point * r_of_s = -2 := by exact η_mul_r_eq_neg_two_of_X2_eq_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point X2_h
     have h2 : x = 2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s := by exact point.prop.2.2 h1
     have h3 : y = (r_of_s - 4) / (r_of_s + 4) := by exact y_with_X2_of_X2_eq_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point y_eq_one X2_h
     simp at h3
@@ -495,7 +495,7 @@ lemma point_in_ϕ_over_F_main_case_with_y_ne_one
   (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
   (point_props : ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
   (x_ne_zero : point.val.1 ≠ 0)
-  (y_eq_one : point.val.2 ≠ 1)
+  (y_ne_one : point.val.2 ≠ 1)
   :
   let ϕ_over_F := ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
   point.val ∈ ϕ_over_F := by
@@ -508,7 +508,7 @@ lemma point_in_ϕ_over_F_main_case_with_y_ne_one
     let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
     by_cases X2_h : X2_of_point = (1 : F)
     · use 0
-      exact x_y_eq_ϕ_of_zero_of_X2_eq_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, point_props⟩ y_eq_one X2_h
+      exact x_y_eq_ϕ_of_zero_of_X2_eq_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, point_props⟩ y_ne_one X2_h
     · sorry
 
 lemma point_in_ϕ_over_F_main_case

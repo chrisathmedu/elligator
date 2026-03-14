@@ -209,7 +209,7 @@ theorem t2_defined
       unfold z_of_point z at h2_1
       let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
       let a := ((c_of_s - 1) * s * (-1) * (1 + (-1)) * point.val.1 * ((-1) ^ 2 + 1 / c_of_s ^ 2))
-      -- TODO where do we know?
+      -- TODO where do we know? Or cases s.t. = 0 is contra?
       have a_ne_zero : a ≠ 0 := by sorry
       grind
     -- TODO the whole proof might be wrong... but there is no other existing proof of t_bar being defined
