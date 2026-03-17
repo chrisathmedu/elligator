@@ -254,3 +254,81 @@ lemma u2_h1
       exact u2_eq_u t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h
     · right
       exact u2_eq_u' t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h
+
+-- Theorem 3 part C define
+noncomputable def u'
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point_props : ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
+  : F :=
+  let z := z' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
+  let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  z * X
+
+lemma u'_eq_X2_or_u'_eq_neg_X2
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point_props : ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
+  (x_ne_zero : point.val.1 ≠ 0)
+  (y_ne_one : point.val.2 ≠ 1)
+  :
+  let u := u' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
+  let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  u = X ∨ u = -X := by
+    intro u X
+    let z'_eq_one_or_z'_eq_neg_one := z'_eq_one_or_z'_eq_neg_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
+    let z := z' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
+    unfold u u'
+    grind
+
+lemma u'_ne_neg_one
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point_props : ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
+  (x_ne_zero : point.val.1 ≠ 0)
+  (y_ne_one : point.val.2 ≠ 1)
+  :
+  let u := u' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
+  let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+  X ≠ 1 → u ≠ -1 := by
+    intro u X h1
+    let z'_eq_one_or_z'_eq_neg_one := z'_eq_one_or_z'_eq_neg_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
+    let z := z' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
+    let X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one := X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, point_props⟩ y_ne_one
+    unfold u u'
+    grind
+
+-- Theorem 3 part C define
+noncomputable def v'
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point_props : ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
+  : F :=
+  let u := u' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
+  let r := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  -- Note: this is just the definition of v as in theorem 1
+  u^5 + (r^2 - 2) * u^3 + u
