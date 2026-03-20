@@ -108,11 +108,11 @@ lemma one_add_X_ne_zero
         apply Nat.odd_iff.2
         norm_num
       rw [← neg_one_mul, mul_pow, mul_pow]
-      rw [LegendreSymbol.χ_of_a_pow_n_eq_χ_a v_ne_zero ⟨5, h3_1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
+      rw [LegendreSymbol.χ_of_a_pow_n_eq_χ_a v_of_t ⟨5, h3_1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
       have h3_2: Odd 3 := by
         apply Nat.odd_iff.2
         norm_num
-      rw [LegendreSymbol.χ_of_a_pow_n_eq_χ_a v_ne_zero ⟨3, h3_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
+      rw [LegendreSymbol.χ_of_a_pow_n_eq_χ_a v_of_t ⟨3, h3_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
       change (-1) ^ 5 * χ_of_v_of_t + (r_of_s ^ 2 - 2) * ((-1) ^ 3 * χ_of_v_of_t) + -1 * χ_of_v_of_t = -1 * χ_of_v_of_t * (1 + r_of_s ^ 2 - 2 + 1)
       ring
     have h4 : v_of_t = -χ_of_v_of_t * r_of_s^2 := by
@@ -233,7 +233,7 @@ lemma Y_comparison
         rw [field_cardinality, add_comm, LegendreSymbol.a_pow_q_add_one_over_two_eq_χ_of_a_mul_a u1 q field_cardinality q_prime_power q_mod_4_congruent_3]
         change (χ_of_u1 * u1)^3 = χ_of_u1 * u1^3
         have h1_3_2 : Odd 3 := by trivial
-        rw [mul_pow, LegendreSymbol.χ_of_a_pow_n_eq_χ_a u_ne_zero ⟨3, h1_3_2 ⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
+        rw [mul_pow, LegendreSymbol.χ_of_a_pow_n_eq_χ_a u1 ⟨3, h1_3_2 ⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
       calc
         (χ_of_v2 * v2)^((q + 1) / 4) = (χ_of_v1 * v1 / u1^6)^((q + 1) / 4) := by
           rw [h1_1]
@@ -303,7 +303,7 @@ lemma Y_comparison
           apply Nat.odd_iff.mpr
           norm_num
         let v_ne_zero := v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
-        rw [← LegendreSymbol.χ_of_a_pow_n_eq_χ_a v_ne_zero ⟨3, h2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
+        rw [← LegendreSymbol.χ_of_a_pow_n_eq_χ_a v1 ⟨3, h2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
         change Y1 * 1 * (1 / χ_of_v1^3) / u1 ^ 3 = Y1 / (χ_of_v1 * u1) ^ 3
         simp
         ring_nf

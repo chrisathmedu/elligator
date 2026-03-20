@@ -51,8 +51,8 @@ lemma Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X
         have h1_2 : Odd 3 := by
           apply Nat.odd_iff.2
           norm_num
-        rw [LegendreSymbol.χ_of_a_pow_n_eq_χ_a v_ne_zero ⟨5, h1_1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
-        rw [LegendreSymbol.χ_of_a_pow_n_eq_χ_a v_ne_zero ⟨3, h1_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
+        rw [LegendreSymbol.χ_of_a_pow_n_eq_χ_a v_of_t ⟨5, h1_1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
+        rw [LegendreSymbol.χ_of_a_pow_n_eq_χ_a v_of_t ⟨3, h1_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
         change χ_of_v_of_t * u_of_t^5 + (r_of_s ^ 2 - 2) * (χ_of_v_of_t * u_of_t^3) + (χ_of_v_of_t * u_of_t) = χ_of_v_of_t * (u_of_t^5 + (r_of_s^2 -2 ) * u_of_t^3 + u_of_t)
         ring_nf
       _ = χ_of_v_of_t * v_of_t := by

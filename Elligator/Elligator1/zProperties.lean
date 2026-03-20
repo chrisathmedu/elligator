@@ -111,6 +111,28 @@ lemma X_pow_two_add_1_over_c_pow_two_ne_zero
       apply IsSquare.mul_self
     contradiction
 
+lemma z'_argument_ne_zero
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point_props : ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
+  (x_ne_zero : point.val.1 ≠ 0)
+  (y_ne_one : point.val.2 ≠ 1)
+  :
+  let Y := Y' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
+  let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let c := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  Y * (X^2 + 1 / c^2) ≠ 0 := by
+    intro Y X c
+    let h1 := Y'_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
+    let h2 := X_pow_two_add_1_over_c_pow_two_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    grind
+
 lemma z'_ne_zero
   (s : F)
   (s_h1 : s ≠ 0)
@@ -130,11 +152,9 @@ lemma z'_ne_zero
     let Y := Y' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
     let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
     let c := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let h1 := Y'_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
-    let h2 := X_pow_two_add_1_over_c_pow_two_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let z'_argument_ne_zero := z'_argument_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
     let a := (Y * (X^2 + 1 / c^2))
-    have a_ne_zero : a ≠ 0 := by grind
-    exact LegendreSymbol.χ_a_ne_zero a a_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+    exact LegendreSymbol.χ_a_ne_zero a z'_argument_ne_zero  q field_cardinality q_prime_power q_mod_4_congruent_3
 
 lemma z'_eq_one_or_z'_eq_neg_one
   (s : F)

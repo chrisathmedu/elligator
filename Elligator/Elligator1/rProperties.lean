@@ -55,6 +55,22 @@ lemma r_ne_zero
       exact h3
     contradiction
 
+lemma aux_neg_one_sq_of_sum_eq_zero (s : F) (hs : s ≠ 0)
+    (h2 : (2 : F) ≠ 0) (h : (2 / s ^ 2) ^ 2 + 4 * (2 / s ^ 2) + 1 = 0) :
+    IsSquare (-1 : F) := by
+      -- Let $a = s^2 + 4$. Then $a^2 = 12$.
+      set a : F := s ^ 2 + 4
+      have ha : a ^ 2 = 12 := by
+        grind;
+      -- Let $u = a / 2$. Then $u^2 = 3$.
+      set u : F := a / 2
+      have hu : u ^ 2 = 3 := by
+        grind;
+      -- Then $-s^2 = (u - 1)^2$, so $-1 = ((u - 1) / s)^2$.
+      have h_neg_one : -1 = ((u - 1) / s) ^ 2 := by
+        grind +ring;
+      exact ⟨ _, h_neg_one.trans ( sq _ ) ⟩
+
 lemma four_add_r_ne_zero
   (s : F)
   (s_h1 : s ≠ 0)
@@ -69,28 +85,25 @@ lemma four_add_r_ne_zero
     let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     change 4 + (c_of_s + 1 / c_of_s) ≠ 0
     intro h
-    have h1 : IsSquare (3 : F) := by
-      rw [← add_assoc] at h
-      rw [← add_right_inj (-(4 + c_of_s))] at h
-      ring_nf at h
-      rw [← mul_left_inj' (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)] at h
-      unfold c_of_s at h
-      rw [inv_mul_cancel₀ (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)] at h
-      rw [sub_mul] at h
-      change 1 = (-4 * c_of_s - c_of_s * c_of_s) at h
-      have h1_1 : (0 : F) = 4 - 4 := by norm_num
-      have h1_2 : -4 * c_of_s - c_of_s * c_of_s = -(c_of_s + 2)^2 + 4 := by ring_nf
-      rw [h1_2, ← add_right_inj (-4)] at h
-      rw [← mul_left_inj' (FiniteFieldBasic.neg_one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)] at h
-      simp at h
-      norm_num at h
-      unfold IsSquare
-      rw [pow_two] at h
-      use (c_of_s + 2)
-      exact h
-    have h2 : ¬IsSquare (3 : F) := by
-      exact FiniteFieldBasic.three_nonsquare q field_cardinality q_prime_power q_mod_4_congruent_3
-    contradiction
+    have hc : c_of_s ≠ 0 := c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    have h2 : (2 : F) ≠ 0 := FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+    have h_quad : c_of_s ^ 2 + 4 * c_of_s + 1 = 0 := by linear_combination' h * c_of_s - inv_mul_cancel₀ hc
+    have h_neg_sq : IsSquare (-1 : F) := by
+      set a : F := s ^ 2 + 4
+      have ha : a ^ 2 = 12 := by
+        unfold c_of_s c at h_quad
+        grind
+      set u : F := a / 2
+      have hu : u ^ 2 = 3 := by
+        grind;
+      have h_neg_one : -1 = ((u - 1) / s) ^ 2 := by
+        grind +ring;
+      exact ⟨ _, h_neg_one.trans ( sq _ ) ⟩
+    have h_not_sq : ¬ IsSquare (-1 : F) := by
+      rw [FiniteField.isSquare_neg_one_iff]
+      rw [field_cardinality]
+      omega
+    exact h_not_sq h_neg_sq
 
 lemma r_h1
   (s : F)
