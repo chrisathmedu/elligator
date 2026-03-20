@@ -208,6 +208,31 @@ lemma q_add_one_over_two_ne_zero
     · norm_num
     · grind
 
+lemma char_ne_two
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  Fintype.card F ≠ 2 := by
+    have h1 := FiniteField.card F ( ringChar F )
+    simp_all +decide ;
+    rintro h
+    simp_all +decide
+
+lemma ring_char_ne_two
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  ringChar F ≠ 2 := by
+    have h1 := FiniteField.card F ( ringChar F )
+    simp_all +decide ;
+    rintro h
+    simp_all +decide
+    rcases h1 with ⟨ x, rfl ⟩ ; rcases x with ( _ | _ | x ) <;> norm_num [ Nat.pow_succ', ← mul_assoc, Nat.mul_mod ] at *;
+
 lemma two_ne_zero
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
@@ -215,44 +240,13 @@ lemma two_ne_zero
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   (2 : F) ≠ 0 := by
-    intro h
-    have hq0: Odd q := by
-      rw [<- field_cardinality]
-      apply q_odd q field_cardinality q_prime_power q_mod_4_congruent_3
-    have hq: q > 2 := by apply odd_prime_power_gt_two q q_prime_power hq0
-    simp_all
-    have h1 : (2 : F) = 0 ↔ 2 ∣ q := by
-      constructor
-      · intro h1
-        sorry
-      · intro h2
-        exact h
-    rw [h1] at h
-    --apply prime_two_or_dvd_of_dvd_two_mul_pow_self_two q_prime_power h
-    --apply h1.2
-    -- Because q prime and does not divide 2, 2 cannot be zero since q is
-    -- 0 in a field with q elements!
-    have h2 : ¬(2 ∣ q) := by
-      apply q_not_dvd_two q field_cardinality q_prime_power q_mod_4_congruent_3
-    contradiction
-
-lemma three_ne_zero
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  (3 : F) ≠ 0 := by
-    have he: Odd (3 : F) := by
-      rw [Odd]
-      use (1)
-      ring_nf
-    have hne: Even (0 : F) := by
-      rw [Even]
-      use 0
-      simp
-    simp_all
-    sorry
+  let char_ne_two := ring_char_ne_two q field_cardinality q_prime_power q_mod_4_congruent_3
+  let h1 := FiniteField.card F ( ringChar F )
+  intro h2
+  apply char_ne_two
+  have h3 := ringChar.spec F;
+  specialize h3 2 ; simp_all +decide [ Nat.dvd_prime ];
+  exact not_subsingleton _ h3
 
 lemma four_ne_zero
   (q : ℕ)
@@ -290,25 +284,10 @@ lemma neg_one_non_square
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  ¬IsSquare (-1 : F) :=
-    sorry
-
-lemma three_nonsquare
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  ¬IsSquare (3 : F) := by
-    apply Prime.not_isSquare
-    unfold Prime
-    constructor
-    · exact three_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
-    · constructor
-      · unfold IsUnit
-        intro u
-        sorry
-      · sorry
+  ¬IsSquare (-1 : F) := by
+    have h_neg_one_not_square : IsSquare (-1 : F) ↔ Fintype.card F % 4 ≠ 3 := by
+      apply_rules [ FiniteField.isSquare_neg_one_iff ];
+    aesop
 
 lemma p_odd_power_odd
   (p k : ℕ)

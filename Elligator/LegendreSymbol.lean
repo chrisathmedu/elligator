@@ -204,13 +204,10 @@ lemma χ_of_a_pow_two_eq_one
   :
   let χ_of_a := χ (a^2) q field_cardinality q_prime_power q_mod_4_congruent_3
   χ_of_a = 1 := by
-    intro χ_of_a
-    unfold χ_of_a χ
-    rw [← pow_mul]
-    have h : 2 * ((Fintype.card F - 1) / 2) =  Fintype.card F - 1 := by omega
-    rw [h]
-    -- TODO search proof
-    sorry
+    convert FiniteField.pow_card_sub_one_eq_one _ _ using 1;
+    convert pow_right_comm _ _ _ using 1;
+    rw [ ← pow_mul, Nat.div_mul_cancel ( even_iff_two_dvd.mp ( FiniteFieldBasic.q_sub_one_even q field_cardinality q_prime_power q_mod_4_congruent_3 ) ) ];
+    exact a_nonzero
 
 lemma χ_of_a_eq_neg_one
   (a : F)
@@ -223,10 +220,23 @@ lemma χ_of_a_eq_neg_one
   :
   let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
   χ_of_a = -1 := by
-    intro χ_of_a
-    unfold χ_of_a χ
-    -- TODO needs argument of cyclic group... perhaps there is yet another more general χ in mathlib that solves this?
-    sorry
+    field_simp;
+    -- By Euler's criterion, since $a$ is not a square, we have $a^{(q-1)/2} \equiv -1 \pmod{q}$.
+    have h_euler : a ^ ((Fintype.card F - 1) / 2) = -1 ∨ a ^ ((Fintype.card F - 1) / 2) = 1 := by
+      have h_euler : (a ^ ((Fintype.card F - 1) / 2))^2 = 1 := by
+        rw [ ← pow_mul, Nat.div_mul_cancel ];
+        · exact FiniteField.pow_card_sub_one_eq_one a a_nonzero;
+        · omega;
+      exact Or.symm ( sq_eq_one_iff.mp h_euler );
+    convert h_euler.resolve_right _;
+    contrapose! a_nonsquare;
+    -- If $a^{(q-1)/2} = 1$, then $a$ is a square in $F$.
+    have h_square : ∃ b : F, a = b^2 := by
+      use a ^ ((Fintype.card F + 1) / 4);
+      rw [ ← pow_mul, show ( Fintype.card F + 1 ) / 4 * 2 = ( Fintype.card F - 1 ) / 2 + 1 from ?_, pow_add, pow_one ];
+      · rw [ a_nonsquare, one_mul ];
+      · omega;
+    exact h_square.elim fun b hb => ⟨ b, by rw [ hb, sq ] ⟩
 
 lemma χ_of_neg_one_eq_neg_one
   (q : ℕ)
@@ -240,17 +250,6 @@ lemma χ_of_neg_one_eq_neg_one
     · apply FiniteFieldBasic.neg_one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
     · apply FiniteFieldBasic.neg_one_non_square q field_cardinality q_prime_power q_mod_4_congruent_3
 
-lemma χ_of_χ_of_a_eq_χ_of_a
-  (a : F)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
-  let χ_of_χ_of_a := χ (χ_of_a) q field_cardinality q_prime_power q_mod_4_congruent_3
-  χ_of_χ_of_a = χ_of_a := sorry
-
 lemma χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b
   (a b : F)
   (q : ℕ)
@@ -261,7 +260,8 @@ lemma χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b
   let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
   let χ_of_b := χ b q field_cardinality q_prime_power q_mod_4_congruent_3
   let χ_of_a_mul_b := χ (a * b) q field_cardinality q_prime_power q_mod_4_congruent_3
-  χ_of_a_mul_b = χ_of_a * χ_of_b := sorry
+  χ_of_a_mul_b = χ_of_a * χ_of_b := by
+    convert mul_pow _ _ _
 
 lemma χ_of_a_even_pow_n_eq_one
   (a : F)
@@ -285,7 +285,7 @@ lemma χ_of_a_even_pow_n_eq_one
     rw [one_pow]
 
 lemma χ_of_a_pow_n_eq_χ_a
-  (a_nonzero : (a : F) ≠ 0)
+  (a : F)
   (n : {n : ℕ | Odd n})
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
@@ -294,14 +294,32 @@ lemma χ_of_a_pow_n_eq_χ_a
   :
   let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
   χ_of_a^(n.val) = χ_of_a := by
-    intro χ_of_a
-    have n_odd := n.prop
-    unfold Odd at n_odd
-    rcases n_odd with ⟨k, kh⟩
-    rw [kh, pow_add, pow_mul]
-    rw [χ_of_a_even_pow_n_eq_one a a_nonzero ⟨2, even_two⟩, one_pow]
-    simp
+    obtain ⟨ k, hk ⟩ := n.2;
+    by_cases ha : a = 0 <;> simp_all +decide [ pow_add, pow_mul ];
+    · unfold χ;
+      by_cases h : ( Fintype.card F - 1 ) / 2 = 0 <;> simp +decide [ h ];
+    · -- By definition of χ, we know that χ(a)^2 = a^(q-1).
+      have hχ_sq : χ a q field_cardinality q_prime_power q_mod_4_congruent_3 ^ 2 = a ^ (q - 1) := by
+        unfold χ; ring;
+        rw [ Nat.div_mul_cancel ( even_iff_two_dvd.mp ( by rw [ field_cardinality ] ; exact Nat.even_iff.mpr ( by omega ) ) ), field_cardinality ];
+      have := FiniteField.pow_card_sub_one_eq_one a; aesop;
 
+lemma χ_of_χ_of_a_eq_χ_of_a
+  (a : F)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
+  let χ_of_χ_of_a := χ (χ_of_a) q field_cardinality q_prime_power q_mod_4_congruent_3
+  χ_of_χ_of_a = χ_of_a := by
+    convert χ_of_a_pow_n_eq_χ_a a _ q field_cardinality q_prime_power q_mod_4_congruent_3 using 1;
+    swap;
+    exact ⟨ ( Fintype.card F - 1 ) / 2, by
+      exact Nat.odd_iff.mpr ( by omega ) ⟩
+    generalize_proofs at *;
+    rfl
 
 lemma χ_of_one_over_a_eq_χ_a
   (a : F)
@@ -313,11 +331,18 @@ lemma χ_of_one_over_a_eq_χ_a
   :
   let χ_of_1_over_a := χ (1 / a) q field_cardinality q_prime_power q_mod_4_congruent_3
   let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
-  χ_of_1_over_a = χ_of_a := sorry
+  χ_of_1_over_a = χ_of_a := by
+    unfold χ;
+    simp +zetaDelta at *;
+    rw [ inv_eq_of_mul_eq_one_right ];
+    rw [ ← pow_add, ← two_mul, Nat.mul_div_cancel' ];
+    · exact FiniteField.pow_card_sub_one_eq_one a a_non_zero;
+    · omega
 
+-- TODO a_ne_zero unused?
 lemma χ_of_one_over_a_eq_one_over_χ_a
   (a : F)
-  (a_non_zero : a ≠ 0)
+  (a_ne_zero : a ≠ 0)
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
@@ -325,9 +350,9 @@ lemma χ_of_one_over_a_eq_one_over_χ_a
   :
   let χ_of_1_over_a := χ (1 / a) q field_cardinality q_prime_power q_mod_4_congruent_3
   let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
-  χ_of_1_over_a = 1 / χ_of_a := sorry
+  χ_of_1_over_a = 1 / χ_of_a := by
+    unfold χ; simp +decide [ a_ne_zero ]
 
--- TODO this probably needs a ≠ 0
 lemma one_over_χ_of_a_eq_χ_a
   (a : F)
   (q : ℕ)
@@ -337,7 +362,15 @@ lemma one_over_χ_of_a_eq_χ_a
   :
   let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
   1 / χ_of_a  = χ_of_a := by
-    sorry
+      -- If a is zero, then χ(a) is zero by definition, so 1/χ(a) is also zero.
+    by_cases ha : a = 0;
+    · simp_all +decide [ χ ];
+      rcases q with ( _ | _ | _ | q ) <;> simp_all +decide;
+    · have h_sq : (χ a q field_cardinality q_prime_power q_mod_4_congruent_3) ^ 2 = 1 := by
+        convert FiniteField.pow_card_sub_one_eq_one a ha using 1;
+        unfold χ; rw [ ← pow_mul, Nat.div_mul_cancel ] ; norm_num [ Nat.dvd_iff_mod_eq_zero, Nat.add_mod, Nat.mul_mod, field_cardinality ] ; rw [ ← Nat.mod_add_div q 4, q_mod_4_congruent_3 ] ; norm_num;
+        norm_num [ Nat.mul_mod ];
+      rw [ div_eq_iff ] <;> aesop
 
 lemma square_of_a
   (a : {n : F // IsSquare n})
@@ -347,8 +380,15 @@ lemma square_of_a
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   a.val^((q + 1) / 2) = a.val := by
-    sorry
+    obtain ⟨ r, hr ⟩ := a.2;
+    by_cases hr : r = 0 <;> simp_all +decide [ mul_pow, pow_mul' ];
+    · exact field_cardinality ▸ Fintype.card_pos_iff.mpr ⟨ 0 ⟩;
+    · rw [ ← pow_add, ← two_mul, Nat.mul_div_cancel' ];
+      · have := FiniteField.pow_card_sub_one_eq_one r hr; simp_all +decide [ pow_succ' ] ;
+        rw [ ← Nat.sub_add_cancel ( show 1 ≤ q from field_cardinality ▸ Fintype.card_pos ), pow_add, pow_one, this, one_mul ];
+      · omega
 
+  -- Introduced in paper theory theorem 3.A proof
 lemma χ_of_a_eq_χ_a_mul_b_pow_two
   (a : F)
   {b : F}
@@ -361,10 +401,14 @@ lemma χ_of_a_eq_χ_a_mul_b_pow_two
   let χ_of_a := χ a q field_cardinality q_prime_power q_mod_4_congruent_3
   let χ_of_a_mul_b_pow_two := χ (a * b^2) q field_cardinality q_prime_power q_mod_4_congruent_3
   χ_of_a = χ_of_a_mul_b_pow_two := by
-  -- Introduced in paper theory theorem 3.A proof
-    sorry
+    -- By definition of χ, we know that χ(a * b^2) = (a * b^2)^((q - 1) / 2).
+    simp [χ];
+    rw [ mul_pow, show ( b ^ 2 ) ^ ( ( Fintype.card F - 1 ) / 2 ) = 1 from ?_ ] ; ring;
+    rw [ ← pow_mul, Nat.mul_div_cancel' ];
+    · exact FiniteField.pow_card_sub_one_eq_one b b_nonzero;
+    · omega
 
--- TODO used so?
+-- TODO use?
 lemma b_eq_χ_of_b_mul_principal_sqrt_a
   (a : {a : F // IsSquare a})
   {b : F}
@@ -376,7 +420,15 @@ lemma b_eq_χ_of_b_mul_principal_sqrt_a
   :
   let χ_of_b := χ b q field_cardinality q_prime_power q_mod_4_congruent_3
   b = χ_of_b * a.val^((q + 1) / 4) := by
-    sorry
+    -- By definition of $χ$, we know that $χ(b) = b^{(q - 1) / 2}$.
+    have hχ_b : χ b q field_cardinality q_prime_power q_mod_4_congruent_3 = b ^ ((q - 1) / 2) := by
+      aesop;
+    -- Substitute $a$ with $b^2$ in the right-hand side of the equation.
+    have h_sub : b ^ ((q - 1) / 2) * (b ^ 2) ^ ((q + 1) / 4) = b := by
+      rw [ ← pow_mul, ← pow_add ];
+      rw [ show ( q - 1 ) / 2 + 2 * ( ( q + 1 ) / 4 ) = q by omega ];
+      rw [ ← field_cardinality, FiniteField.pow_card ];
+    simp_all +decide [ ← sq ]
 
 lemma b_pow_q_add_one_over_four_eq_χ_of_a_mul_a
   (a : F)
