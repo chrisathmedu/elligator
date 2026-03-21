@@ -338,6 +338,54 @@ lemma u'_ne_neg_one
     unfold u u'
     grind
 
+lemma one_add_u'_ne_zero
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point_props : ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
+  (x_ne_zero : point.val.1 ≠ 0)
+  (y_ne_one : point.val.2 ≠ 1)
+  :
+  let u := u' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
+  let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+  X ≠ 1 → 1 + u ≠ 0 := by
+    intro u X h1
+    let z'_eq_one_or_z'_eq_neg_one := z'_eq_one_or_z'_eq_neg_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
+    let z := z' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
+    let X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one := X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, point_props⟩ y_ne_one
+    unfold u u'
+    grind
+
+lemma u'_ne_zero
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point_props : ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
+  (x_ne_zero : point.val.1 ≠ 0)
+  (y_ne_one : point.val.2 ≠ 1)
+  :
+  let u := u' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
+  let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+  X ≠ 1 → u ≠ 0 := by
+    intro u X h1
+    let z'_eq_one_or_z'_eq_neg_one := z'_eq_one_or_z'_eq_neg_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
+    let z := z' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
+    let z_ne_zero := z'_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
+    let X2_ne_zero := X2_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, point_props⟩
+    let X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one := X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, point_props⟩ y_ne_one
+    unfold u u'
+    grind
+
 -- Theorem 3 part C define
 noncomputable def v'
   (s : F)
@@ -557,8 +605,6 @@ lemma Y'_pow_two_eq_χ_of_v'_mul_v'
     let u := u' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
     let r := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let a := u^5 + (r^2 - 2) * u^3 + u
-    -- TODO need ≠ 0 for this as soon as API adjusted for one_over_χ_of_a_eq_χ_a
-    let v'_ne_zero := v'_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
     rw [← h2, mul_comm]
     unfold χ_of_v v v'
     rw [← LegendreSymbol.one_over_χ_of_a_eq_χ_a a q field_cardinality q_prime_power q_mod_4_congruent_3]

@@ -330,6 +330,37 @@ lemma x_y_eq_ϕ_of_zero_of_X2_eq_one
     let ϕ_of_zero'' := ϕ_of_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     grind
 
+-- Used in theorem 3 proof part C
+lemma x_y_eq_ϕ_of_t_of_X2_ne_one
+  (s : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point_props : ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
+  (x_ne_zero : point.val.1 ≠ 0)
+  (y_ne_one : point.val.2 ≠ 1)
+  :
+  let x := point.val.1
+  let y := point.val.2
+  let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+  let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
+  let ϕ_of_t := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  X ≠ 1 → ϕ_of_t = (x, y) := by
+    intro x y X t ϕ_of_t h1
+    unfold ϕ_of_t ϕ
+    let h2 := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one h1
+    simp
+    rw [dif_pos h2]
+    let x_of_t := Elligator1.x ⟨t, h2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let y_of_t := Elligator1.y ⟨t, h2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    change (x_of_t, y_of_t) = (x, y)
+    let h3 := x_y_of_point_eq_x_y_of_t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one h1
+    grind
+
 lemma ϕ_of_t2_eq_x_y_base_case
   (t : { n : F // n = 1 ∨ n = -1})
   (s : F)
@@ -506,10 +537,12 @@ lemma point_in_ϕ_over_F_main_case_with_y_ne_one
     unfold ϕ_over_F Elligator1.ϕ_over_F
     rw [Set.mem_setOf_eq]
     let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+    let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
     by_cases X2_h : X2_of_point = (1 : F)
     · use 0
       exact x_y_eq_ϕ_of_zero_of_X2_eq_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, point_props⟩ y_ne_one X2_h
-    · sorry
+    · use t
+      exact x_y_eq_ϕ_of_t_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X2_h
 
 lemma point_in_ϕ_over_F_main_case
   (s : F)
