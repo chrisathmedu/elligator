@@ -483,8 +483,13 @@ lemma one_add_one_a_pow_two_eq_a_add_one_over_a_over_a
     ring_nf
     rw [mul_inv_cancel₀ a_ne_zero]
 
-lemma card_sub_one_over_four_mul_two_eq_one_add_card_over_two
-  {q : ℕ}
-  :
+lemma card_sub_one_over_four_mul_two_eq_one_add_card_over_two :
   (q - 1) / 2 = (q + 1) / 2 - 1 := by
     omega
+
+lemma ringChar_of_F_eq_q
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Prime q)
+  : ringChar F = q := by
+      have := FiniteField.card F (ringChar F)
+      aesop

@@ -7,6 +7,7 @@ namespace Elligator.Elligator1
 section Variables
 
 variable {F : Type*} [Field F] [Fintype F]
+variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
 /-- c(s) is a constant defined in the paper.
 
@@ -240,10 +241,19 @@ noncomputable def t2
   let u2_of_point := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   (1 - u2_of_point) / (1 + u2_of_point)
 
-noncomputable def b
-  (q : ℕ)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  : ℕ := Int.toNat ⌊ Real.logb 2 q ⌋
+/-- `b q` is `⌊log₂ q⌋`, the number of bits needed. -/
+noncomputable def b : ℕ := Nat.log 2 q
 
-abbrev Binary := Fin 2
+/-- Convert a bit vector (τ₀, τ₁, ..., τ_{b-1}) to a natural number via binary
+    expansion: bitsToNat(τ) = Σᵢ τᵢ · 2^i. -/
+def bitsToNat {n : ℕ} (τ : Fin n → Bool) : ℕ :=
+  ∑ i : Fin n, if τ i then 2^(i : ℕ) else 0
+
+-- `σ` interprets a bit vector `(τ₀, τ₁, …, τ_{b−1})` as the field element
+-- `∑ᵢ τᵢ · 2ⁱ ∈ Fq`. This is the standard binary-to-integer conversion followed by casting into `F`.
+noncomputable def σ (τ : Fin (@b q) → Bool) : F := (bitsToNat τ : F)
+
+-- S = σ⁻¹({0, 1, 2, ..., (q-1)/2}), the set of bit vectors whose binary value
+-- falls in the lower half {0, 1, ..., (q-1)/2} of F_q. -/
+noncomputable def S : Finset (Fin (@b q) → Bool) :=
+  Finset.univ.filter (fun τ => (bitsToNat τ) ≤ (q - 1) / 2)

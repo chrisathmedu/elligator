@@ -26,4 +26,7 @@ import Elligator.Elligator1.phiProperties
 import Elligator.Elligator1.InvertedMap
 import Elligator.Elligator1.DecodingFunction
 -- 3.4
+import Elligator.Elligator1.bProperties
+import Elligator.Elligator1.bitsToNatProperties
+import Elligator.Elligator1.SProperties
 import Elligator.Elligator1.StringEncoding

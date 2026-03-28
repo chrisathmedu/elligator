@@ -1,0 +1,76 @@
+import Mathlib
+import Elligator.FiniteFieldBasic
+import Elligator.Elligator1.Variables
+import Elligator.Elligator1.bProperties
+
+namespace Elligator.Elligator1
+
+section bitsToNatProperties
+
+variable {F : Type*} [Field F] [Fintype F]
+variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
+
+lemma bitsToNat_le_full_range {n : ℕ} (τ : Fin n → Bool) : bitsToNat τ ≤ ∑ i ∈ Finset.range n, 2^i := by
+  rw [ Finset.sum_range ];
+  exact Finset.sum_le_sum fun i _ => by aesop;
+
+/-- Every bit-vector of length `n` has binary value less than `2^n`. -/
+lemma bitsToNat_lt_two_pow_n {n : ℕ} (τ : Fin n → Bool) : bitsToNat τ < 2 ^ n := by
+  let h1 := bitsToNat_le_full_range τ
+  exact lt_of_le_of_lt h1 (Nat.geomSum_lt (by norm_num) (by norm_num))
+
+/-- `bitsToNat` is injective: distinct bit-vectors give distinct natural numbers. -/
+lemma bitsToNat_injective {n : ℕ} : Function.Injective (bitsToNat : (Fin n → Bool) → ℕ) := by
+  induction' n with n ih;
+  · decide
+  · intro τ τ' h1;
+    have h_bitsToNat_succ : ∀ (τ : Fin (n + 1) → Bool), bitsToNat τ = 2 * bitsToNat (fun i => τ (Fin.succ i)) + if τ 0 then 1 else 0 := by
+      intro τ; unfold bitsToNat; simp +decide [ Fin.sum_univ_succ, pow_succ' ] ; ring;
+      rw [ Finset.sum_mul _ _ _ ] ; congr ; ext ; aesop;
+    have h_bitsToNat_succ_eq : bitsToNat (fun i => τ (Fin.succ i)) = bitsToNat (fun i => τ' (Fin.succ i)) := by
+      grind +ring;
+    ext i; induction i using Fin.inductionOn <;> simp_all +singlePass ;
+    · grind +ring;
+    · exact ih h_bitsToNat_succ_eq |> fun h => by simpa using congr_fun h _;
+
+/-- Every natural number less than `2^n` is the binary value of some bit-vector. -/
+-- TODO use Function.surjective possible, i.e. have to get hm into ∀ m value somehow
+lemma bitsToNat_surj (n : ℕ) (m : ℕ) (hm : m < 2^n) :
+  ∃ τ : Fin n → Bool, bitsToNat τ = m := by
+    induction' n with n ih generalizing m <;> simp_all +decide [ pow_succ' ];
+    rcases Nat.even_or_odd' m with ⟨ k, rfl | rfl ⟩;
+    · obtain ⟨ τ, hτ ⟩ := ih k ( by linarith );
+      use Fin.cons false τ;
+      simp +decide [ ← hτ, Fin.sum_univ_succ, bitsToNat ] ; ring_nf;
+      rw [ Finset.sum_mul _ _ _ ] ; congr ; ext ; aesop;
+    · obtain ⟨ τ, hτ ⟩ := ih k ( by linarith ) ; use Fin.cons true τ; simp +decide [ *, bitsToNat ] ; ring;
+      simp +decide [ ← hτ, Fin.sum_univ_succ ] ; ring_nf;
+      simp +decide [ bitsToNat, Finset.sum_mul _ _ _ ]
+
+lemma natCast_injective_of_prime_card
+  (q : ℕ)
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Prime q)
+  (a b : ℕ) (ha : a < q) (hb : b < q) (h : (a : F) = (b : F))
+  : a = b := by
+    let h1 := FiniteFieldBasic.ringChar_of_F_eq_q field_cardinality q_prime
+    have h2 := ringChar.spec F;
+    have h3 := h2 ( a - b |> Int.natAbs )
+    simp_all
+    cases abs_cases ( a - b : ℤ ) <;> simp_all
+    · exact le_antisymm ( le_of_not_gt fun h => by have := Nat.le_of_dvd ( by omega ) h3; omega ) ‹_›;
+    · exact absurd h3 ( Nat.not_dvd_of_pos_of_lt ( by omega ) ( by omega ) )
+
+lemma σ_injective
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  Function.Injective (@σ F _ q) := by
+    intro a b h_eq
+    apply bitsToNat_injective
+    have h1 : bitsToNat a < q :=
+      lt_of_lt_of_le (bitsToNat_lt_two_pow_n a) (two_pow_b_le_q q_mod_4_congruent_3)
+    have h2 : bitsToNat b < q :=
+      lt_of_lt_of_le (bitsToNat_lt_two_pow_n b) (two_pow_b_le_q q_mod_4_congruent_3)
+    exact natCast_injective_of_prime_card q field_cardinality q_prime _ _ h1 h2 h_eq
