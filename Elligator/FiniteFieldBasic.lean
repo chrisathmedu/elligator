@@ -500,3 +500,55 @@ lemma CharP_of_F_eq_q
   : CharP F q := by
     let h1 := ringChar_of_F_eq_q field_cardinality q_prime
     exact h1 ▸ by infer_instance
+
+/-
+Every element of F can be written as (n : F) for some n < q because Fintype.card F = q and the natural cast n ↦ (n : F) has period equal to ringChar F
+= q (since q is prime), so {(0 : F), (1 : F), ..., (q-1 : F)} gives all q distinct elements.
+-/
+lemma exists_nat_cast_eq
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Prime q)
+  (t : F)
+  : ∃ (n : ℕ), n < q ∧ (n : F) = t := by
+  have h_nat_cast : Function.Surjective (fun n : ℕ => (n : F)) := by
+    intro t
+    have h_order : ringChar F = q := by
+      have := FiniteField.card F ( ringChar F ) ; aesop;
+    have h_order : Function.Injective (fun n : Fin (Fintype.card F) => (n : F)) := by
+      intro a b hab;
+      have := ringChar.spec F;
+      specialize this ( a - b |> Int.natAbs ) ; simp_all +decide [ sub_eq_iff_eq_add ] ;
+      cases abs_cases ( ( a : ℤ ) - b ) <;> simp_all +decide [ sub_eq_iff_eq_add ];
+      · exact Fin.ext ( Nat.le_antisymm ( Nat.le_of_not_lt fun h => by have := Nat.le_of_dvd ( by omega ) this; omega ) ‹_› );
+      · exact absurd this ( Nat.not_dvd_of_pos_of_lt ( by omega ) ( by omega ) );
+    have h_order : Function.Surjective (fun n : Fin (Fintype.card F) => (n : F)) := by
+      exact ( Fintype.bijective_iff_injective_and_card _ ).mpr ⟨ h_order, by simp +decide [ Fintype.card_fin ] ⟩ |>.2;
+    exact Exists.elim ( h_order t ) fun n hn => ⟨ n, hn ⟩;
+  cases' h_nat_cast t with n hn;
+  refine' ⟨ n % q, Nat.mod_lt _ q_prime.nat_prime.pos, _ ⟩;
+  rw [ ← hn, Nat.mod_def ];
+  rw [ Nat.cast_sub ( Nat.mul_div_le _ _ ) ] ; aesop
+
+/-
+In a prime field with `q ≡ 3 (mod 4)` (hence `q` odd), for any `n < q`, either
+`n ≤ (q-1)/2` or `q - n ≤ (q-1)/2` (i.e., `n` or its "negation" `q-n` lies in the
+lower half).
+-/
+lemma nat_or_neg_in_lower_half
+  (q_prime : Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (n : ℕ) (hn : n < q)
+  : n ≤ (q - 1) / 2 ∨ (q - n ≤ (q - 1) / 2 ∧ 0 < n) := by
+  cases Nat.Prime.eq_two_or_odd q_prime.nat_prime <;> omega;
+
+/-
+Negation in `F_q` for a natural number cast: `-(n : F) = (q - n : F)` when
+`q = Fintype.card F` is the characteristic.
+-/
+lemma neg_natCast_eq
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Prime q)
+  (n : ℕ) (hn : 0 < n) (hn' : n < q)
+  : -(n : F) = ((q - n : ℕ) : F) := by
+  rw [ Nat.cast_sub hn'.le ];
+  rw [ neg_eq_iff_add_eq_zero ] ; aesop

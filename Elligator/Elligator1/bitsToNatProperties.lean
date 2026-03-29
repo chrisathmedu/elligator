@@ -91,3 +91,43 @@ lemma σ_injective
     have h2 : bitsToNat b < q :=
       lt_of_lt_of_le (bitsToNat_lt_two_pow_n b) (two_pow_b_le_q q_mod_4_congruent_3)
     exact natCast_injective_of_prime_card q field_cardinality q_prime _ _ h1 h2 h_eq
+
+/-
+PROBLEM
+If `n < q` and `n ≤ (q-1)/2`, there exists a bit-vector `τ ∈ S` with
+`bitsToNat τ = n`.
+-/
+lemma exists_S_elem_of_le
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (n : ℕ) (hn : n < q) (hle : n ≤ (q - 1) / 2)
+  : ∃ (τ : (@S q)), bitsToNat τ.1 = n := by
+  -- By `bitsToNat_surj`, there exists a bit-vector `τ` such that `bitsToNat τ = n`.
+  have h_surj : ∃ τ : Fin (@b q) → Bool, bitsToNat τ = n := by
+    apply bitsToNat_surj;
+    have h_log : q ≤ 2 ^ (Nat.log 2 q) * 2 := by
+      rw [ ← pow_succ ] ; exact Nat.le_of_lt ( Nat.lt_pow_succ_log_self ( by decide ) _ );
+    unfold b; omega;
+  unfold S; aesop;
+
+/-
+For any `t ∈ F_q` (with `q` prime, `q ≡ 3 mod 4`), there exists `τ ∈ S` such
+that `σ(τ) = t` or `σ(τ) = -t`. This is the key encoding lemma: at least one of
+`{t, -t}` lies in the image of `σ` restricted to `S`.
+-/
+lemma exists_σ_preimage_or_neg
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Prime q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (t : F)
+  : ∃ (τ : (@S q)), (@σ F _ q τ.1) = t ∨ (@σ F _ q τ.1) = -t := by
+  obtain ⟨ n, hn, rfl ⟩ := FiniteFieldBasic.exists_nat_cast_eq field_cardinality q_prime t;
+  by_cases h : n ≤ ( q - 1 ) / 2;
+  · obtain ⟨ τ, hτ ⟩ := exists_S_elem_of_le q_mod_4_congruent_3 n hn h;
+    unfold σ; aesop;
+  · -- Since $q - n \leq (q - 1) / 2$, we can find a $\tau \in S$ such that $\sigma(\tau) = q - n$.
+    obtain ⟨τ, hτ⟩ : ∃ τ : @S q, bitsToNat τ.1 = q - n := by
+      apply exists_S_elem_of_le q_mod_4_congruent_3 (q - n) (by
+      omega) (by
+      omega);
+    use τ; simp_all +decide [ σ ] ;
+    rw [ Nat.cast_sub hn.le ] ; aesop

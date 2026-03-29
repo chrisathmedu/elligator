@@ -102,39 +102,27 @@ noncomputable def ι_over_S'
   -- TODO if range works out do this with φ_of_F aswell
   := Set.range (ι s s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3)
 
-lemma ϕ_over_F_eq_ι_over_S
+theorem ϕ_over_F_eq_ι_over_S'
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
+  (q_prime : Prime q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let ϕ_over_F := ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let ι_over_S := ι_over_S' s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let ϕ_over_F := ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime.isPrimePow q_mod_4_congruent_3
+  let ι_over_S := ι_over_S' s_h1 s_h2 q field_cardinality q_prime.isPrimePow q_mod_4_congruent_3
   ϕ_over_F = ι_over_S := by
-    intro ϕ_over_F ι_over_S
-    unfold ϕ_over_F Elligator1.ϕ_over_F ι_over_S ι_over_S' Set.range
-    apply Set.Subset.antisymm
-    -- if P ∈ ϕ(Fq) then P = ϕ(t) for some t ∈ Fq,
-    · rintro P ⟨t, t_h⟩
-      let h1 := (ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).mp
-      let ϕ_of_t := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-      let ϕ_of_neg_t := ϕ (-t) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-      -- so also P = ϕ(−t) by Theorem 3.
-      have h2 : ϕ_of_t = ϕ_of_neg_t := by
-        sorry
-      -- and no other besides {t, -t}
-      have h4 : ¬ (∃ (p : { n : F // n ≠ t ∧ n ≠ -t}), ϕ p.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ_of_t) := by
-        unfold ϕ_of_t ϕ_of_neg_t at h2
-        convert h1 ( congr_arg Subtype.val h2 ) using 1
-        simp +decide [ Subtype.ext_iff ]
-        rfl
-      -- At least one of t, −t is in {0, 1, . . . , (q − 1)/2}, i.e., in σ(S), so P is in ϕ(σ(S)) = ι(S)
-      --change ∃ y, ι s s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 y = P
-      simp_all
-      sorry
-    -- Each element of ι(S) has the form ϕ(σ(τ)) and is therefore in ϕ(F_over_q).
-    · rintro P ⟨P_of_ι, P_of_ι_h⟩
-      unfold ι at P_of_ι_h
-      grind
+    --intro ϕ_over_F ι_over_S
+    --unfold ϕ_over_F Elligator1.ϕ_over_F ι_over_S ι_over_S' Set.range
+    --apply Set.Subset.antisymm
+    refine' Set.ext fun x => ⟨ _, _ ⟩;
+    · rintro ⟨ t, rfl ⟩;
+      obtain ⟨ τ, hτ ⟩ := exists_σ_preimage_or_neg field_cardinality q_prime q_mod_4_congruent_3 t;
+      cases' hτ with hτ hτ;
+      · exact ⟨ _, ⟨ τ, rfl ⟩, by aesop ⟩;
+      · refine' ⟨ _, ⟨ τ, rfl ⟩, _ ⟩;
+        unfold ι;
+        rw [ hτ, ϕ_of_t_eq_ϕ_of_neg_t ];
+        norm_num +zetaDelta at *;
+    · rintro ⟨ y, ⟨ τ, rfl ⟩, rfl ⟩ ; exact ⟨ _, rfl ⟩ ;
