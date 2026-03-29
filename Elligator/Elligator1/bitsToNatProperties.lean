@@ -19,8 +19,7 @@ lemma bitsToNat_lt_two_pow_n {n : ℕ} (τ : Fin n → Bool) : bitsToNat τ < 2 
   let h1 := bitsToNat_le_full_range τ
   exact lt_of_le_of_lt h1 (Nat.geomSum_lt (by norm_num) (by norm_num))
 
-lemma bitsToNat_le_q_sub_one_over_two (τ : (@S q))
-  : ↑(bitsToNat τ.1) ≤ (q - 1) / 2 := by
+lemma bitsToNat_le_q_sub_one_over_two (τ : (@S q)) : bitsToNat τ.1 ≤ (q - 1) / 2 := by
     exact Finset.mem_filter.mp τ.2 |>.2
 
 /-- `bitsToNat` is injective: distinct bit-vectors give distinct natural numbers. -/

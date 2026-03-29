@@ -27,8 +27,9 @@ section InvertedMap
 
 variable {F : Type*} [Field F] [Fintype F]
 
--- Original: Chapter "3.3 Inverting the map" - Theorem 3.1
--- If t ∈ Fq then the set of preimages of ϕ(t) under ϕ is {t, −t}
+-- Original: Chapter "3.3 Inverting the map" - Theorem 3.1 :
+--
+-- "If t ∈ Fq then the set of preimages of ϕ(t) under ϕ is {t, −t}"
 theorem ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages
   (t s : F)
   (s_h1 : s ≠ 0)
@@ -49,12 +50,12 @@ theorem ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages
     · intro h
       exact ϕ_of_t_eq_ϕ_of_neg_t t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
--- Original: Chapter "3.3 Inverting the map" - Theorem 3.2
--- If t ∈ Fq then the set of preimages of ϕ(t) under ϕ is {t, −t}
--- ϕ(Fq) is the set of (x, y) ∈ E(Fq) such that
+-- Original: Chapter "3.3 Inverting the map" - Theorem 3.2 :
+--
+-- "ϕ(Fq) is the set of (x, y) ∈ E(Fq) such that
 -- • y + 1 ≠ 0;
 -- • (1+ηr)² - 1 is a square, where η = (y − 1) / (2(y + 1)); and
--- • if ηr = −2 then x = 2s(c − 1)χ(c)/r.
+-- • if ηr = −2 then x = 2s(c − 1)χ(c)/r."
 --
 -- Note: Original statement does not read like an iff. Only the proof explanation
 -- makes this more concrete
