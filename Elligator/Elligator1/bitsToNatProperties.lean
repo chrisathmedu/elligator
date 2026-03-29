@@ -19,6 +19,10 @@ lemma bitsToNat_lt_two_pow_n {n : ℕ} (τ : Fin n → Bool) : bitsToNat τ < 2 
   let h1 := bitsToNat_le_full_range τ
   exact lt_of_le_of_lt h1 (Nat.geomSum_lt (by norm_num) (by norm_num))
 
+lemma bitsToNat_le_q_sub_one_over_two (τ : (@S q))
+  : ↑(bitsToNat τ.1) ≤ (q - 1) / 2 := by
+    exact Finset.mem_filter.mp τ.2 |>.2
+
 /-- `bitsToNat` is injective: distinct bit-vectors give distinct natural numbers. -/
 lemma bitsToNat_injective {n : ℕ} : Function.Injective (bitsToNat : (Fin n → Bool) → ℕ) := by
   induction' n with n ih;
@@ -60,6 +64,20 @@ lemma natCast_injective_of_prime_card
     cases abs_cases ( a - b : ℤ ) <;> simp_all
     · exact le_antisymm ( le_of_not_gt fun h => by have := Nat.le_of_dvd ( by omega ) h3; omega ) ‹_›;
     · exact absurd h3 ( Nat.not_dvd_of_pos_of_lt ( by omega ) ( by omega ) )
+
+lemma lower_half_neg_eq
+  (field_cardinality : Fintype.card F = q) (hq : Prime q)
+  {a b : ℕ} (ha : a ≤ (q - 1) / 2) (hb : b ≤ (q - 1) / 2)
+  (heq : (a : F) = -(b : F))
+  : a = b := by
+    obtain ⟨k, hk⟩ : ∃ k : ℕ, a + b = k * q := by
+      have h_div : q ∣ (a + b : ℕ) := by
+        have h_char : ringChar F = q :=
+          FiniteFieldBasic.ringChar_of_F_eq_q field_cardinality hq
+        rw [← h_char, ← CharP.cast_eq_zero_iff F]; aesop
+      exact exists_eq_mul_left_of_dvd h_div
+    rcases k with (_ | _ | k) <;> norm_num at hk <;>
+      nlinarith [Nat.div_mul_le_self (q - 1) 2, Nat.sub_add_cancel hq.nat_prime.pos]
 
 lemma σ_injective
   (field_cardinality : Fintype.card F = q)

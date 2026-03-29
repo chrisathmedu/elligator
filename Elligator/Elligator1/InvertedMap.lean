@@ -164,6 +164,7 @@ theorem z_defined
   := by
     exact (c_pow_two_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
 
+-- TODO proof pot. implicit in paper?
 theorem t2_defined
   (s : F)
   (s_h1 : s ≠ 0)

@@ -493,3 +493,10 @@ lemma ringChar_of_F_eq_q
   : ringChar F = q := by
       have := FiniteField.card F (ringChar F)
       aesop
+
+lemma CharP_of_F_eq_q
+  (field_cardinality : Fintype.card F = q)
+  (q_prime : Prime q)
+  : CharP F q := by
+    let h1 := ringChar_of_F_eq_q field_cardinality q_prime
+    exact h1 ▸ by infer_instance

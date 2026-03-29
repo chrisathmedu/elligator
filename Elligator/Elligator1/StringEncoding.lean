@@ -48,19 +48,6 @@ theorem S_card (q_mod_4_congruent_3 : q % 4 = 3)
   : (@S q).card = (q + 1) / 2 := by
     exact S_card_eq_q_add_one_over_two q_mod_4_congruent_3
 
-/-- If `a, b ≤ (q-1)/2` (as naturals) and `(a : F) = -(b : F)` where `CharP F q`
-    and `q` is prime, then `a = b` (and both are 0). -/
-lemma lower_half_neg_eq {q : ℕ} [CharP F q] (hq : Nat.Prime q)
-    {a b : ℕ} (ha : a ≤ (q - 1) / 2) (hb : b ≤ (q - 1) / 2)
-    (heq : (a : F) = -(b : F)) : a = b := by
-      have h_div : q ∣ (a + b) := by
-        rw [ ← CharP.cast_eq_zero_iff F q ] ; aesop;
-      have h_sum : a + b < q := by
-        linarith [ Nat.div_mul_le_self ( q - 1 ) 2, Nat.sub_add_cancel hq.pos ]
-      have h_zero : a + b = 0 := by
-        exact Nat.eq_zero_of_dvd_of_lt h_div h_sum
-      aesop
-
 theorem ι_injective
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -87,15 +74,21 @@ theorem ι_injective
     have h4 : ¬ (∃ (p : { n : F // n ≠ (σ τ.1) ∧ n ≠ -(σ τ.1)}), ϕ p.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ_of_τ) := by
         let h4_1 := (ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages (σ τ.1) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).mp
         unfold ϕ_of_τ ϕ_of_neg_τ at h2
-        --exact h4_1 h2
-        -- TODO coercion hinderance... perhaps overall statemnt suboptimal?
-        sorry
+        convert h4_1 ( congr_arg Subtype.val h2 ) using 1
+        simp +decide [ Subtype.ext_iff ]
+        rfl
     have h5 : (@σ F _ q τ.1) = (@σ F _ q τ'.1) ∨ (@σ F _ q τ.1) = -(@σ F _ q τ'.1) := by
       simp_all
       grind
+    -- Since τ and τ ∈ {0, ..., (q-1)/2}
     have h6 : (@σ F _ q τ.1) = (@σ F _ q τ'.1) := by
-      -- Since τ and τ ∈ {0, ..., (q-1)/2} by previous b analysis TODO formalize statement of that properly
-      sorry
+      cases' h5 with h6_1 h6_1 <;> simp_all +decide [ σ ];
+      have h6_2 : bitsToNat τ.val = bitsToNat τ'.val := by
+        have h6_2_1 : bitsToNat τ.val ≤ (q - 1) / 2 ∧ bitsToNat τ'.val ≤ (q - 1) / 2 := by exact ⟨bitsToNat_le_q_sub_one_over_two τ , bitsToNat_le_q_sub_one_over_two τ'⟩
+        have h6_2_2 : (bitsToNat τ.val : F) = -((bitsToNat τ'.val) : F) := by grind
+        let h6_2_3 := lower_half_neg_eq field_cardinality q_prime h6_2_1.1 h6_2_1.2 h6_2_2
+        grind
+      grind
     grind
 
 lemma ϕ_over_F_eq_ι_over_S
