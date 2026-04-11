@@ -2,6 +2,7 @@ import Lake
 open Lake DSL
 
 package «elligator» where
+  lintDriver := "batteries/runLinter"
   -- Settings applied to both builds and interactive editing
   leanOptions := #[
     ⟨`pp.unicode.fun, true⟩ -- pretty-prints `fun a ↦ b`
